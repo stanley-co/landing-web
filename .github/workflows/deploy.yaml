@@ -35,7 +35,6 @@ jobs:
             mkdir -p ~/stanley-co/web
             cd ~/stanley-co/web
 
-            # Клонируем или обновляем репозиторий
             if [ ! -d landing-web ]; then
               git clone -b develop git@github.com:stanley-co/landing-web.git
             else
@@ -46,20 +45,10 @@ jobs:
             fi
 
             cd landing-web
-
-            # Устанавливаем Node.js зависимости
             npm ci
-
-            # Собираем фронтенд
             npm run build
-
-            # Сборка Docker образа
             docker build -t stanok-landing:latest .
-
-            # Останавливаем старый контейнер (если есть)
             docker stop stanok-landing || true
             docker rm stanok-landing || true
-
-            # Запускаем новый контейнер
             docker run -d --name stanok-landing -p 4066:80 stanok-landing:latest
 EOF
