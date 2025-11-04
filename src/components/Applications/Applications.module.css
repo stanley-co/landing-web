@@ -1,18 +1,67 @@
 .applications {
-  padding: 48px 16px;
+  padding: 80px 16px;
+  background: white;
 }
 
-.list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 48px;
+  color: var(--ion-color-dark, #1a202c);
 }
 
 .card {
-  padding: 16px;
-  border-radius: 8px;
-  background: rgba(0,0,0,0.04);
+  --background: white;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  height: 100%;
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.card:hover {
+  transform: translateY(-4px);
+  --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
 
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.icon {
+  font-size: 48px;
+  color: var(--ion-color-primary, #3880ff);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--ion-color-dark, #1a202c);
+  margin-bottom: 12px;
+}
+
+.text {
+  color: var(--ion-color-medium, #6b7280);
+  text-align: center;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .applications {
+    padding: 48px 16px;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 32px;
+  }
+}

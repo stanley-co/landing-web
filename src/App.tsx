@@ -1,3 +1,4 @@
+import { IonApp, IonContent, IonPage } from '@ionic/react';
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
 import Features from "./components/Features/Features";
@@ -13,10 +14,10 @@ import Certificates from "./components/Certificates/Certificates";
 
 const App = () => {
   return (
-    <>
-      <Header />
-      <main>
-        <div className="container">
+    <IonApp>
+      <IonPage>
+        <Header />
+        <IonContent>
           <Hero />
           <Features />
           <ProductsSection />
@@ -27,10 +28,10 @@ const App = () => {
           <Testimonials />
           <FAQ />
           <ContactForm />
-        </div>
-      </main>
-      <Footer />
-    </>
+          <Footer />
+        </IonContent>
+      </IonPage>
+    </IonApp>
   );
 };
 

@@ -1,26 +1,35 @@
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
+  --background: #ffffff;
+  --border-color: #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.header > :global(.container) {
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ion-color-primary, #3880ff);
+  padding: 0 16px;
+}
+
+.nav {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 0;
+  gap: 4px;
 }
 
-nav a {
-  margin-left: 20px;
-  text-decoration: none;
-  color: var(--text);
-  font-weight: 600;
-  opacity: 0.8;
+.mobileMenu {
+  background: white;
+  border-top: 1px solid var(--border-color);
+  padding: 8px 0;
+  animation: slideDown 0.3s ease-out;
 }
-nav a:hover {
-  opacity: 1;
-  color: var(--accent);
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

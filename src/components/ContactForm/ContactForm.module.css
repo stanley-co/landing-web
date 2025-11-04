@@ -1,23 +1,47 @@
 .contact {
-  background: var(--card);
-  padding: 28px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 30px rgba(15,18,34,0.06);
-  max-width: 760px;
+  padding: 80px 16px;
+  background: var(--ion-background-color, #f7f8fa);
+}
+
+.container {
+  max-width: 900px;
   margin: 0 auto;
 }
-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-  margin-top: 12px;
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--ion-color-dark, #1a202c);
 }
-input, textarea {
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  outline: none;
+
+.subtitle {
+  text-align: center;
+  color: var(--ion-color-medium, #6b7280);
+  margin-bottom: 48px;
+  font-size: 1.125rem;
 }
-textarea { min-height: 120px; grid-column: 1 / -1; }
-button { grid-column: 1 / -1; }
+
+.formCard {
+  --background: white;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  margin: 0;
+}
+
+.submitButton {
+  margin-top: 16px;
+  --border-radius: 12px;
+  height: 48px;
+}
+
+@media (max-width: 768px) {
+  .contact {
+    padding: 48px 16px;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+}

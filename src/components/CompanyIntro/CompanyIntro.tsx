@@ -1,19 +1,61 @@
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { shieldCheckmarkOutline, flaskOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { IonIcon } from '@ionic/react';
 import styles from "./CompanyIntro.module.css";
 
 const CompanyIntro = () => (
   <section id="company" className={styles.company}>
-    <h2>Hone Machinery</h2>
-    <p>
-      Специализируемся на разработке, производстве, продаже и сервисе машин для жидкостей,
-      лосьонов, кремов, зубных паст и клеев: вакуумные эмульгаторы, смесители, фасовочные
-      линии. Предприятие с полным циклом: R&D, производство, монтаж и сервис. Сертификации:
-      ISO9001:2000, CE и GMP.
-    </p>
-    <ul className={styles.badges}>
-      <li>Сертифицированное производство</li>
-      <li>Тестирование продукции</li>
-      <li>Гарантия качества</li>
-    </ul>
+    <div className={styles.container}>
+      <IonCard className={styles.introCard}>
+        <IonCardHeader>
+          <IonCardTitle className={styles.title}>Hone Machinery</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <p className={styles.description}>
+            Специализируемся на разработке, производстве, продаже и сервисе машин для жидкостей,
+            лосьонов, кремов, зубных паст и клеев: вакуумные эмульгаторы, смесители, фасовочные
+            линии. Предприятие с полным циклом: R&D, производство, монтаж и сервис.
+          </p>
+          <div className={styles.certifications}>
+            <IonChip color="primary">ISO9001:2000</IonChip>
+            <IonChip color="success">CE</IonChip>
+            <IonChip color="tertiary">GMP</IonChip>
+          </div>
+        </IonCardContent>
+      </IonCard>
+      
+      <IonGrid className={styles.badgesGrid}>
+        <IonRow>
+          <IonCol size="12" sizeMd="4">
+            <IonCard className={styles.badgeCard}>
+              <IonCardContent>
+                <IonIcon icon={shieldCheckmarkOutline} className={styles.badgeIcon} />
+                <h3>Сертифицированное производство</h3>
+                <p>Соответствие международным стандартам качества</p>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+          <IonCol size="12" sizeMd="4">
+            <IonCard className={styles.badgeCard}>
+              <IonCardContent>
+                <IonIcon icon={flaskOutline} className={styles.badgeIcon} />
+                <h3>Тестирование продукции</h3>
+                <p>Тщательное тестирование перед поставкой</p>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+          <IonCol size="12" sizeMd="4">
+            <IonCard className={styles.badgeCard}>
+              <IonCardContent>
+                <IonIcon icon={checkmarkCircleOutline} className={styles.badgeIcon} />
+                <h3>Гарантия качества</h3>
+                <p>Долгосрочная гарантия и сервисное обслуживание</p>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+    </div>
   </section>
 );
 
