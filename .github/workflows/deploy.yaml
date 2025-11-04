@@ -7,71 +7,70 @@ on:
       - feature/*
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      # 1️⃣ Клонируем репозиторий на runner
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Устанавливаем зависимости на runner
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-      # 3️⃣ Настраиваем SSH
-      - name: Setup SSH
+      - name: Install dependencies and build
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_deploy
-          chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          npm ci
+          npm run build
+          # Копируем build в dist, чтобы совпадало с VPS
+          rm -rf github-actions/dist
+          mkdir -p github-actions/dist
+          cp -r build/* github-actions/dist/
 
-      # 4️⃣ Подготавливаем и загружаем код на VPS
-      - name: Prepare and upload code
+      - name: Upload deploy artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-deploy
+          path: github-actions/dist
+          retention-days: 1
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download deploy artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: react-deploy
+          path: ./deploy
+
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Deploy to VPS
         env:
           SSH_USER: ${{ secrets.VPS_USER }}
           SSH_HOST: ${{ secrets.VPS_HOST }}
+          SSH_PASSWORD: ${{ secrets.VPS_PASSWORD }}
         run: |
-          # Создаем архив с кодом (исключаем node_modules и .git)
-          tar -czf deploy.tar.gz --exclude='node_modules' --exclude='.git' .
-          
-          # Загружаем архив на VPS
-          scp -i ~/.ssh/id_deploy deploy.tar.gz $SSH_USER@$SSH_HOST:~/stanley-co/web/
-          
-          # Распаковываем и настраиваем на VPS
-          ssh -i ~/.ssh/id_deploy $SSH_USER@$SSH_HOST << 'EOF'
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "mkdir -p ~/stanley-co/web/github-actions/dist"
+
+          # Копируем новые файлы на VPS
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./deploy/* $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/dist/
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no Dockerfile $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/Dockerfile
+
+          # Сборка и запуск контейнера
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
             set -e
-            cd ~/stanley-co/web
-            
-            # Останавливаем текущий контейнер
+            cd ~/stanley-co/web/github-actions
+
             docker stop stanok-landing || true
             docker rm stanok-landing || true
-            
-            # Удаляем старый код (сохраняем только node_modules если есть)
-            if [ -d landing-web ]; then
-              rm -rf landing-web
-            fi
-            
-            # Распаковываем новый код
-            mkdir -p landing-web
-            tar -xzf deploy.tar.gz -C landing-web --strip-components=0
-            rm deploy.tar.gz
-            
-            cd landing-web
-            
-            # Устанавливаем зависимости и собираем проект
-            npm ci --only=production
-            npm run build
-            
-            # Собираем и запускаем Docker контейнер
+            docker rmi stanok-landing:latest || true
+
             docker build -t stanok-landing:latest .
             docker run -d --name stanok-landing -p 4066:80 --restart unless-stopped stanok-landing:latest
-            
-            # Очищаем старые образы
-            docker image prune -f
-            
-            echo "✅ Deploy completed successfully!"
 EOF
