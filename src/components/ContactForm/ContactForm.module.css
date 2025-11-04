@@ -1,0 +1,23 @@
+.contact {
+  background: var(--card);
+  padding: 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 30px rgba(15,18,34,0.06);
+  max-width: 760px;
+  margin: 0 auto;
+}
+form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+input, textarea {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+textarea { min-height: 120px; grid-column: 1 / -1; }
+button { grid-column: 1 / -1; }

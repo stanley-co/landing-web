@@ -1,0 +1,17 @@
+.products {
+  text-align: center;
+}
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 16px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: var(--radius);
+  text-align: left;
+  box-shadow: 0 8px 30px rgba(15,18,34,0.06);
+}
