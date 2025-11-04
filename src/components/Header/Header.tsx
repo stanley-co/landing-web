@@ -1,4 +1,4 @@
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonMenuButton, IonIcon } from '@ionic/react';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon } from '@ionic/react';
 import { menuOutline, closeOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import styles from "./Header.module.css";
