@@ -3,7 +3,6 @@ name: Build and Deploy React Web to VPS
 on:
   push:
     branches:
-      - main
       - develop
       - feature/*
 
@@ -12,53 +11,54 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Устанавливаем sshpass на runner (для SSH по паролю)
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
+      # 1️⃣ Устанавливаем зависимости на runner (sshpass, git, docker)
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git docker.io docker-compose nodejs npm
 
-      # 2️⃣ Выполняем деплой на VPS
-      - name: Build and Deploy on VPS
+      # 2️⃣ Копируем SSH ключ на runner
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+
+      # 3️⃣ Клонируем репозиторий прямо на VPS и билдим ветку develop
+      - name: Build & Deploy on VPS
         env:
           SSH_USER: ${{ secrets.VPS_USER }}
           SSH_HOST: ${{ secrets.VPS_HOST }}
-          SSH_PASSWORD: ${{ secrets.VPS_PASSWORD }}
         run: |
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_deploy $SSH_USER@$SSH_HOST <<EOF
             set -e
+            cd ~/stanley-co/web || mkdir -p ~/stanley-co/web && cd ~/stanley-co/web
 
-            # Папка проекта
-            APP_DIR=/home/$SSH_USER/stanley-co/web/landing-web
-
-            # Если папка не существует, клонируем репозиторий
-            if [ ! -d \$APP_DIR ]; then
-              git clone https://github.com/${{ github.repository }} \$APP_DIR
-            fi
-
-            cd \$APP_DIR
-            git fetch --all
-            git reset --hard origin/${GITHUB_REF##*/}
-
-            # Устанавливаем Node.js через nvm (если нет)
-            if ! command -v node >/dev/null 2>&1; then
-              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.6/install.sh | bash
-              export NVM_DIR=\"$HOME/.nvm\"
-              [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
-              nvm install 20
+            # Клонируем или обновляем репозиторий
+            if [ ! -d landing-web ]; then
+              git clone -b develop git@github.com:stanley-co/landing-web.git
             else
-              node -v
+              cd landing-web
+              git fetch origin develop
+              git reset --hard origin/develop
+              cd ..
             fi
 
-            # Устанавливаем зависимости и билдим
+            cd landing-web
+
+            # Устанавливаем Node.js зависимости
             npm ci
+
+            # Собираем фронтенд
             npm run build
 
-            # Собираем Docker образ
+            # Сборка Docker образа
             docker build -t stanok-landing:latest .
 
-            # Останавливаем старый контейнер, если есть
+            # Останавливаем старый контейнер (если есть)
             docker stop stanok-landing || true
             docker rm stanok-landing || true
 
             # Запускаем новый контейнер
             docker run -d --name stanok-landing -p 4066:80 stanok-landing:latest
-          "
+EOF
