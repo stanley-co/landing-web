@@ -75,17 +75,11 @@ jobs:
           sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no ./docker-image/stanok-landing.tar $SSH_USER@$SSH_HOST:/home/$SSH_USER/stanley-co/web/github-actions/
 
           # Загружаем образ и перезапускаем контейнер
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
             set -e
-            cd /home/homic/stanley-co/web/github-actions
-
-            # Загружаем образ
+            cd /home/$SSH_USER/stanley-co/web/github-actions
             docker load -i stanok-landing.tar
-
-            # Останавливаем старый контейнер
             docker stop stanok-landing || true
             docker rm stanok-landing || true
-
-            # Запускаем новый контейнер
             docker run -d --name stanok-landing -p 4066:80 stanok-landing:latest
-EOF
+          "
