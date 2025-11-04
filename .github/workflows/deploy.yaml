@@ -56,21 +56,12 @@ jobs:
           SSH_HOST: ${{ secrets.VPS_HOST }}
           SSH_PASSWORD: ${{ secrets.VPS_PASSWORD }}
         run: |
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "mkdir -p ~/stanley-co/web/github-actions/dist"
-
-          # Копируем новые файлы на VPS
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./deploy/* $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/dist/
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no Dockerfile $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/Dockerfile
-
-          # Сборка и запуск контейнера
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST '
             set -e
             cd ~/stanley-co/web/github-actions
-
             docker stop stanok-landing || true
             docker rm stanok-landing || true
             docker rmi stanok-landing:latest || true
-
             docker build -t stanok-landing:latest .
             docker run -d --name stanok-landing -p 4066:80 --restart unless-stopped stanok-landing:latest
-EOF
+          '
