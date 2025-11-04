@@ -26,30 +26,15 @@ jobs:
 
       # 3️⃣ Клонируем репозиторий прямо на VPS и билдим ветку develop
       - name: Build & Deploy on VPS
-      # 3️⃣ Клонируем репозиторий прямо на VPS и билдим ветку develop
-      - name: Build & Deploy on VPS
         env:
           SSH_USER: ${{ secrets.VPS_USER }}
           SSH_HOST: ${{ secrets.VPS_HOST }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_deploy $SSH_USER@$SSH_HOST <<EOF
             set -e
-            cd ~/stanley-co/web || mkdir -p ~/stanley-co/web && cd ~/stanley-co/web
-            cd ~/stanley-co/web || mkdir -p ~/stanley-co/web && cd ~/stanley-co/web
+            mkdir -p ~/stanley-co/web
+            cd ~/stanley-co/web
 
-            # Клонируем или обновляем репозиторий
-            if [ ! -d landing-web ]; then
-              git clone -b develop git@github.com:stanley-co/landing-web.git
-            else
-              cd landing-web
-              git fetch origin develop
-              git reset --hard origin/develop
-              cd ..
-            fi
-
-            cd landing-web
-
-            # Устанавливаем Node.js зависимости
             # Клонируем или обновляем репозиторий
             if [ ! -d landing-web ]; then
               git clone -b develop git@github.com:stanley-co/landing-web.git
@@ -66,20 +51,15 @@ jobs:
             npm ci
 
             # Собираем фронтенд
-
-            # Собираем фронтенд
             npm run build
 
             # Сборка Docker образа
-            # Сборка Docker образа
             docker build -t stanok-landing:latest .
 
-            # Останавливаем старый контейнер (если есть)
             # Останавливаем старый контейнер (если есть)
             docker stop stanok-landing || true
             docker rm stanok-landing || true
 
             # Запускаем новый контейнер
             docker run -d --name stanok-landing -p 4066:80 stanok-landing:latest
-EOF
 EOF
