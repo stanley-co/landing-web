@@ -1,5 +1,5 @@
 import { IonCard, IonGrid, IonRow, IonCol, IonImg } from '@ionic/react';
-import testImage from '../../assets/images/test-image.svg';
+import testImage from '../../assets/images/test-image.png';
 import styles from "./Gallery.module.css";
 
 const galleryItems = [
