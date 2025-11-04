@@ -15,7 +15,7 @@ const certificates = [
 const Certificates = () => (
   <section id="certificates" className={styles.certificates}>
     <div className={styles.container}>
-      <h2 className={styles.sectionTitle}>Сертификаты и стандарты</h2>
+      <h2 className={styles.sectionTitle}>НАШИ ПОЧЕТНЫЕ СЕРТИФИКАТЫ</h2>
       <IonGrid>
         <IonRow>
           {certificates.map((cert, idx) => (

@@ -23,7 +23,7 @@ const ContactForm = () => {
     <section id="contact" className={styles.contact}>
       <div className={styles.container}>
         <h2 className={styles.sectionTitle}>Свяжитесь с нами</h2>
-        <p className={styles.subtitle}>Заполните форму, и мы свяжемся с вами в ближайшее время.</p>
+        <p className={styles.subtitle}>Заполните вашу информацию, и мы свяжемся с вами немедленно. Давайте лучше поймем ваши потребности.</p>
         <IonCard className={styles.formCard}>
           <IonCardContent>
             <form onSubmit={handleSubmit}>

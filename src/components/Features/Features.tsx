@@ -5,29 +5,32 @@ import styles from "./Features.module.css";
 
 const items = [
   {
-    title: "Smart Automated Vacuum Emulsifying Mixer",
-    desc: "Высокая безопасность · Интеллектуальный PLC · Точный контроль температуры",
+    title: "Умный автоматизированный вакуумный эмульгатор",
+    desc: "Высокая безопасность · Интеллектуальный PLC · Точный контроль температуры · Мощное гомогенное смешивание материалов · Гигиеническая нержавеющая сталь",
     icon: shieldCheckmarkOutline,
-    color: "primary"
+    color: "primary",
+    type: "Lotion Making Machine"
   },
   {
-    title: "High Efficient Cosmetic Vacuum Emulsifier",
-    desc: "GMP-дизайн · Широкая совместимость · Экономия труда · Автоматический трубопровод",
+    title: "Высокоэффективный косметический вакуумный эмульгатор",
+    desc: "GMP-стандартный дизайн · Широкая совместимость · Экономия труда · Автоматический контроль трубопровода · Обеспечивает стабильные эмульсии для постоянного качества",
     icon: flashOutline,
-    color: "success"
+    color: "success",
+    type: "Automatic Gel Making Machine"
   },
   {
-    title: "Automatic Gel Making Machine",
-    desc: "Стабильная эмульсия и постоянное качество продукции",
+    title: "Автоматическая машина для производства гелей",
+    desc: "Использует передовые технологии вакуумной эмульгации для создания стабильных гелевых продуктов с постоянным качеством и однородностью",
     icon: checkmarkCircleOutline,
-    color: "tertiary"
+    color: "tertiary",
+    type: "Vacuum Emulsifying Mixer"
   },
 ];
 
 const Features = () => (
   <section id="display" className={styles.features}>
     <div className={styles.container}>
-      <h2 className={styles.sectionTitle}>Продуктовые решения</h2>
+      <h2 className={styles.sectionTitle}>ОТЛИЧНАЯ ДЕМОНСТРАЦИЯ ПРОДУКЦИИ</h2>
       <IonGrid>
         <IonRow>
           {items.map((f, i) => (
@@ -38,6 +41,7 @@ const Features = () => (
                     <IonIcon icon={f.icon} className={styles.icon} />
                   </div>
                   <IonCardTitle className={styles.cardTitle}>{f.title}</IonCardTitle>
+                  {f.type && <p className={styles.type}>ТИП: {f.type}</p>}
                 </IonCardHeader>
                 <IonCardContent>
                   <p className={styles.desc}>{f.desc}</p>

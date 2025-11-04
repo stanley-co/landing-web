@@ -45,7 +45,17 @@
   font-weight: 600;
   text-align: center;
   color: var(--ion-color-dark, #1a202c);
+  margin-bottom: 8px;
+}
+
+.type {
+  font-size: 0.75rem;
+  color: var(--ion-color-primary, #3880ff);
+  text-align: center;
+  font-weight: 600;
   margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .desc {
