@@ -8,74 +8,57 @@ on:
       - feature/*
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      # 1️⃣ Клонируем репозиторий
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # 2️⃣ Устанавливаем Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      # 3️⃣ Устанавливаем зависимости
-      - name: Install dependencies
-        run: npm ci
-
-      # 4️⃣ Собираем фронтенд
-      - name: Build project
-        run: npm run build
-
-      # 5️⃣ Сохраняем Docker образ для ARM64
-      - name: Build Docker image for ARM64
-        run: |
-          docker build --platform linux/arm64 -t stanok-landing:latest .
-
-      # 6️⃣ Сохраняем образ в tar для передачи
-      - name: Save Docker image
-        run: docker save stanok-landing:latest -o stanok-landing.tar
-
-      # 7️⃣ Загружаем образ как артефакт
-      - name: Upload Docker image
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-image
-          path: stanok-landing.tar
-
   deploy:
     runs-on: ubuntu-latest
-    needs: build
 
     steps:
-      # 1️⃣ Скачиваем Docker образ
-      - name: Download Docker image
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-image
-          path: ./docker-image
+      # 1️⃣ Устанавливаем sshpass на runner (для SSH по паролю)
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      # 2️⃣ Деплой на VPS
-      - name: Deploy Docker image to VPS
+      # 2️⃣ Выполняем деплой на VPS
+      - name: Build and Deploy on VPS
         env:
           SSH_USER: ${{ secrets.VPS_USER }}
           SSH_HOST: ${{ secrets.VPS_HOST }}
           SSH_PASSWORD: ${{ secrets.VPS_PASSWORD }}
         run: |
-          sudo apt-get update && sudo apt-get install -y sshpass
-
-          # Копируем tar с образом на VPS
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no ./docker-image/stanok-landing.tar $SSH_USER@$SSH_HOST:/home/$SSH_USER/stanley-co/web/github-actions/
-
-          # Загружаем образ и перезапускаем контейнер
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
             set -e
-            cd /home/$SSH_USER/stanley-co/web/github-actions
-            docker load -i stanok-landing.tar
+
+            # Папка проекта
+            APP_DIR=/home/$SSH_USER/stanley-co/web/landing-web
+
+            # Если папка не существует, клонируем репозиторий
+            if [ ! -d \$APP_DIR ]; then
+              git clone https://github.com/${{ github.repository }} \$APP_DIR
+            fi
+
+            cd \$APP_DIR
+            git fetch --all
+            git reset --hard origin/${GITHUB_REF##*/}
+
+            # Устанавливаем Node.js через nvm (если нет)
+            if ! command -v node >/dev/null 2>&1; then
+              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.6/install.sh | bash
+              export NVM_DIR=\"$HOME/.nvm\"
+              [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
+              nvm install 20
+            else
+              node -v
+            fi
+
+            # Устанавливаем зависимости и билдим
+            npm ci
+            npm run build
+
+            # Собираем Docker образ
+            docker build -t stanok-landing:latest .
+
+            # Останавливаем старый контейнер, если есть
             docker stop stanok-landing || true
             docker rm stanok-landing || true
+
+            # Запускаем новый контейнер
             docker run -d --name stanok-landing -p 4066:80 stanok-landing:latest
           "
