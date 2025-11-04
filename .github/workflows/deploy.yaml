@@ -25,7 +25,7 @@ jobs:
           # Копируем build в dist, чтобы совпадало с VPS
           rm -rf github-actions/dist
           mkdir -p github-actions/dist
-          cp -r build/* github-actions/dist/
+          cp -r dist/* github-actions/dist/
 
       - name: Upload deploy artifact
         uses: actions/upload-artifact@v4
