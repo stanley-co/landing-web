@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Клонируем код
+      # 1️⃣ Клонируем репозиторий
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -22,39 +22,48 @@ jobs:
         with:
           node-version: '20'
 
-      # 3️⃣ Ставим зависимости
+      # 3️⃣ Устанавливаем зависимости
       - name: Install dependencies
         run: npm ci
 
-      # 4️⃣ Сборка фронтенда
+      # 4️⃣ Собираем фронтенд
       - name: Build project
         run: npm run build
 
-      # 5️⃣ Загружаем артефакт сборки (dist)
-      - name: Upload build artifact
+      # 5️⃣ Сохраняем Docker образ
+      - name: Build Docker image
+        run: |
+          docker build -t stanok-landing:latest .
+
+      # 6️⃣ Сохраняем образ в tar для передачи
+      - name: Save Docker image
+        run: docker save stanok-landing:latest -o stanok-landing.tar
+
+      # 7️⃣ Загружаем образ как артефакт
+      - name: Upload Docker image
         uses: actions/upload-artifact@v4
         with:
-          name: web-dist
-          path: dist/
+          name: docker-image
+          path: stanok-landing.tar
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      # 1️⃣ Клонируем код
-      - name: Checkout code
+      # 1️⃣ Клонируем код (не обязательно, можно только артефакт)
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Скачиваем собранный артефакт
-      - name: Download build artifact
+      # 2️⃣ Скачиваем Docker образ
+      - name: Download Docker image
         uses: actions/download-artifact@v4
         with:
-          name: web-dist
-          path: ./dist
+          name: docker-image
+          path: ./docker-image
 
       # 3️⃣ Деплой на VPS
-      - name: Deploy to VPS via SSH
+      - name: Deploy Docker image to VPS
         env:
           SSH_USER: ${{ secrets.VPS_USER }}
           SSH_HOST: ${{ secrets.VPS_HOST }}
@@ -62,19 +71,21 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y sshpass
 
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "mkdir -p /home/$SSH_USER/stanley-co/web/github-actions"
+          # Копируем tar с образом на VPS
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no ./docker-image/stanok-landing.tar $SSH_USER@$SSH_HOST:/home/$SSH_USER/stanley-co/web/github-actions/
 
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./dist $SSH_USER@$SSH_HOST:/home/$SSH_USER/stanley-co/web/github-actions/dist
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no Dockerfile $SSH_USER@$SSH_HOST:/home/$SSH_USER/stanley-co/web/github-actions/Dockerfile
-
+          # Загружаем образ и перезапускаем контейнер
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
             set -e
             cd /home/homic/stanley-co/web/github-actions
 
+            # Загружаем образ
+            docker load -i stanok-landing.tar
+
+            # Останавливаем старый контейнер
             docker stop stanok-landing || true
             docker rm stanok-landing || true
-            docker rmi stanok-landing:latest || true
 
-            docker build -t stanok-landing:latest .
+            # Запускаем новый контейнер
             docker run -d --name stanok-landing -p 4066:80 stanok-landing:latest
-          EOF
+EOF

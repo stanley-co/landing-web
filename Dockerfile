@@ -2,11 +2,11 @@
     FROM node:20-alpine AS build
     WORKDIR /app
     
-    # Копируем package.json и устанавливаем зависимости
+    # Копируем package.json и package-lock.json
     COPY package*.json ./
     RUN npm install
     
-    # Копируем весь проект
+    # Копируем исходники
     COPY . .
     
     # Собираем приложение (для Vite — dist, для CRA — build)
@@ -16,13 +16,13 @@
     FROM nginx:alpine
     WORKDIR /usr/share/nginx/html
     
-    # Удаляем дефолтную конфигурацию
+    # Удаляем дефолтные файлы
     RUN rm -rf ./*
     
-    # Копируем собранное приложение
-    COPY --from=build /app/dist ./
+    # Копируем собранное приложение из предыдущего этапа
+    COPY --from=build /app/dist .
     
-    # Копируем кастомный nginx.conf
+    # Копируем кастомный nginx.conf (если есть)
     COPY ./deploy/nginx.conf /etc/nginx/conf.d/default.conf
     
     EXPOSE 80
