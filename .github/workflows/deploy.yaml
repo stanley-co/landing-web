@@ -22,7 +22,7 @@ jobs:
         run: |
           npm ci
           npm run build
-          # Копируем build в dist, чтобы совпадало с VPS
+          # Копируем dist в github-actions/dist для деплоя
           rm -rf github-actions/dist
           mkdir -p github-actions/dist
           cp -r dist/* github-actions/dist/
@@ -56,6 +56,14 @@ jobs:
           SSH_HOST: ${{ secrets.VPS_HOST }}
           SSH_PASSWORD: ${{ secrets.VPS_PASSWORD }}
         run: |
+          # Создаем папку на VPS
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "mkdir -p ~/stanley-co/web/github-actions/dist"
+
+          # Копируем готовый фронт + Dockerfile
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./deploy/* $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/dist/
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no Dockerfile $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/Dockerfile
+
+          # Сборка и запуск контейнера на VPS
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST '
             set -e
             cd ~/stanley-co/web/github-actions
