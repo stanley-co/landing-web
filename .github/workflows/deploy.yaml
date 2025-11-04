@@ -30,10 +30,10 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 5️⃣ Сохраняем Docker образ
-      - name: Build Docker image
+      # 5️⃣ Сохраняем Docker образ для ARM64
+      - name: Build Docker image for ARM64
         run: |
-          docker build -t stanok-landing:latest .
+          docker build --platform linux/arm64 -t stanok-landing:latest .
 
       # 6️⃣ Сохраняем образ в tar для передачи
       - name: Save Docker image
@@ -51,18 +51,14 @@ jobs:
     needs: build
 
     steps:
-      # 1️⃣ Клонируем код (не обязательно, можно только артефакт)
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # 2️⃣ Скачиваем Docker образ
+      # 1️⃣ Скачиваем Docker образ
       - name: Download Docker image
         uses: actions/download-artifact@v4
         with:
           name: docker-image
           path: ./docker-image
 
-      # 3️⃣ Деплой на VPS
+      # 2️⃣ Деплой на VPS
       - name: Deploy Docker image to VPS
         env:
           SSH_USER: ${{ secrets.VPS_USER }}
