@@ -42,16 +42,16 @@ jobs:
     needs: build
 
     steps:
-      # 1️⃣ Скачиваем собранный артефакт
+      # 1️⃣ Клонируем код
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Скачиваем собранный артефакт
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: web-dist
           path: ./dist
-
-      # 2️⃣ Копируем Dockerfile
-      - name: Checkout code
-        uses: actions/checkout@v4
 
       # 3️⃣ Деплой на VPS
       - name: Deploy to VPS via SSH
@@ -62,14 +62,11 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y sshpass
 
-          # Создаем каталог на сервере
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "mkdir -p /home/$SSH_USER/stanley-co/web/github-actions"
 
-          # Передаем dist и Dockerfile
           sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./dist $SSH_USER@$SSH_HOST:/home/$SSH_USER/stanley-co/web/github-actions/dist
           sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no Dockerfile $SSH_USER@$SSH_HOST:/home/$SSH_USER/stanley-co/web/github-actions/Dockerfile
 
-          # Выполняем сборку и перезапуск контейнера
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
             set -e
             cd /home/homic/stanley-co/web/github-actions
