@@ -71,5 +71,5 @@ jobs:
             docker rm stanok-landing || true
             docker rmi stanok-landing:latest || true
             docker build -t stanok-landing:latest .
-            docker run -d --name stanok-landing -p 4066:80 --restart unless-stopped stanok-landing:latest
+            docker run -d --name stanok-landing -p 4066:80 --network app-network --restart unless-stopped stanok-landing:latest
           '
