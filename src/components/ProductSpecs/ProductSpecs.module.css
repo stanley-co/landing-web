@@ -1,0 +1,136 @@
+.specs {
+  padding: 48px 16px;
+  background: var(--ion-background-color, #f7f8fa);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  --background: white;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ion-color-dark, #1a202c);
+  margin: 0;
+  padding-bottom: 8px;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  padding: 20px 24px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--ion-color-primary, #008CFF);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.row:hover {
+  background: linear-gradient(90deg, rgba(0, 140, 255, 0.05) 0%, transparent 100%);
+  transform: translateX(4px);
+}
+
+.row:hover::before {
+  opacity: 1;
+}
+
+.row.even {
+  background: var(--ion-color-light, #f9fafb);
+}
+
+.row.odd {
+  background: white;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--ion-color-dark, #1a202c);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.labelText {
+  position: relative;
+  padding-left: 12px;
+}
+
+.labelText::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--ion-color-primary, #008CFF);
+  font-size: 1.2em;
+}
+
+.value {
+  color: var(--ion-color-dark, #1a202c);
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.valueText {
+  background: linear-gradient(135deg, rgba(0, 140, 255, 0.1) 0%, rgba(0, 140, 255, 0.05) 100%);
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: inline-block;
+  border: 1px solid rgba(0, 140, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+  .specs {
+    padding: 32px 16px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .label {
+    font-size: 0.95rem;
+  }
+
+  .value {
+    font-size: 0.95rem;
+  }
+
+  .valueText {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}
+

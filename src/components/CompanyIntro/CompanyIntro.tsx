@@ -8,7 +8,7 @@ const CompanyIntro = () => (
     <div className={styles.container}>
       <IonCard className={styles.introCard}>
         <IonCardHeader>
-          <IonCardTitle className={styles.title}>Hone Machinery</IonCardTitle>
+          <IonCardTitle className={styles.title}>ABOUT US</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
           <p className={styles.description}>

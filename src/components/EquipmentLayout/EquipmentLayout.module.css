@@ -1,0 +1,34 @@
+.layout {
+  padding: 48px 16px 80px;
+  background: var(--ion-background-color, #f7f8fa);
+  min-height: 400px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.filterCol {
+  padding-right: 24px;
+}
+
+.gridCol {
+  padding-left: 0;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    padding: 32px 16px 64px;
+  }
+
+  .filterCol {
+    padding-right: 0;
+    margin-bottom: 16px;
+  }
+
+  .gridCol {
+    padding-left: 0;
+  }
+}
+

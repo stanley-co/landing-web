@@ -1,0 +1,198 @@
+.gallery {
+  padding: 48px 16px;
+  background: white;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mainImageWrapper {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.mainImage {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f7f8fa;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  position: relative;
+  cursor: zoom-in;
+  transition: cursor 0.2s ease;
+}
+
+.mainImage.zoomed {
+  cursor: zoom-out;
+}
+
+.mainImage.zoomed .image {
+  transform: scale(2.5);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navButton {
+  --color: white;
+  --background: rgba(0, 0, 0, 0.5);
+  --background-hover: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.navButton:hover {
+  --background: rgba(0, 140, 255, 0.8);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.nextButton {
+  right: 16px;
+}
+
+.navButton:first-of-type {
+  left: 16px;
+}
+
+.zoomButton {
+  --color: white;
+  --background: rgba(0, 0, 0, 0.5);
+  --background-hover: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.zoomButton:hover {
+  --background: rgba(0, 140, 255, 0.8);
+  transform: scale(1.1);
+}
+
+.counter {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ion-color-medium, #9ca3af) transparent;
+  justify-content: center;
+}
+
+.thumbnails::-webkit-scrollbar {
+  height: 6px;
+}
+
+.thumbnails::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.thumbnails::-webkit-scrollbar-thumb {
+  background-color: var(--ion-color-medium, #9ca3af);
+  border-radius: 3px;
+}
+
+.thumbnail {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.2s ease;
+  background: #f7f8fa;
+  position: relative;
+}
+
+.thumbnail::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.thumbnail:hover::after {
+  border-color: var(--ion-color-primary, #008CFF);
+}
+
+.thumbnail.active {
+  border-color: var(--ion-color-primary, #008CFF);
+  box-shadow: 0 0 0 2px rgba(0, 140, 255, 0.2);
+}
+
+.thumbnail.active::after {
+  border-color: var(--ion-color-primary, #008CFF);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    padding: 32px 16px;
+  }
+
+  .mainImage {
+    aspect-ratio: 4 / 3;
+  }
+
+  .navButton,
+  .zoomButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .thumbnail {
+    width: 80px;
+    height: 80px;
+  }
+}
+

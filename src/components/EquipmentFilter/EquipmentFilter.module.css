@@ -1,0 +1,113 @@
+.filter {
+  width: 280px;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+  position: sticky;
+  top: 80px;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--ion-color-dark, #1a202c);
+  margin: 0 0 20px 0;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--ion-color-light, #f3f4f6);
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --min-height: 48px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.item:hover {
+  --background: rgba(0, 140, 255, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.item.active {
+  --background: rgba(0, 140, 255, 0.1);
+  --color: var(--ion-color-primary, #008CFF);
+  font-weight: 600;
+  border-left: 3px solid var(--ion-color-primary, #008CFF);
+}
+
+.itemContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+}
+
+.count {
+  background: var(--ion-color-medium, #9ca3af);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.item.active .count {
+  background: var(--ion-color-primary, #008CFF);
+}
+
+.selectedItem {
+  --background: rgba(0, 140, 255, 0.1);
+  --color: var(--ion-color-primary, #008CFF);
+  font-weight: 600;
+}
+
+.desktopOnly {
+  display: block;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.filterButton {
+  --border-radius: 12px;
+  --border-color: var(--ion-color-primary, #008CFF);
+  --color: var(--ion-color-dark, #1a202c);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.badge {
+  background: var(--ion-color-primary, #008CFF);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+}
+
+@media (max-width: 768px) {
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: block;
+  }
+}
+

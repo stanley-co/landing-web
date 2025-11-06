@@ -25,7 +25,7 @@ const Header = () => {
     <IonHeader className={styles.header}>
       <IonToolbar>
         <div slot="start" className={styles.logoContainer}>
-          <IonTitle className={styles.title} onClick={() => navigate('/')}>СТАНОК ПРО</IonTitle>
+          <IonTitle className={styles.title} onClick={() => navigate('/')}>Stanley-Co.</IonTitle>
         </div>
         <IonButtons slot="end" className="ion-hide-md-up">
           <IonButton onClick={() => setMenuOpen(!menuOpen)}>
