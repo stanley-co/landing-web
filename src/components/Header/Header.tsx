@@ -2,17 +2,11 @@ import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon } from 
 import { menuOutline, closeOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import styles from "./Header.module.css";
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setMenuOpen(false);
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <IonHeader className={styles.header}>
@@ -24,24 +18,18 @@ const Header = () => {
           </IonButton>
         </IonButtons>
         <div slot="end" className={`${styles.nav} ion-hide-md-down`}>
-          <IonButton fill="clear" onClick={() => scrollToSection('home')}>Главная</IonButton>
-          <IonButton fill="clear" onClick={() => scrollToSection('display')}>Продуктовые решения</IonButton>
-          <IonButton fill="clear" onClick={() => scrollToSection('products')}>Каталог</IonButton>
-          <IonButton fill="clear" onClick={() => scrollToSection('company')}>О компании</IonButton>
-          <IonButton fill="clear" onClick={() => scrollToSection('applications')}>Применение</IonButton>
-          <IonButton fill="clear" onClick={() => scrollToSection('certificates')}>Сертификаты</IonButton>
-          <IonButton fill="clear" onClick={() => scrollToSection('contact')}>Контакты</IonButton>
+          <IonButton fill="clear" onClick={() => navigate('/')}>Главная</IonButton>
+          <IonButton fill="clear" onClick={() => navigate('/equipment')}>Оборудование</IonButton>
+          <IonButton fill="clear" onClick={() => navigate('/news')}>Новости</IonButton>
+          <IonButton fill="clear" onClick={() => navigate('/contacts')}>Контакты</IonButton>
         </div>
       </IonToolbar>
       {menuOpen && (
         <div className={styles.mobileMenu}>
-          <IonButton fill="clear" expand="block" onClick={() => scrollToSection('home')}>Главная</IonButton>
-          <IonButton fill="clear" expand="block" onClick={() => scrollToSection('display')}>Продуктовые решения</IonButton>
-          <IonButton fill="clear" expand="block" onClick={() => scrollToSection('products')}>Каталог</IonButton>
-          <IonButton fill="clear" expand="block" onClick={() => scrollToSection('company')}>О компании</IonButton>
-          <IonButton fill="clear" expand="block" onClick={() => scrollToSection('applications')}>Применение</IonButton>
-          <IonButton fill="clear" expand="block" onClick={() => scrollToSection('certificates')}>Сертификаты</IonButton>
-          <IonButton fill="clear" expand="block" onClick={() => scrollToSection('contact')}>Контакты</IonButton>
+          <IonButton fill="clear" expand="block" onClick={() => { navigate('/'); setMenuOpen(false); }}>Главная</IonButton>
+          <IonButton fill="clear" expand="block" onClick={() => { navigate('/equipment'); setMenuOpen(false); }}>Оборудование</IonButton>
+          <IonButton fill="clear" expand="block" onClick={() => { navigate('/news'); setMenuOpen(false); }}>Новости</IonButton>
+          <IonButton fill="clear" expand="block" onClick={() => { navigate('/contacts'); setMenuOpen(false); }}>Контакты</IonButton>
         </div>
       )}
     </IonHeader>

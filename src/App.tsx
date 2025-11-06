@@ -1,36 +1,25 @@
-import { IonApp, IonContent, IonPage } from '@ionic/react';
-import Header from "./components/Header/Header";
-import Hero from "./components/Hero/Hero";
-import Features from "./components/Features/Features";
-import ProductsSection from "./components/ProductsSection/ProductsSection";
-import Gallery from "./components/Gallery/Gallery";
-import Testimonials from "./components/Testimonials/Testimonials";
-import FAQ from "./components/FAQ/FAQ";
-import ContactForm from "./components/ContactForm/ContactForm";
-import Footer from "./components/Footer/Footer";
-import CompanyIntro from "./components/CompanyIntro/CompanyIntro";
-import Applications from "./components/Applications/Applications";
-import Certificates from "./components/Certificates/Certificates";
+import { IonApp } from '@ionic/react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from './routes/HomePage';
+import EquipmentPage from './routes/EquipmentPage';
+import ProductDetailPage from './routes/ProductDetailPage';
+import NewsPage from './routes/NewsPage';
+import NewsArticlePage from './routes/NewsArticlePage';
+import ContactsPage from './routes/ContactsPage';
 
 const App = () => {
   return (
     <IonApp>
-      <IonPage>
-        <Header />
-        <IonContent>
-          <Hero />
-          <Features />
-          <ProductsSection />
-          <CompanyIntro />
-          <Applications />
-          <Certificates />
-          <Gallery />
-          <Testimonials />
-          <FAQ />
-          <ContactForm />
-          <Footer />
-        </IonContent>
-      </IonPage>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/equipment" element={<EquipmentPage />} />
+          <Route path="/equipment/:id" element={<ProductDetailPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:slug" element={<NewsArticlePage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
+        </Routes>
+      </BrowserRouter>
     </IonApp>
   );
 };
