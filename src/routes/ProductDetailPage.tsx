@@ -5,7 +5,6 @@ import ProductHeader from '../components/ProductHeader/ProductHeader';
 import ProductGallery from '../components/ProductGallery/ProductGallery';
 import ProductSpecs from '../components/ProductSpecs/ProductSpecs';
 import ProductDescription from '../components/ProductDescription/ProductDescription';
-import ContactCTA from '../components/ContactCTA/ContactCTA';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
 import productsData from '../data/products.json';
@@ -53,7 +52,6 @@ const ProductDetailPage = () => {
             description={product.description}
             fullDescription={product.fullDescription}
           />
-          <ContactCTA />
           <CooperationFormSection />
           <Footer />
         </IonContent>

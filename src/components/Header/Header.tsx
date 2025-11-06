@@ -9,14 +9,6 @@ const Header = () => {
   const navigate = useNavigate();
 
   const scrollToContact = () => {
-    if (window.location.pathname === '/') {
-      const element = document.getElementById('contact-cta');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-        setMenuOpen(false);
-        return;
-      }
-    }
     navigate('/contacts');
     setMenuOpen(false);
   };
