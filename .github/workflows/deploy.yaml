@@ -59,9 +59,10 @@ jobs:
           # Создаем папку на VPS
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "mkdir -p ~/stanley-co/web/github-actions/dist"
 
-          # Копируем готовый фронт + Dockerfile
+          # Копируем готовый фронт + Dockerfile + nginx.conf
           sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./deploy/* $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/dist/
           sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no Dockerfile $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/Dockerfile
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no nginx.conf $SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/nginx.conf
 
           # Сборка и запуск контейнера на VPS
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST '
