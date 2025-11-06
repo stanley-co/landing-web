@@ -2,35 +2,26 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGri
 import { arrowForwardOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
+import newsData from '../../data/news.json';
 import testImage from '../../assets/images/test-image.png';
 import styles from "./NewsPreview.module.css";
 
-const news = [
-  {
-    id: 1,
-    title: "Новые технологии в вакуумной эмульгации",
-    excerpt: "Обзор современных решений для производства косметических продуктов",
-    image: testImage,
-    slug: "new-vacuum-emulsification-technologies"
-  },
-  {
-    id: 2,
-    title: "Преимущества планетарных миксеров",
-    excerpt: "Как выбрать оптимальное оборудование для вашего производства",
-    image: testImage,
-    slug: "planetary-mixer-advantages"
-  },
-  {
-    id: 3,
-    title: "Сертификация оборудования по стандартам GMP",
-    excerpt: "Важность соответствия международным стандартам качества",
-    image: testImage,
-    slug: "gmp-certification"
-  },
-];
-
 const NewsPreview = () => {
   const navigate = useNavigate();
+
+  // Берем последние 3 новости из реальных данных (сортируем по дате)
+  const news = useMemo(() => {
+    return [...newsData]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 3)
+      .map(item => ({
+        id: item.id,
+        title: item.title,
+        excerpt: item.preview,
+        image: testImage
+      }));
+  }, []);
 
   return (
     <section className={styles.newsPreview}>
@@ -51,7 +42,7 @@ const NewsPreview = () => {
                     <p className={styles.excerpt}>{item.excerpt}</p>
                     <IonButton 
                       fill="clear" 
-                      onClick={() => navigate(`/news/${item.slug}`)}
+                      onClick={() => navigate(`/news/${item.id}`)}
                       className={styles.readButton}
                     >
                       Читать

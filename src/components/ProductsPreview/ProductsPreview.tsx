@@ -2,42 +2,24 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGri
 import { informationCircleOutline, arrowForwardOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
+import productsData from '../../data/products.json';
 import testImage from '../../assets/images/test-image.png';
 import styles from "./ProductsPreview.module.css";
 
-const products = [
-  { 
-    id: 1,
-    name: "Вакуумный эмульгатор", 
-    category: "Эмульгаторы",
-    description: "Профессиональное оборудование для производства косметических и фармацевтических эмульсий",
-    image: testImage
-  },
-  { 
-    id: 2,
-    name: "Планетарный миксер", 
-    category: "Миксеры",
-    description: "Современное оборудование для смешивания вязких и пастообразных продуктов",
-    image: testImage
-  },
-  { 
-    id: 3,
-    name: "Гомогенизатор", 
-    category: "Специализированное",
-    description: "Высокоэффективное оборудование для гомогенизации различных продуктов",
-    image: testImage
-  },
-  { 
-    id: 4,
-    name: "Резервуар с двойной рубашкой", 
-    category: "Резервуары",
-    description: "Промышленные резервуары для хранения и обработки жидкостей с термостатированием",
-    image: testImage
-  },
-];
-
 const ProductsPreview = () => {
   const navigate = useNavigate();
+
+  // Берем первые 4 продукта из реальных данных
+  const products = useMemo(() => {
+    return productsData.slice(0, 4).map(product => ({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      description: product.description,
+      image: testImage
+    }));
+  }, []);
 
   return (
     <section id="products-preview" className={styles.productsPreview}>

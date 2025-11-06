@@ -1,0 +1,60 @@
+.grid {
+  padding: 48px 16px 80px;
+  background: var(--ion-background-color, #f7f8fa);
+  min-height: 400px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.col {
+  margin-bottom: 32px;
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empty {
+  text-align: center;
+  padding: 80px 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  opacity: 0.5;
+}
+
+.emptyTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ion-color-dark, #1a202c);
+  margin: 0 0 16px 0;
+}
+
+.emptyText {
+  font-size: 1rem;
+  color: var(--ion-color-medium, #6b7280);
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    padding: 32px 16px 64px;
+  }
+}
+
