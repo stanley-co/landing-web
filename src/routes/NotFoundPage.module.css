@@ -1,0 +1,151 @@
+.notFound {
+  padding: 120px 16px 80px;
+  background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%);
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.content {
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.errorCode {
+  font-size: 8rem;
+  font-weight: 900;
+  color: var(--ion-color-primary, #008CFF);
+  line-height: 1;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #008CFF 0%, #0066CC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.8;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ion-color-dark, #1a202c);
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: var(--ion-color-medium, #6b7280);
+  margin: 0 0 40px 0;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.button {
+  --border-radius: 12px;
+  height: 50px;
+  font-weight: 600;
+  padding: 0 28px;
+}
+
+.links {
+  padding-top: 48px;
+  border-top: 1px solid var(--ion-color-medium-shade, #e5e7eb);
+}
+
+.linksTitle {
+  font-size: 1rem;
+  color: var(--ion-color-medium, #6b7280);
+  margin: 0 0 20px 0;
+  font-weight: 500;
+}
+
+.linksList {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.link {
+  background: none;
+  border: 1px solid var(--ion-color-medium-shade, #e5e7eb);
+  color: var(--ion-color-dark, #1a202c);
+  font-size: 0.95rem;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.link:hover {
+  border-color: var(--ion-color-primary, #008CFF);
+  color: var(--ion-color-primary, #008CFF);
+  background: rgba(0, 140, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .notFound {
+    padding: 80px 16px 60px;
+  }
+
+  .errorCode {
+    font-size: 5rem;
+    margin-bottom: 20px;
+  }
+
+  .title {
+    font-size: 1.875rem;
+  }
+
+  .description {
+    font-size: 1rem;
+    margin-bottom: 32px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 40px;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .linksList {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .link {
+    width: 100%;
+  }
+}
+

@@ -6,6 +6,7 @@ import ProductDetailPage from './routes/ProductDetailPage';
 import NewsPage from './routes/NewsPage';
 import NewsArticlePage from './routes/NewsArticlePage';
 import ContactsPage from './routes/ContactsPage';
+import NotFoundPage from './routes/NotFoundPage';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/news" element={<NewsPage />} />
           <Route path="/news/:id" element={<NewsArticlePage />} />
           <Route path="/contacts" element={<ContactsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </IonApp>
