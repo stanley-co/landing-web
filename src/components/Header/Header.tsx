@@ -1,17 +1,32 @@
 import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon } from '@ionic/react';
 import { menuOutline, closeOutline } from 'ionicons/icons';
 import { useState } from 'react';
-import styles from "./Header.module.css";
 import { useNavigate } from 'react-router-dom';
+import styles from "./Header.module.css";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  const scrollToContact = () => {
+    if (window.location.pathname === '/') {
+      const element = document.getElementById('contact-cta');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setMenuOpen(false);
+        return;
+      }
+    }
+    navigate('/contacts');
+    setMenuOpen(false);
+  };
+
   return (
     <IonHeader className={styles.header}>
       <IonToolbar>
-        <IonTitle className={styles.title}>СТАНОК ПРО</IonTitle>
+        <div slot="start" className={styles.logoContainer}>
+          <IonTitle className={styles.title} onClick={() => navigate('/')}>СТАНОК ПРО</IonTitle>
+        </div>
         <IonButtons slot="end" className="ion-hide-md-up">
           <IonButton onClick={() => setMenuOpen(!menuOpen)}>
             <IonIcon icon={menuOpen ? closeOutline : menuOutline} />
@@ -22,6 +37,9 @@ const Header = () => {
           <IonButton fill="clear" onClick={() => navigate('/equipment')}>Оборудование</IonButton>
           <IonButton fill="clear" onClick={() => navigate('/news')}>Новости</IonButton>
           <IonButton fill="clear" onClick={() => navigate('/contacts')}>Контакты</IonButton>
+          <IonButton color="primary" onClick={scrollToContact} className={styles.ctaButton}>
+            Связаться
+          </IonButton>
         </div>
       </IonToolbar>
       {menuOpen && (
@@ -30,6 +48,9 @@ const Header = () => {
           <IonButton fill="clear" expand="block" onClick={() => { navigate('/equipment'); setMenuOpen(false); }}>Оборудование</IonButton>
           <IonButton fill="clear" expand="block" onClick={() => { navigate('/news'); setMenuOpen(false); }}>Новости</IonButton>
           <IonButton fill="clear" expand="block" onClick={() => { navigate('/contacts'); setMenuOpen(false); }}>Контакты</IonButton>
+          <IonButton color="primary" expand="block" onClick={scrollToContact} className={styles.ctaButton}>
+            Связаться
+          </IonButton>
         </div>
       )}
     </IonHeader>

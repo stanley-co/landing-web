@@ -1,0 +1,81 @@
+.contactCTA {
+  padding: 100px 16px;
+  background: linear-gradient(135deg, #008CFF 0%, #0066CC 100%);
+  color: white;
+  text-align: center;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.content {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  --background: white;
+  --color: #008CFF;
+  --border-radius: 12px;
+  height: 56px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  padding: 0 40px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .contactCTA {
+    padding: 64px 16px;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 32px;
+  }
+
+  .ctaButton {
+    height: 48px;
+    font-size: 1rem;
+    padding: 0 24px;
+  }
+}
+

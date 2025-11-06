@@ -1,15 +1,13 @@
 import { IonContent, IonPage } from '@ionic/react';
 import PageWrapper from '../components/layout/PageWrapper';
 import Hero from '../components/Hero/Hero';
+import AboutSection from '../components/AboutSection/AboutSection';
 import Features from '../components/Features/Features';
-import ProductsSection from '../components/ProductsSection/ProductsSection';
-import CompanyIntro from '../components/CompanyIntro/CompanyIntro';
-import Applications from '../components/Applications/Applications';
+import ProductsPreview from '../components/ProductsPreview/ProductsPreview';
+import Advantages from '../components/Advantages/Advantages';
 import Certificates from '../components/Certificates/Certificates';
-import Gallery from '../components/Gallery/Gallery';
-import Testimonials from '../components/Testimonials/Testimonials';
-import FAQ from '../components/FAQ/FAQ';
-import ContactForm from '../components/ContactForm/ContactForm';
+import NewsPreview from '../components/NewsPreview/NewsPreview';
+import ContactCTA from '../components/ContactCTA/ContactCTA';
 import Footer from '../components/Footer/Footer';
 
 const HomePage = () => (
@@ -17,15 +15,13 @@ const HomePage = () => (
     <PageWrapper>
       <IonContent>
         <Hero />
+        <AboutSection />
         <Features />
-        <ProductsSection />
-        <CompanyIntro />
-        <Applications />
+        <ProductsPreview />
+        <Advantages />
         <Certificates />
-        <Gallery />
-        <Testimonials />
-        <FAQ />
-        <ContactForm />
+        <NewsPreview />
+        <ContactCTA />
         <Footer />
       </IonContent>
     </PageWrapper>
