@@ -1,37 +1,51 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonRow, IonCol } from '@ionic/react';
-import { checkmarkCircleOutline, shieldCheckmarkOutline, constructOutline, timeOutline } from 'ionicons/icons';
+import { shieldCheckmarkOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import styles from "./ProductDescription.module.css";
+import * as IonIcons from 'ionicons/icons';
+import type { ProductAdvantage } from '../../types/product';
 
 type ProductDescriptionProps = {
   name: string;
   description: string;
   fullDescription: string;
+  advantages?: ProductAdvantage[]; // Преимущества из данных продукта
 };
 
-const ProductDescription = ({ description, fullDescription }: ProductDescriptionProps) => {
-  const advantages = [
+const ProductDescription = ({ description, fullDescription, advantages: productAdvantages }: ProductDescriptionProps) => {
+  // Fallback - стандартный список преимуществ, если у продукта нет своих
+  const defaultAdvantages: ProductAdvantage[] = [
     {
-      icon: shieldCheckmarkOutline,
+      icon: "shieldCheckmarkOutline",
       title: "Высокое качество материалов",
       description: "Использование сертифицированных материалов и компонентов"
     },
     {
-      icon: constructOutline,
+      icon: "constructOutline",
       title: "Точное соответствие спецификациям",
       description: "Строгий контроль качества на всех этапах производства"
     },
     {
-      icon: timeOutline,
+      icon: "timeOutline",
       title: "Гарантия и сервисное обслуживание",
       description: "Долгосрочная гарантия и профессиональная техническая поддержка"
     },
     {
-      icon: checkmarkCircleOutline,
+      icon: "checkmarkCircleOutline",
       title: "Индивидуальные решения",
       description: "Адаптация оборудования под специфические требования заказчика"
     }
   ];
+
+  // Используем преимущества из продукта или fallback
+  const advantages = productAdvantages && productAdvantages.length > 0 
+    ? productAdvantages 
+    : defaultAdvantages;
+
+  // Функция для получения иконки по имени
+  const getIconByName = (iconName: string) => {
+    return (IonIcons as any)[iconName] || shieldCheckmarkOutline;
+  };
 
   return (
     <section className={styles.description}>
@@ -65,7 +79,7 @@ const ProductDescription = ({ description, fullDescription }: ProductDescription
                   <IonCardContent>
                     <div className={styles.advantageItem}>
                       <div className={styles.advantageIcon}>
-                        <IonIcon icon={advantage.icon} />
+                        <IonIcon icon={getIconByName(advantage.icon)} />
                       </div>
                       <div className={styles.advantageContent}>
                         <h3 className={styles.advantageTitle}>{advantage.title}</h3>

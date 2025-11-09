@@ -1,14 +1,33 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonChip, IonImg } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonChip, IonImg, IonSpinner } from '@ionic/react';
 import { informationCircleOutline, arrowForwardOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
-import { useMemo } from 'react';
-import productsData from '../../data/products.json';
+import { useMemo, useState, useEffect } from 'react';
+import { fetchStaticData, S3_URLS } from '../../utils/fetchStaticData';
+import type { Product } from '../../types/product';
 import testImage from '../../assets/images/test-image.png';
 import styles from "./ProductsPreview.module.css";
 
 const ProductsPreview = () => {
   const navigate = useNavigate();
+  const [productsData, setProductsData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchStaticData<Product[]>(S3_URLS.PRODUCTS);
+        setProductsData(data);
+      } catch (err) {
+        console.error('[ProductsPreview] Ошибка при загрузке продуктов:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   // Берем первые 4 продукта из реальных данных
   const products = useMemo(() => {
@@ -19,7 +38,25 @@ const ProductsPreview = () => {
       description: product.description,
       image: testImage
     }));
-  }, []);
+  }, [productsData]);
+
+  if (loading) {
+    return (
+      <section id="products-preview" className={styles.productsPreview}>
+        <div className={styles.container}>
+          <h2 className={styles.sectionTitle}>Каталог оборудования</h2>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            minHeight: '200px'
+          }}>
+            <IonSpinner name="crescent" />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="products-preview" className={styles.productsPreview}>

@@ -1,14 +1,33 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonImg } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonImg, IonSpinner } from '@ionic/react';
 import { arrowForwardOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
-import { useMemo } from 'react';
-import newsData from '../../data/news.json';
+import { useMemo, useState, useEffect } from 'react';
+import { fetchStaticData, S3_URLS } from '../../utils/fetchStaticData';
+import type { News } from '../../types/news';
 import testImage from '../../assets/images/test-image.png';
 import styles from "./NewsPreview.module.css";
 
 const NewsPreview = () => {
   const navigate = useNavigate();
+  const [newsData, setNewsData] = useState<News[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadNews = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchStaticData<News[]>(S3_URLS.NEWS);
+        setNewsData(data);
+      } catch (err) {
+        console.error('[NewsPreview] Ошибка при загрузке новостей:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadNews();
+  }, []);
 
   // Берем последние 3 новости из реальных данных (сортируем по дате)
   const news = useMemo(() => {
@@ -21,7 +40,25 @@ const NewsPreview = () => {
         excerpt: item.preview,
         image: testImage
       }));
-  }, []);
+  }, [newsData]);
+
+  if (loading) {
+    return (
+      <section className={styles.newsPreview}>
+        <div className={styles.container}>
+          <h2 className={styles.sectionTitle}>Новости и статьи</h2>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            minHeight: '200px'
+          }}>
+            <IonSpinner name="crescent" />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.newsPreview}>

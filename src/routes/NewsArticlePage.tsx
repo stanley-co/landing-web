@@ -1,6 +1,6 @@
-import { IonContent, IonPage } from '@ionic/react';
+import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import { useParams } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
 import ArticleHero from '../components/ArticleHero/ArticleHero';
 import ArticleBody from '../components/ArticleBody/ArticleBody';
@@ -8,7 +8,8 @@ import ArticleShare from '../components/ArticleShare/ArticleShare';
 import RelatedNews from '../components/RelatedNews/RelatedNews';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
-import newsData from '../data/news.json';
+import { fetchStaticData, S3_URLS } from '../utils/fetchStaticData';
+import type { News } from '../types/news';
 import testImage from '../assets/images/test-image.png';
 
 type ContentBlock = {
@@ -30,6 +31,26 @@ type NewsArticle = {
 
 const NewsArticlePage = () => {
   const { id } = useParams();
+  const [newsData, setNewsData] = useState<News[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadNews = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchStaticData<News[]>(S3_URLS.NEWS);
+        setNewsData(data);
+      } catch (err) {
+        console.error('[NewsArticlePage] Ошибка при загрузке новостей:', err);
+        setError('Ошибка при загрузке статьи');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadNews();
+  }, []);
 
   // Находим статью по ID
   const article = useMemo(() => {
@@ -44,16 +65,40 @@ const NewsArticlePage = () => {
         src: block.type === 'image' ? testImage : block.src
       }))
     } as NewsArticle;
-  }, [id]);
+  }, [id, newsData]);
 
-  if (!article) {
+  // Показываем индикатор загрузки
+  if (loading) {
+    return (
+      <IonPage>
+        <PageWrapper>
+          <IonContent>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              height: '100vh',
+              flexDirection: 'column',
+              gap: '16px'
+            }}>
+              <IonSpinner name="crescent" style={{ width: '48px', height: '48px' }} />
+              <p>Загрузка статьи...</p>
+            </div>
+          </IonContent>
+        </PageWrapper>
+      </IonPage>
+    );
+  }
+
+  // Показываем ошибку или сообщение о том, что статья не найдена
+  if (error || !article) {
     return (
       <IonPage>
         <PageWrapper>
           <IonContent>
             <div style={{ padding: '80px 16px', textAlign: 'center' }}>
               <h2>Статья не найдена</h2>
-              <p>Запрашиваемая статья не существует.</p>
+              <p>{error || 'Запрашиваемая статья не существует.'}</p>
             </div>
             <CooperationFormSection />
             <Footer />
@@ -69,7 +114,7 @@ const NewsArticlePage = () => {
       ...item,
       image: testImage
     }));
-  }, []);
+  }, [newsData]);
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
 
