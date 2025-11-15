@@ -1,6 +1,5 @@
-import { IonCard, IonCardContent, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { personCircleOutline, star } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import styles from "./Testimonials.module.css";
 
 const testimonials = [

@@ -1,6 +1,5 @@
-import { IonButton } from '@ionic/react';
+import { IonButton, IonIcon } from '@ionic/react';
 import { arrowForwardOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import styles from "./Hero.module.css";
 

@@ -1,6 +1,5 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonChip, IonImg } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonChip, IonImg, IonIcon } from '@ionic/react';
 import { informationCircleOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import testImage from '../../assets/images/test-image.png';
 import styles from "./ProductsSection.module.css";
 

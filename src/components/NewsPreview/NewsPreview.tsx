@@ -1,6 +1,5 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonImg, IonSpinner } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonImg, IonSpinner, IonIcon } from '@ionic/react';
 import { arrowForwardOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import { useMemo, useState, useEffect } from 'react';
 import { fetchStaticData, S3_URLS } from '../../utils/fetchStaticData';

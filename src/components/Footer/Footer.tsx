@@ -1,6 +1,5 @@
-import { IonTitle, IonButtons, IonButton, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonTitle, IonButtons, IonButton, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { logoLinkedin, paperPlaneOutline, mailOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import styles from "./Footer.module.css";
 

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import type React from "react";
-import { IonCard, IonCardContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { sendOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import styles from "./ContactForm.module.css";
 
 const ContactForm = () => {

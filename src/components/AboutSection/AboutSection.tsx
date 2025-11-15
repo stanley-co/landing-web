@@ -1,6 +1,5 @@
-import { IonGrid, IonRow, IonCol, IonButton, IonImg } from '@ionic/react';
+import { IonGrid, IonRow, IonCol, IonButton, IonImg, IonIcon } from '@ionic/react';
 import { arrowForwardOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import testImage from '../../assets/images/test-image.png';
 import styles from "./AboutSection.module.css";

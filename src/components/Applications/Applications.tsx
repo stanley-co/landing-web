@@ -1,6 +1,5 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { businessOutline, flaskOutline, medicalOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import styles from "./Applications.module.css";
 
 const items = [

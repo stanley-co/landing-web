@@ -1,6 +1,5 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonImg, IonChip } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonImg, IonChip, IonIcon } from '@ionic/react';
 import { arrowForwardOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import styles from "./NewsCard.module.css";
 

@@ -1,6 +1,5 @@
-import { IonCard, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { checkmarkCircleOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import styles from "./Certificates.module.css";
 
 const certificates = [

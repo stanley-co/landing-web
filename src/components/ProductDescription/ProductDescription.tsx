@@ -1,6 +1,5 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { shieldCheckmarkOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import styles from "./ProductDescription.module.css";
 import * as IonIcons from 'ionicons/icons';
 import type { ProductAdvantage } from '../../types/product';

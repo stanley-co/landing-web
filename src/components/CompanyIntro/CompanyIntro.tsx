@@ -1,6 +1,5 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { shieldCheckmarkOutline, flaskOutline, checkmarkCircleOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import styles from "./CompanyIntro.module.css";
 
 const CompanyIntro = () => (

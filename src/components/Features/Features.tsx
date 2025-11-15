@@ -1,6 +1,5 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { constructOutline, globeOutline, bulbOutline, peopleOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import styles from "./Features.module.css";
 
 const items = [
