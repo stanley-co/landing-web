@@ -1,7 +1,6 @@
 .grid {
-  padding: 48px 16px 80px;
-  background: var(--ion-background-color, #f7f8fa);
-  min-height: 400px;
+  padding: 0;
+  min-height: 300px;
 }
 
 .container {
@@ -10,14 +9,14 @@
 }
 
 .col {
-  margin-bottom: 32px;
-  animation: fadeInUp 0.5s ease-out both;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.4s ease-out both;
   padding: 0;
 }
 
 @media (min-width: 992px) {
   .col {
-    padding: 0 16px;
+    padding: 0 12px;
   }
 }
 
@@ -72,8 +71,8 @@
 }
 
 @media (max-width: 768px) {
-  .grid {
-    padding: 32px 16px 64px;
+  .col {
+    margin-bottom: 20px;
   }
 }
 

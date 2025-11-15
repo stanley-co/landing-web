@@ -2,6 +2,19 @@
   --background: #ffffff;
   --border-color: #e5e7eb;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 999999 !important;
+  /* Убираем все свойства, создающие stacking context */
+  transform: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  filter: none !important;
+  will-change: auto !important;
+  isolation: auto !important;
 }
 
 .logoContainer {
@@ -30,6 +43,84 @@
 .nav {
   display: flex;
   gap: 4px;
+  align-items: center;
+  position: relative;
+}
+
+.navItem {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  z-index: 999999;
+  /* Убираем transform и другие свойства, создающие stacking context */
+  transform: none;
+  overflow: visible;
+}
+
+.navButton {
+  position: relative;
+  z-index: 1;
+}
+
+.chevron {
+  font-size: 14px;
+  margin-left: 4px;
+  transition: transform 0.3s ease;
+}
+
+.navItem:hover .chevron {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: fixed !important; /* Portal рендерит в body, поэтому используем fixed */
+  /* top и left устанавливаются через JS в ref callback */
+  background: white;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  min-width: 280px;
+  padding: 8px 0;
+  z-index: 9999999 !important;
+  animation: slideDown 0.2s ease-out;
+  pointer-events: auto;
+  /* Рендерим через Portal в body, поэтому нет stacking context проблем */
+  /* Убираем все свойства, создающие stacking context */
+  transform: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  will-change: auto !important;
+  isolation: auto !important;
+}
+
+/* Невидимый буфер для плавного перехода курсора */
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: transparent;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background-color: #f5f5f5;
+  color: var(--ion-color-primary, #3880ff);
 }
 
 .mobileMenu {
@@ -39,13 +130,29 @@
   animation: slideDown 0.3s ease-out;
 }
 
+.mobileNavItem {
+  position: relative;
+}
+
+.mobileDropdown {
+  background: #f9f9f9;
+  padding: 0;
+  animation: slideDown 0.3s ease-out;
+}
+
+.mobileDropdownItem {
+  padding-left: 32px !important;
+  font-size: 14px;
+  --min-height: 40px;
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    /* Убираем transform, чтобы не создавать stacking context */
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
+
