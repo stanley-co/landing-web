@@ -1,18 +1,18 @@
 .description {
-  padding: 48px 16px;
+  padding: 32px 16px;
   background: white;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
 .descriptionCard {
   --background: white;
-  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  margin-bottom: 48px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  margin-bottom: 32px;
 }
 
 .title {
@@ -30,11 +30,11 @@
 }
 
 .advantagesTitle {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--ion-color-dark, #1a202c);
-  margin: 0 0 32px 0;
-  text-align: center;
+  margin: 0 0 24px 0;
+  text-align: left;
 }
 
 .advantageCard {
@@ -43,7 +43,7 @@
   border-radius: 12px;
   height: 100%;
   transition: all 0.3s ease;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .advantageCard:hover {
@@ -94,41 +94,41 @@
 
 @media (max-width: 768px) {
   .description {
-    padding: 32px 16px;
+    padding: 24px 16px;
   }
 
   .descriptionCard {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .title,
   .advantagesTitle {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
   }
 
   .text {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .advantageItem {
-    gap: 16px;
+    gap: 14px;
   }
 
   .advantageIcon {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
   }
 
   .advantageIcon ion-icon {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .advantageTitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .advantageDescription {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
   }
 }
 

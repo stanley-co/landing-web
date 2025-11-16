@@ -11,6 +11,11 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.card :global(ion-card-header),
+.card :global(ion-card-content) {
+  flex-shrink: 0;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -31,10 +36,17 @@
 
 .imageContainer {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
+  min-height: 320px;
   overflow: hidden;
   background: #f7f8fa;
   position: relative;
+}
+
+@media (min-width: 992px) {
+  .imageContainer {
+    min-height: 380px;
+  }
 }
 
 .imagePlaceholder {
@@ -61,8 +73,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  object-position: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
+  will-change: transform;
 }
 
 .image.loaded {
@@ -70,7 +84,7 @@
 }
 
 .card:hover .image {
-  transform: scale(1.15);
+  transform: scale(1.2);
 }
 
 .overlay {
@@ -133,13 +147,21 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
+.card :global(ion-card-header) {
+  padding: 12px 14px 8px 14px;
+}
+
+.card :global(ion-card-content) {
+  padding: 0 14px 14px 14px;
+}
+
 .title {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--ion-color-dark, #1a202c);
   line-height: 1.4;
-  margin-bottom: 10px;
-  min-height: 52px;
+  margin-bottom: 8px;
+  min-height: 48px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -150,7 +172,7 @@
   color: var(--ion-color-medium, #6b7280);
   font-size: 0.9375rem;
   line-height: 1.6;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -173,17 +195,28 @@
 
 @media (max-width: 768px) {
   .imageContainer {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 2;
+    min-height: 240px;
+  }
+
+  .card :global(ion-card-header) {
+    padding: 10px 12px 6px 12px;
+  }
+
+  .card :global(ion-card-content) {
+    padding: 0 12px 12px 12px;
   }
 
   .title {
     font-size: 1rem;
-    min-height: 48px;
+    min-height: 44px;
+    margin-bottom: 6px;
   }
 
   .description {
     font-size: 0.875rem;
     min-height: 60px;
+    margin-bottom: 10px;
   }
 }
 

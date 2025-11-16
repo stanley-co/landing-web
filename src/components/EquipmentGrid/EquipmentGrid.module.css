@@ -4,19 +4,19 @@
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
 .col {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   animation: fadeInUp 0.4s ease-out both;
   padding: 0;
 }
 
 @media (min-width: 992px) {
   .col {
-    padding: 0 12px;
+    padding: 0 16px;
   }
 }
 

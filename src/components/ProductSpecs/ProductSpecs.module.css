@@ -1,22 +1,22 @@
 .specs {
-  padding: 48px 16px;
+  padding: 32px 16px;
   background: var(--ion-background-color, #f7f8fa);
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
 .card {
   --background: white;
-  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
   overflow: hidden;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--ion-color-dark, #1a202c);
   margin: 0;
@@ -34,7 +34,7 @@
 .row {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  padding: 20px 24px;
+  padding: 16px 20px;
   transition: all 0.2s ease;
   position: relative;
 }
@@ -107,30 +107,30 @@
 
 @media (max-width: 768px) {
   .specs {
-    padding: 32px 16px;
+    padding: 24px 16px;
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
   }
 
   .row {
     grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 16px;
+    gap: 10px;
+    padding: 14px;
   }
 
   .label {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .value {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .valueText {
     padding: 6px 12px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 }
 

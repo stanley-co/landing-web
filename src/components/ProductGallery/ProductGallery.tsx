@@ -50,6 +50,7 @@ const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
   return (
     <section className={styles.gallery}>
       <div className={styles.container}>
+        <div className={styles.galleryLayout}>
         <div className={styles.mainImageWrapper}>
           <div
             ref={imageRef}
@@ -120,6 +121,7 @@ const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
             ))}
           </div>
         )}
+        </div>
       </div>
     </section>
   );
