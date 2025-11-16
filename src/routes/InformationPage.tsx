@@ -5,9 +5,8 @@ import PageHero from '../components/PageHero/PageHero';
 import NewsGrid from '../components/NewsGrid/NewsGrid';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
-import { fetchStaticData, S3_URLS } from '../utils/fetchStaticData';
+import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { News } from '../types/news';
-import testImage from '../assets/images/test-image.png';
 import styles from './InformationPage.module.css';
 
 type NewsItem = {
@@ -41,21 +40,31 @@ const InformationPage = () => {
     loadNews();
   }, []);
 
-  // Преобразуем данные и заменяем пути изображений
+  // Преобразуем данные и используем реальные URL изображений из S3
   const news: NewsItem[] = useMemo(() => {
     return newsData.map(item => ({
       ...item,
-      image: testImage, // Используем локальное изображение
+      image: getImageUrl(item.image), // Используем реальные изображения из S3
     }));
   }, [newsData]);
 
   // Разделяем на новости и статьи
+  // Новости: категории "События", "Производство", "Партнерство", "Продукты" и без категории
   const newsItems = useMemo(() => {
-    return news.filter(item => !item.category || item.category === 'news');
+    const newsCategories = ['События', 'Производство', 'Партнерство', 'Продукты'];
+    return news.filter(item => 
+      !item.category || 
+      newsCategories.includes(item.category) ||
+      item.category.toLowerCase() === 'news'
+    );
   }, [news]);
 
+  // Статьи: категория "Статьи" или "article"
   const articles = useMemo(() => {
-    return news.filter(item => item.category === 'article');
+    return news.filter(item => 
+      item.category?.toLowerCase() === 'article' || 
+      item.category === 'Статьи'
+    );
   }, [news]);
 
   // Сортируем по дате (новые сначала)

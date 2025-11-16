@@ -2,9 +2,8 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGri
 import { arrowForwardOutline } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
 import { useMemo, useState, useEffect } from 'react';
-import { fetchStaticData, S3_URLS } from '../../utils/fetchStaticData';
+import { fetchStaticData, S3_URLS, getImageUrl } from '../../utils/fetchStaticData';
 import type { News } from '../../types/news';
-import testImage from '../../assets/images/test-image.png';
 import styles from "./NewsPreview.module.css";
 
 const NewsPreview = () => {
@@ -37,7 +36,7 @@ const NewsPreview = () => {
         id: item.id,
         title: item.title,
         excerpt: item.preview,
-        image: testImage
+        image: getImageUrl(item.image) // Используем реальные изображения из S3
       }));
   }, [newsData]);
 

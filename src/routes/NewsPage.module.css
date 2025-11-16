@@ -1,0 +1,36 @@
+.filters {
+  padding: 2rem 1rem;
+  background: var(--ion-color-light, #f4f5f8);
+}
+
+.filtersContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.filterButton {
+  --border-radius: 24px;
+  margin: 0;
+  text-transform: none;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    padding: 1.5rem 1rem;
+  }
+  
+  .filtersContainer {
+    gap: 0.5rem;
+  }
+  
+  .filterButton {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+}
+

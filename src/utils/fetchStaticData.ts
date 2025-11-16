@@ -86,6 +86,27 @@ export function clearCache(url?: string) {
  */
 export const S3_URLS = {
   PRODUCTS: 'https://storage.yandexcloud.net/stanley-co/data/products/products.json',
-  NEWS: 'https://storage.yandexcloud.net/stanley-co/data/news/news.json'
+  NEWS: 'https://storage.yandexcloud.net/stanley-co/data/news/news.json',
+  BASE: 'https://storage.yandexcloud.net/stanley-co'
 } as const;
+
+/**
+ * Преобразует относительный путь изображения в полный URL S3
+ * @param imagePath - Относительный путь изображения (например, "/assets/images/test-image.png")
+ * @returns Полный URL изображения в S3
+ */
+export function getImageUrl(imagePath: string | undefined): string {
+  if (!imagePath) {
+    return '';
+  }
+  
+  // Если путь уже является полным URL, возвращаем как есть
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  
+  // Если путь начинается с "/", убираем его и добавляем к базовому URL
+  const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+  return `${S3_URLS.BASE}/${cleanPath}`;
+}
 

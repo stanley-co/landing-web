@@ -8,9 +8,8 @@ import ArticleShare from '../components/ArticleShare/ArticleShare';
 import RelatedNews from '../components/RelatedNews/RelatedNews';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
-import { fetchStaticData, S3_URLS } from '../utils/fetchStaticData';
+import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { News } from '../types/news';
-import testImage from '../assets/images/test-image.png';
 
 type ContentBlock = {
   type: 'paragraph' | 'image' | 'quote';
@@ -59,13 +58,21 @@ const NewsArticlePage = () => {
     
     return {
       ...found,
-      image: testImage, // Используем локальное изображение
+      image: getImageUrl(found.image), // Используем реальное изображение из S3
       content: found.content.map(block => ({
         ...block,
-        src: block.type === 'image' ? testImage : block.src
+        src: block.type === 'image' ? getImageUrl(block.src) : block.src
       }))
     } as NewsArticle;
   }, [id, newsData]);
+
+  // Преобразуем все новости для RelatedNews (должно быть до условных возвратов)
+  const allNews = useMemo(() => {
+    return newsData.map(item => ({
+      ...item,
+      image: getImageUrl(item.image) // Используем реальные изображения из S3
+    }));
+  }, [newsData]);
 
   // Показываем индикатор загрузки
   if (loading) {
@@ -107,14 +114,6 @@ const NewsArticlePage = () => {
       </IonPage>
     );
   }
-
-  // Преобразуем все новости для RelatedNews
-  const allNews = useMemo(() => {
-    return newsData.map(item => ({
-      ...item,
-      image: testImage
-    }));
-  }, [newsData]);
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
 

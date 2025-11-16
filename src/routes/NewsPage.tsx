@@ -1,13 +1,13 @@
-import { IonContent, IonPage, IonSpinner } from '@ionic/react';
+import { IonContent, IonPage, IonSpinner, IonButton } from '@ionic/react';
 import { useMemo, useState, useEffect } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
 import PageHero from '../components/PageHero/PageHero';
 import NewsGrid from '../components/NewsGrid/NewsGrid';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
-import { fetchStaticData, S3_URLS } from '../utils/fetchStaticData';
+import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { News } from '../types/news';
-import testImage from '../assets/images/test-image.png';
+import styles from './NewsPage.module.css';
 
 type NewsItem = {
   id: string;
@@ -22,6 +22,7 @@ const NewsPage = () => {
   const [newsData, setNewsData] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const loadNews = async () => {
@@ -40,20 +41,34 @@ const NewsPage = () => {
     loadNews();
   }, []);
 
-  // Преобразуем данные и заменяем пути изображений
+  // Получаем уникальные категории
+  const categories = useMemo(() => {
+    const cats = newsData
+      .map(item => item.category)
+      .filter((cat): cat is string => !!cat);
+    return Array.from(new Set(cats));
+  }, [newsData]);
+
+  // Преобразуем данные и используем реальные URL изображений из S3
   const news: NewsItem[] = useMemo(() => {
     return newsData.map(item => ({
       ...item,
-      image: testImage // Используем локальное изображение
+      image: getImageUrl(item.image) // Используем реальные изображения из S3
     }));
   }, [newsData]);
 
-  // Сортируем по дате (новые сначала)
-  const sortedNews = useMemo(() => {
-    return [...news].sort((a, b) => {
+  // Фильтруем и сортируем по дате (новые сначала)
+  const filteredAndSortedNews = useMemo(() => {
+    let filtered = news;
+    
+    if (selectedCategory) {
+      filtered = news.filter(item => item.category === selectedCategory);
+    }
+    
+    return [...filtered].sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
-  }, [news]);
+  }, [news, selectedCategory]);
 
   // Показываем индикатор загрузки
   if (loading) {
@@ -117,7 +132,33 @@ const NewsPage = () => {
             subtitle="Узнайте о новых разработках, проектах и событиях, в которых мы участвуем"
             showCTA={false}
           />
-          <NewsGrid news={sortedNews} />
+          
+          {/* Фильтр по категориям */}
+          {categories.length > 0 && (
+            <section className={styles.filters}>
+              <div className={styles.filtersContainer}>
+                <IonButton
+                  fill={selectedCategory === null ? 'solid' : 'outline'}
+                  onClick={() => setSelectedCategory(null)}
+                  className={styles.filterButton}
+                >
+                  Все новости
+                </IonButton>
+                {categories.map(category => (
+                  <IonButton
+                    key={category}
+                    fill={selectedCategory === category ? 'solid' : 'outline'}
+                    onClick={() => setSelectedCategory(category)}
+                    className={styles.filterButton}
+                  >
+                    {category}
+                  </IonButton>
+                ))}
+              </div>
+            </section>
+          )}
+          
+          <NewsGrid news={filteredAndSortedNews} />
           <CooperationFormSection />
           <Footer />
         </IonContent>
