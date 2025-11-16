@@ -1,69 +1,272 @@
+.tabsContainer {
+  display: flex;
+  justify-content: center;
+  padding: 16px 16px 8px 16px;
+  background: var(--ion-background-color, #ffffff);
+}
+
+.tabs {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.tabChip {
+  --background: #f3f4f6;
+  --color: var(--ion-color-medium, #6b7280);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 10px 20px;
+  height: auto;
+  border: 2px solid transparent;
+}
+
+.tabChip:hover {
+  --background: #e5e7eb;
+  --color: var(--ion-color-dark, #1a202c);
+}
+
+.tabChipActive {
+  --background: var(--ion-color-primary, #008CFF);
+  --color: white;
+  border-color: var(--ion-color-primary, #008CFF);
+}
+
 .section {
-  padding: 80px 0;
+  padding: 16px 0 24px 0;
   scroll-margin-top: 80px;
+  background: var(--ion-background-color, #ffffff);
 }
 
 .section:first-of-type {
-  padding-top: 60px;
+  padding-top: 8px;
+}
+
+.section:nth-child(even) {
+  background: #f9fafb;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 48px;
 }
 
-.sectionHeader {
-  text-align: center;
-  margin-bottom: 48px;
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  padding-left: 0;
+}
+
+.headerInfo {
+  flex: 1;
+  min-width: 300px;
+  padding-left: 0;
 }
 
 .sectionTitle {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--ion-color-dark, #1a202c);
-  margin: 0 0 24px 0;
-}
-
-.sectionDivider {
-  width: 100px;
-  height: 4px;
-  background: linear-gradient(to right, transparent, var(--ion-color-primary, #3880ff), transparent);
-  margin: 0 auto 24px;
-  border-radius: 2px;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
 }
 
 .sectionDescription {
-  font-size: 1.125rem;
-  color: var(--ion-color-medium, #666);
-  max-width: 700px;
-  margin: 0 auto;
+  font-size: 1rem;
+  color: var(--ion-color-medium, #6b7280);
   line-height: 1.6;
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+.searchContainer {
+  flex: 1;
+  min-width: 320px;
+  max-width: 550px;
+}
+
+.searchItem {
+  --background: #f9fafb;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  margin: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  height: 52px;
+  transition: all 0.3s ease;
+}
+
+.searchItem:focus-within {
+  border-color: var(--ion-color-primary, #008CFF);
+  box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.1);
+  --background: white;
+}
+
+.searchIcon {
+  color: var(--ion-color-medium, #9ca3af);
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.searchInput {
+  --padding-start: 0;
+  --padding-end: 0;
+  font-size: 1.05rem;
+}
+
+.dateFilterContainer {
+  min-width: 220px;
+}
+
+.dateFilterItem {
+  --background: #f9fafb;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  margin: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  height: 52px;
+  transition: all 0.3s ease;
+}
+
+.dateFilterItem:focus-within {
+  border-color: var(--ion-color-primary, #008CFF);
+  box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.1);
+  --background: white;
+}
+
+.filterIcon {
+  color: var(--ion-color-medium, #9ca3af);
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.dateSelect {
+  --padding-start: 0;
+  --padding-end: 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.resultsCount {
+  font-size: 0.95rem;
+  color: var(--ion-color-medium, #6b7280);
+  font-weight: 600;
+  padding: 0 4px 12px 4px;
 }
 
 .emptyState {
   text-align: center;
   padding: 60px 20px;
-  color: var(--ion-color-medium, #666);
-  font-size: 1.125rem;
+  color: var(--ion-color-medium, #6b7280);
+  font-size: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 1024px) {
+  .headerRow {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 32px;
+  }
 }
 
 @media (max-width: 768px) {
+  .tabsContainer {
+    padding: 16px 12px 8px 12px;
+  }
+
+  .tabs {
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tabChip {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    flex: 1;
+    max-width: 200px;
+  }
+
   .section {
-    padding: 60px 0;
+    padding: 12px 0 20px 0;
     scroll-margin-top: 60px;
   }
 
-  .sectionTitle {
-    font-size: 2rem;
-    margin-bottom: 20px;
+  .section:first-of-type {
+    padding-top: 4px;
   }
 
-  .sectionHeader {
-    margin-bottom: 32px;
+  .container {
+    padding: 0 16px;
+  }
+
+  .headerRow {
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .headerInfo {
+    min-width: unset;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
   }
 
   .sectionDescription {
-    font-size: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .filters {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .searchContainer {
+    width: 100%;
+    max-width: 100%;
+    min-width: unset;
+  }
+
+  .dateFilterContainer {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .resultsCount {
+    text-align: left;
+    padding-bottom: 6px;
   }
 }

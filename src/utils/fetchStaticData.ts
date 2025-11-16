@@ -87,6 +87,7 @@ export function clearCache(url?: string) {
 export const S3_URLS = {
   PRODUCTS: 'https://storage.yandexcloud.net/stanley-co/data/products/products.json',
   NEWS: 'https://storage.yandexcloud.net/stanley-co/data/news/news.json',
+  ARTICLES: 'https://storage.yandexcloud.net/stanley-co/data/articles/articles.json',
   BASE: 'https://storage.yandexcloud.net/stanley-co'
 } as const;
 

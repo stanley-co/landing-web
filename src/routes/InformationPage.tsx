@@ -1,4 +1,5 @@
-import { IonContent, IonPage, IonSpinner } from '@ionic/react';
+import { IonContent, IonPage, IonSpinner, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonIcon, IonChip } from '@ionic/react';
+import { searchOutline, calendarOutline } from 'ionicons/icons';
 import { useMemo, useState, useEffect } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
 import PageHero from '../components/PageHero/PageHero';
@@ -20,27 +21,36 @@ type NewsItem = {
 
 const InformationPage = () => {
   const [newsData, setNewsData] = useState<News[]>([]);
+  const [articlesData, setArticlesData] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [dateFilter, setDateFilter] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState<'news' | 'articles'>('news');
 
   useEffect(() => {
-    const loadNews = async () => {
+    const loadData = async () => {
       try {
         setLoading(true);
-        const data = await fetchStaticData<News[]>(S3_URLS.NEWS);
-        setNewsData(data);
+        // Загружаем новости и статьи параллельно
+        const [news, articles] = await Promise.all([
+          fetchStaticData<News[]>(S3_URLS.NEWS).catch(() => []),
+          fetchStaticData<News[]>(S3_URLS.ARTICLES).catch(() => [])
+        ]);
+        setNewsData(news);
+        setArticlesData(articles);
       } catch (err) {
-        console.error('[InformationPage] Ошибка при загрузке новостей:', err);
-        setError('Ошибка при загрузке новостей');
+        console.error('[InformationPage] Ошибка при загрузке данных:', err);
+        setError('Ошибка при загрузке данных');
       } finally {
         setLoading(false);
       }
     };
 
-    loadNews();
+    loadData();
   }, []);
 
-  // Преобразуем данные и используем реальные URL изображений из S3
+  // Преобразуем новости и используем реальные URL изображений из S3
   const news: NewsItem[] = useMemo(() => {
     return newsData.map(item => ({
       ...item,
@@ -48,37 +58,75 @@ const InformationPage = () => {
     }));
   }, [newsData]);
 
-  // Разделяем на новости и статьи
-  // Новости: категории "События", "Производство", "Партнерство", "Продукты" и без категории
-  const newsItems = useMemo(() => {
-    const newsCategories = ['События', 'Производство', 'Партнерство', 'Продукты'];
-    return news.filter(item => 
-      !item.category || 
-      newsCategories.includes(item.category) ||
-      item.category.toLowerCase() === 'news'
-    );
-  }, [news]);
+  // Преобразуем статьи и используем реальные URL изображений из S3
+  const articles: NewsItem[] = useMemo(() => {
+    return articlesData.map(item => ({
+      ...item,
+      image: getImageUrl(item.image), // Используем реальные изображения из S3
+    }));
+  }, [articlesData]);
 
-  // Статьи: категория "Статьи" или "article"
-  const articles = useMemo(() => {
-    return news.filter(item => 
-      item.category?.toLowerCase() === 'article' || 
-      item.category === 'Статьи'
-    );
-  }, [news]);
+  // Функция для фильтрации по дате
+  const filterByDate = (items: NewsItem[], filter: string): NewsItem[] => {
+    if (filter === 'all') return items;
+    
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    return items.filter(item => {
+      const itemDate = new Date(item.date);
+      
+      switch (filter) {
+        case 'today':
+          return itemDate >= today;
+        case 'week':
+          const weekAgo = new Date(today);
+          weekAgo.setDate(weekAgo.getDate() - 7);
+          return itemDate >= weekAgo;
+        case 'month':
+          const monthAgo = new Date(today);
+          monthAgo.setMonth(monthAgo.getMonth() - 1);
+          return itemDate >= monthAgo;
+        case 'year':
+          const yearAgo = new Date(today);
+          yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+          return itemDate >= yearAgo;
+        default:
+          return true;
+      }
+    });
+  };
 
-  // Сортируем по дате (новые сначала)
-  const sortedNews = useMemo(() => {
-    return [...newsItems].sort((a, b) => {
+  // Функция для поиска по названию
+  const filterBySearch = (items: NewsItem[], query: string): NewsItem[] => {
+    if (!query.trim()) return items;
+    
+    const lowerQuery = query.toLowerCase();
+    return items.filter(item => 
+      item.title.toLowerCase().includes(lowerQuery) ||
+      item.preview.toLowerCase().includes(lowerQuery)
+    );
+  };
+
+  // Фильтруем и сортируем новости
+  const filteredNews = useMemo(() => {
+    let filtered = news;
+    filtered = filterByDate(filtered, dateFilter);
+    filtered = filterBySearch(filtered, searchQuery);
+    return filtered.sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
-  }, [newsItems]);
+  }, [news, dateFilter, searchQuery]);
 
-  const sortedArticles = useMemo(() => {
-    return [...articles].sort((a, b) => {
+  // Фильтруем и сортируем статьи
+  const filteredArticles = useMemo(() => {
+    let filtered = articles;
+    filtered = filterByDate(filtered, dateFilter);
+    filtered = filterBySearch(filtered, searchQuery);
+    return filtered.sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
-  }, [articles]);
+  }, [articles, dateFilter, searchQuery]);
 
   // Показываем индикатор загрузки
   if (loading) {
@@ -143,45 +191,151 @@ const InformationPage = () => {
             showCTA={false}
           />
           
+          {/* Чипы для переключения между секциями */}
+          <div className={styles.tabsContainer}>
+            <div className={styles.tabs}>
+              <IonChip
+                className={`${styles.tabChip} ${activeTab === 'news' ? styles.tabChipActive : ''}`}
+                onClick={() => setActiveTab('news')}
+              >
+                Новости компании
+              </IonChip>
+              <IonChip
+                className={`${styles.tabChip} ${activeTab === 'articles' ? styles.tabChipActive : ''}`}
+                onClick={() => setActiveTab('articles')}
+              >
+                Полезные статьи
+              </IonChip>
+            </div>
+          </div>
+          
           {/* Секция новостей */}
+          {activeTab === 'news' && (
           <section id="news" className={styles.section}>
             <div className={styles.container}>
-              <div className={styles.sectionHeader}>
-                <h2 className={styles.sectionTitle}>Новости компании</h2>
-                <div className={styles.sectionDivider} />
-                <p className={styles.sectionDescription}>
-                  Узнайте о новых разработках, проектах и событиях, в которых мы участвуем
-                </p>
+              {/* Заголовок и фильтры в одной строке */}
+              <div className={styles.headerRow}>
+                <div className={styles.headerInfo}>
+                  <h2 className={styles.sectionTitle}>Новости компании</h2>
+                  <p className={styles.sectionDescription}>
+                    Узнайте о новых разработках, проектах и событиях, в которых мы участвуем
+                  </p>
+                </div>
+                
+                <div className={styles.filters}>
+                  <div className={styles.searchContainer}>
+                    <IonItem className={styles.searchItem}>
+                      <IonIcon icon={searchOutline} slot="start" className={styles.searchIcon} />
+                      <IonInput
+                        placeholder="Поиск по названию..."
+                        value={searchQuery}
+                        onIonInput={(e) => setSearchQuery(e.detail.value || '')}
+                        className={styles.searchInput}
+                      />
+                    </IonItem>
+                  </div>
+                  
+                  <div className={styles.dateFilterContainer}>
+                    <IonItem className={styles.dateFilterItem}>
+                      <IonIcon icon={calendarOutline} slot="start" className={styles.filterIcon} />
+                      <IonLabel>Период:</IonLabel>
+                      <IonSelect
+                        value={dateFilter}
+                        onIonChange={(e) => setDateFilter(e.detail.value)}
+                        interface="popover"
+                        className={styles.dateSelect}
+                      >
+                        <IonSelectOption value="all">Все время</IonSelectOption>
+                        <IonSelectOption value="today">Сегодня</IonSelectOption>
+                        <IonSelectOption value="week">За неделю</IonSelectOption>
+                        <IonSelectOption value="month">За месяц</IonSelectOption>
+                        <IonSelectOption value="year">За год</IonSelectOption>
+                      </IonSelect>
+                    </IonItem>
+                  </div>
+                </div>
               </div>
-              {sortedNews.length > 0 ? (
-                <NewsGrid news={sortedNews} />
+
+              {/* Результаты */}
+              {filteredNews.length > 0 ? (
+                <>
+                  <div className={styles.resultsCount}>
+                    Найдено новостей: {filteredNews.length}
+                  </div>
+                  <NewsGrid news={filteredNews} />
+                </>
               ) : (
                 <div className={styles.emptyState}>
-                  <p>Новости скоро появятся</p>
+                  <p>Новости не найдены. Попробуйте изменить параметры поиска.</p>
                 </div>
               )}
             </div>
           </section>
+          )}
 
           {/* Секция статей */}
+          {activeTab === 'articles' && (
           <section id="articles" className={styles.section}>
             <div className={styles.container}>
-              <div className={styles.sectionHeader}>
-                <h2 className={styles.sectionTitle}>Полезные статьи</h2>
-                <div className={styles.sectionDivider} />
-                <p className={styles.sectionDescription}>
-                  Информационные материалы, руководства и полезные советы для вашего бизнеса
-                </p>
+              {/* Заголовок и фильтры в одной строке */}
+              <div className={styles.headerRow}>
+                <div className={styles.headerInfo}>
+                  <h2 className={styles.sectionTitle}>Полезные статьи</h2>
+                  <p className={styles.sectionDescription}>
+                    Информационные материалы, руководства и полезные советы для вашего бизнеса
+                  </p>
+                </div>
+                
+                <div className={styles.filters}>
+                  <div className={styles.searchContainer}>
+                    <IonItem className={styles.searchItem}>
+                      <IonIcon icon={searchOutline} slot="start" className={styles.searchIcon} />
+                      <IonInput
+                        placeholder="Поиск по названию..."
+                        value={searchQuery}
+                        onIonInput={(e) => setSearchQuery(e.detail.value || '')}
+                        className={styles.searchInput}
+                      />
+                    </IonItem>
+                  </div>
+                  
+                  <div className={styles.dateFilterContainer}>
+                    <IonItem className={styles.dateFilterItem}>
+                      <IonIcon icon={calendarOutline} slot="start" className={styles.filterIcon} />
+                      <IonLabel>Период:</IonLabel>
+                      <IonSelect
+                        value={dateFilter}
+                        onIonChange={(e) => setDateFilter(e.detail.value)}
+                        interface="popover"
+                        className={styles.dateSelect}
+                      >
+                        <IonSelectOption value="all">Все время</IonSelectOption>
+                        <IonSelectOption value="today">Сегодня</IonSelectOption>
+                        <IonSelectOption value="week">За неделю</IonSelectOption>
+                        <IonSelectOption value="month">За месяц</IonSelectOption>
+                        <IonSelectOption value="year">За год</IonSelectOption>
+                      </IonSelect>
+                    </IonItem>
+                  </div>
+                </div>
               </div>
-              {sortedArticles.length > 0 ? (
-                <NewsGrid news={sortedArticles} />
+
+              {/* Результаты */}
+              {filteredArticles.length > 0 ? (
+                <>
+                  <div className={styles.resultsCount}>
+                    Найдено статей: {filteredArticles.length}
+                  </div>
+                  <NewsGrid news={filteredArticles} />
+                </>
               ) : (
                 <div className={styles.emptyState}>
-                  <p>Статьи скоро появятся</p>
+                  <p>Статьи не найдены. Попробуйте изменить параметры поиска.</p>
                 </div>
               )}
             </div>
           </section>
+          )}
 
           <CooperationFormSection />
           <Footer />

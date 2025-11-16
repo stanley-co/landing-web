@@ -1,11 +1,14 @@
-import { IonImg } from '@ionic/react';
+import { IonImg, IonIcon } from '@ionic/react';
+import { openOutline } from 'ionicons/icons';
 import styles from "./ArticleBody.module.css";
 
 type ContentBlock = {
-  type: 'paragraph' | 'image' | 'quote';
+  type: 'paragraph' | 'image' | 'quote' | 'link';
   text?: string;
   src?: string;
   caption?: string;
+  url?: string;
+  linkText?: string;
 };
 
 type ArticleBodyProps = {
@@ -41,6 +44,24 @@ const ArticleBody = ({ content }: ArticleBodyProps) => {
                   <blockquote key={index} className={styles.quote}>
                     <p className={styles.quoteText}>{block.text}</p>
                   </blockquote>
+                );
+              
+              case 'link':
+                return (
+                  <div key={index} className={styles.linkBlock}>
+                    <a 
+                      href={block.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={styles.externalLink}
+                    >
+                      <span className={styles.linkText}>{block.linkText || block.url}</span>
+                      <IonIcon icon={openOutline} className={styles.linkIcon} />
+                    </a>
+                    {block.text && (
+                      <p className={styles.linkDescription}>{block.text}</p>
+                    )}
+                  </div>
                 );
               
               default:

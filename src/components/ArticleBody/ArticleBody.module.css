@@ -70,6 +70,54 @@
   line-height: 1.6;
 }
 
+.linkBlock {
+  margin: 48px 0;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(0, 140, 255, 0.05) 0%, rgba(0, 140, 255, 0.1) 100%);
+  border: 2px solid var(--ion-color-primary, #008CFF);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.linkBlock:hover {
+  background: linear-gradient(135deg, rgba(0, 140, 255, 0.1) 0%, rgba(0, 140, 255, 0.15) 100%);
+  box-shadow: 0 4px 16px rgba(0, 140, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.externalLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ion-color-primary, #008CFF);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+}
+
+.externalLink:hover {
+  color: var(--ion-color-primary-shade, #0066CC);
+}
+
+.linkText {
+  display: flex;
+  align-items: center;
+}
+
+.linkIcon {
+  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.linkDescription {
+  margin: 16px 0 0 0;
+  font-size: 0.95rem;
+  color: var(--ion-color-medium, #6b7280);
+  line-height: 1.6;
+}
+
 @media (max-width: 768px) {
   .body {
     padding: 48px 16px;
@@ -92,6 +140,27 @@
   .quoteText {
     font-size: 1.125rem;
     padding-left: 16px;
+  }
+
+  .linkBlock {
+    margin: 32px 0;
+    padding: 20px;
+  }
+
+  .externalLink {
+    font-size: 1rem;
+    gap: 8px;
+  }
+
+  .linkIcon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .linkDescription {
+    font-size: 0.9rem;
+    margin-top: 12px;
   }
 }
 

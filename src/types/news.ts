@@ -3,7 +3,7 @@
  */
 
 // Тип контента новости
-export type NewsContentType = 'paragraph' | 'image' | 'quote';
+export type NewsContentType = 'paragraph' | 'image' | 'quote' | 'link';
 
 // Интерфейс для элемента контента новости
 export interface NewsContent {
@@ -11,6 +11,8 @@ export interface NewsContent {
   text?: string;
   src?: string;
   caption?: string;
+  url?: string;
+  linkText?: string;
 }
 
 // Основной интерфейс новости

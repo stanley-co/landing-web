@@ -1,4 +1,3 @@
-import { IonGrid, IonRow, IonCol } from '@ionic/react';
 import NewsCard from '../NewsCard/NewsCard';
 import styles from "./NewsGrid.module.css";
 
@@ -18,7 +17,7 @@ type NewsGridProps = {
 const NewsGrid = ({ news }: NewsGridProps) => {
   if (news.length === 0) {
     return (
-      <section className={styles.grid}>
+      <section className={styles.list}>
         <div className={styles.container}>
           <div className={styles.empty}>
             <div className={styles.emptyIcon}>📰</div>
@@ -33,30 +32,21 @@ const NewsGrid = ({ news }: NewsGridProps) => {
   }
 
   return (
-    <section className={styles.grid}>
+    <section className={styles.list}>
       <div className={styles.container}>
-        <IonGrid>
-          <IonRow>
-            {news.map((item) => (
-              <IonCol 
-                size="12" 
-                sizeMd="6" 
-                sizeLg="4"
-                key={item.id}
-                className={styles.col}
-              >
-                <NewsCard
-                  id={item.id}
-                  title={item.title}
-                  date={item.date}
-                  category={item.category}
-                  image={item.image}
-                  preview={item.preview}
-                />
-              </IonCol>
-            ))}
-          </IonRow>
-        </IonGrid>
+        <div className={styles.newsList}>
+          {news.map((item) => (
+            <NewsCard
+              key={item.id}
+              id={item.id}
+              title={item.title}
+              date={item.date}
+              category={item.category}
+              image={item.image}
+              preview={item.preview}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

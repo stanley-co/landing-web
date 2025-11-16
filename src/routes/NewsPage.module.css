@@ -1,6 +1,80 @@
+.breadcrumbs {
+  padding: 16px 0;
+  background: var(--ion-background-color, #ffffff);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.breadcrumbsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.backButton {
+  --color: var(--ion-color-medium, #6b7280);
+  margin: 0;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.backButton:hover {
+  --color: var(--ion-color-primary, #008CFF);
+}
+
+.breadcrumbPath {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+.breadcrumbItem {
+  color: var(--ion-color-medium, #6b7280);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.breadcrumbItem:hover {
+  color: var(--ion-color-primary, #008CFF);
+}
+
+.breadcrumbItemActive {
+  color: var(--ion-color-dark, #1a202c);
+  font-weight: 600;
+}
+
+.breadcrumbSeparator {
+  color: var(--ion-color-medium, #9ca3af);
+  font-size: 0.75rem;
+}
+
+.pageHeader {
+  padding: 32px 16px;
+  background: var(--ion-background-color, #ffffff);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.headerContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pageTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ion-color-dark, #1a202c);
+  margin: 0;
+  line-height: 1.2;
+}
+
 .filters {
-  padding: 2rem 1rem;
-  background: var(--ion-color-light, #f4f5f8);
+  padding: 24px 16px;
+  background: var(--ion-background-color, #ffffff);
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .filtersContainer {
@@ -8,29 +82,75 @@
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
+  gap: 8px;
+  align-items: center;
 }
 
 .filterButton {
-  --border-radius: 24px;
+  --border-radius: 4px;
   margin: 0;
   text-transform: none;
   font-weight: 500;
+  font-size: 0.875rem;
+  height: 36px;
+  padding: 0 16px;
+  --color: var(--ion-color-dark, #1a202c);
+  --background: transparent;
+  --background-activated: var(--ion-color-primary-tint, #e6f4ff);
+  --color-activated: var(--ion-color-primary, #008CFF);
+}
+
+.filterButton[fill="solid"] {
+  --background: var(--ion-color-primary, #008CFF);
+  --color: white;
+  --background-activated: var(--ion-color-primary-shade, #0066CC);
+}
+
+.filterButton:hover {
+  --background: var(--ion-color-primary-tint, #e6f4ff);
+  --color: var(--ion-color-primary, #008CFF);
+}
+
+.filterButton[fill="solid"]:hover {
+  --background: var(--ion-color-primary-shade, #0066CC);
+  --color: white;
 }
 
 @media (max-width: 768px) {
+  .breadcrumbs {
+    padding: 12px 0;
+  }
+
+  .breadcrumbsContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .breadcrumbPath {
+    font-size: 0.8rem;
+  }
+
+  .pageHeader {
+    padding: 24px 16px;
+  }
+
+  .pageTitle {
+    font-size: 2rem;
+  }
+
   .filters {
-    padding: 1.5rem 1rem;
+    padding: 16px;
   }
   
   .filtersContainer {
-    gap: 0.5rem;
+    gap: 6px;
   }
   
   .filterButton {
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    padding: 0 12px;
+    height: 32px;
   }
 }
 

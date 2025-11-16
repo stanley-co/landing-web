@@ -1,7 +1,8 @@
-import { IonContent, IonPage, IonSpinner, IonButton } from '@ionic/react';
+import { IonContent, IonPage, IonSpinner, IonButton, IonIcon } from '@ionic/react';
+import { arrowBackOutline, chevronForwardOutline } from 'ionicons/icons';
 import { useMemo, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageWrapper from '../components/layout/PageWrapper';
-import PageHero from '../components/PageHero/PageHero';
 import NewsGrid from '../components/NewsGrid/NewsGrid';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
@@ -19,6 +20,7 @@ type NewsItem = {
 };
 
 const NewsPage = () => {
+  const navigate = useNavigate();
   const [newsData, setNewsData] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,11 +78,18 @@ const NewsPage = () => {
       <IonPage>
         <PageWrapper>
           <IonContent>
-            <PageHero
-              title="Новости компании Stanley"
-              subtitle="Узнайте о новых разработках, проектах и событиях, в которых мы участвуем"
-              showCTA={false}
-            />
+            <section className={styles.breadcrumbs}>
+              <div className={styles.breadcrumbsContainer}>
+                <IonButton
+                  fill="clear"
+                  onClick={() => navigate(-1)}
+                  className={styles.backButton}
+                >
+                  <IonIcon icon={arrowBackOutline} slot="start" />
+                  Назад
+                </IonButton>
+              </div>
+            </section>
             <div style={{ 
               display: 'flex', 
               justifyContent: 'center', 
@@ -106,11 +115,18 @@ const NewsPage = () => {
       <IonPage>
         <PageWrapper>
           <IonContent>
-            <PageHero
-              title="Новости компании Stanley"
-              subtitle="Узнайте о новых разработках, проектах и событиях, в которых мы участвуем"
-              showCTA={false}
-            />
+            <section className={styles.breadcrumbs}>
+              <div className={styles.breadcrumbsContainer}>
+                <IonButton
+                  fill="clear"
+                  onClick={() => navigate(-1)}
+                  className={styles.backButton}
+                >
+                  <IonIcon icon={arrowBackOutline} slot="start" />
+                  Назад
+                </IonButton>
+              </div>
+            </section>
             <div style={{ padding: '40px 16px', textAlign: 'center' }}>
               <h2>Ошибка загрузки данных</h2>
               <p>{error}</p>
@@ -127,27 +143,47 @@ const NewsPage = () => {
     <IonPage>
       <PageWrapper>
         <IonContent>
-          <PageHero
-            title="Новости компании Stanley"
-            subtitle="Узнайте о новых разработках, проектах и событиях, в которых мы участвуем"
-            showCTA={false}
-          />
+          {/* Хлебные крошки */}
+          <section className={styles.breadcrumbs}>
+            <div className={styles.breadcrumbsContainer}>
+              <IonButton
+                fill="clear"
+                onClick={() => navigate(-1)}
+                className={styles.backButton}
+              >
+                <IonIcon icon={arrowBackOutline} slot="start" />
+                Назад
+              </IonButton>
+              <div className={styles.breadcrumbPath}>
+                <span className={styles.breadcrumbItem}>О компании</span>
+                <IonIcon icon={chevronForwardOutline} className={styles.breadcrumbSeparator} />
+                <span className={styles.breadcrumbItemActive}>Новости</span>
+              </div>
+            </div>
+          </section>
+
+          {/* Заголовок страницы */}
+          <section className={styles.pageHeader}>
+            <div className={styles.headerContainer}>
+              <h1 className={styles.pageTitle}>Новости</h1>
+            </div>
+          </section>
           
           {/* Фильтр по категориям */}
           {categories.length > 0 && (
             <section className={styles.filters}>
               <div className={styles.filtersContainer}>
                 <IonButton
-                  fill={selectedCategory === null ? 'solid' : 'outline'}
+                  fill={selectedCategory === null ? 'solid' : 'clear'}
                   onClick={() => setSelectedCategory(null)}
                   className={styles.filterButton}
                 >
-                  Все новости
+                  Все
                 </IonButton>
                 {categories.map(category => (
                   <IonButton
                     key={category}
-                    fill={selectedCategory === category ? 'solid' : 'outline'}
+                    fill={selectedCategory === category ? 'solid' : 'clear'}
                     onClick={() => setSelectedCategory(category)}
                     className={styles.filterButton}
                   >

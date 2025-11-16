@@ -12,10 +12,12 @@ import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData'
 import type { News } from '../types/news';
 
 type ContentBlock = {
-  type: 'paragraph' | 'image' | 'quote';
+  type: 'paragraph' | 'image' | 'quote' | 'link';
   text?: string;
   src?: string;
   caption?: string;
+  url?: string;
+  linkText?: string;
 };
 
 type NewsArticle = {
@@ -31,29 +33,40 @@ type NewsArticle = {
 const NewsArticlePage = () => {
   const { id } = useParams();
   const [newsData, setNewsData] = useState<News[]>([]);
+  const [articlesData, setArticlesData] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadNews = async () => {
+    const loadData = async () => {
       try {
         setLoading(true);
-        const data = await fetchStaticData<News[]>(S3_URLS.NEWS);
-        setNewsData(data);
+        // Загружаем новости и статьи параллельно
+        const [news, articles] = await Promise.all([
+          fetchStaticData<News[]>(S3_URLS.NEWS).catch(() => []),
+          fetchStaticData<News[]>(S3_URLS.ARTICLES).catch(() => [])
+        ]);
+        setNewsData(news);
+        setArticlesData(articles);
       } catch (err) {
-        console.error('[NewsArticlePage] Ошибка при загрузке новостей:', err);
+        console.error('[NewsArticlePage] Ошибка при загрузке данных:', err);
         setError('Ошибка при загрузке статьи');
       } finally {
         setLoading(false);
       }
     };
 
-    loadNews();
+    loadData();
   }, []);
 
-  // Находим статью по ID
+  // Объединяем новости и статьи для поиска
+  const allData = useMemo(() => {
+    return [...newsData, ...articlesData];
+  }, [newsData, articlesData]);
+
+  // Находим статью по ID (ищем в новостях и статьях)
   const article = useMemo(() => {
-    const found = newsData.find(item => item.id === id);
+    const found = allData.find(item => item.id === id);
     if (!found) return null;
     
     return {
@@ -64,15 +77,15 @@ const NewsArticlePage = () => {
         src: block.type === 'image' ? getImageUrl(block.src) : block.src
       }))
     } as NewsArticle;
-  }, [id, newsData]);
+  }, [id, allData]);
 
-  // Преобразуем все новости для RelatedNews (должно быть до условных возвратов)
+  // Преобразуем все данные для RelatedNews (должно быть до условных возвратов)
   const allNews = useMemo(() => {
-    return newsData.map(item => ({
+    return allData.map(item => ({
       ...item,
       image: getImageUrl(item.image) // Используем реальные изображения из S3
     }));
-  }, [newsData]);
+  }, [allData]);
 
   // Показываем индикатор загрузки
   if (loading) {
