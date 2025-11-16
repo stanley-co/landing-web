@@ -18,7 +18,8 @@ export interface ProductSpecs {
 export interface Product {
   id: string;
   name: string;
-  category: string;
+  globalCategory?: string; // Общая категория для распределения по разделам (Оборудование для приготовления и хранения, Фасовочное оборудование и т.д.)
+  category: string; // Подкатегория (Вакуумные эмульгаторы, Планетарные миксеры и т.д.)
   image: string;
   description: string;
   specs: ProductSpecs;
