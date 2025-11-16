@@ -33,7 +33,7 @@ const carouselSlides: CarouselSlide[] = [
 
 const EquipmentCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     // Автоматическая смена слайдов каждые 5.5 секунд

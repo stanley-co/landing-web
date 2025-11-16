@@ -5,7 +5,6 @@ import EquipmentPage from './routes/EquipmentPage';
 import ProductDetailPage from './routes/ProductDetailPage';
 import InformationPage from './routes/InformationPage';
 import AboutPage from './routes/AboutPage';
-import NewsPage from './routes/NewsPage';
 import NewsArticlePage from './routes/NewsArticlePage';
 import ContactsPage from './routes/ContactsPage';
 import NotFoundPage from './routes/NotFoundPage';

@@ -59,7 +59,7 @@ const Header = () => {
   }, [activeDropdown]);
 
   // Таймеры для задержки закрытия выпадающего меню
-  const hoverTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
+  const hoverTimeoutRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   const handleMenuClick = (path: string, anchor?: string) => {
     if (anchor) {
