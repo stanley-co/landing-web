@@ -1,4 +1,3 @@
-import { IonGrid, IonRow, IonCol } from '@ionic/react';
 import EquipmentGrid from '../EquipmentGrid/EquipmentGrid';
 import styles from "./EquipmentLayout.module.css";
 

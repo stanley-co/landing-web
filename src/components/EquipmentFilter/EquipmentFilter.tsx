@@ -42,7 +42,7 @@ const EquipmentFilter = ({
   // Раскрываем активную категорию при скролле и сворачиваем остальные
   useEffect(() => {
     if (activeGlobalCategoryId) {
-      setExpandedCategories(prev => {
+      setExpandedCategories(() => {
         const newSet = new Set<string>();
         // Оставляем раскрытой только активную категорию
         newSet.add(activeGlobalCategoryId);
