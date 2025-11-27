@@ -1,7 +1,8 @@
-import { IonContent, IonPage, IonSpinner } from '@ionic/react';
-import { useState, useMemo, useEffect } from 'react';
+import { IonContent, IonPage, IonSpinner, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
 import EquipmentCarousel from '../components/EquipmentCarousel/EquipmentCarousel';
+import EquipmentFilter from '../components/EquipmentFilter/EquipmentFilter';
 import EquipmentLayout from '../components/EquipmentLayout/EquipmentLayout';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
@@ -58,13 +59,32 @@ const getGlobalCategory = (product: Product): string | undefined => {
   return categoryToGlobalCategoryMapping[product.category];
 };
 
+type CategoryStructure = {
+  globalCategory: string;
+  globalCategoryId: string;
+  subcategories: {
+    name: string;
+    count: number;
+  }[];
+  totalCount: number;
+};
+
 const EquipmentPage = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Состояния для фильтров каждой секции (динамически создаются)
+  // Состояния для единого фильтра
+  const [selectedGlobalCategory, setSelectedGlobalCategory] = useState<string | null>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
+  
+  // Состояния для фильтров каждой секции (для внутренней фильтрации)
   const [selectedCategories, setSelectedCategories] = useState<Record<string, string | null>>({});
+  
+  // Активная категория при скролле
+  const [activeGlobalCategoryId, setActiveGlobalCategoryId] = useState<string | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -113,7 +133,6 @@ const EquipmentPage = () => {
     });
     // Сортируем категории для стабильного порядка
     const sorted = Array.from(categories).sort();
-    console.log(`[EquipmentPage] Найдено ${sorted.length} глобальных категорий:`, sorted);
     return sorted;
   }, [products]);
 
@@ -124,6 +143,32 @@ const EquipmentPage = () => {
       name: category,
     }));
   }, [globalCategories]);
+
+  // Создаем структуру категорий для единого фильтра
+  const categoryStructure: CategoryStructure[] = useMemo(() => {
+    return equipmentSections.map(section => {
+      const globalCategory = section.name;
+      const sectionProducts = products.filter(p => p.globalCategory === globalCategory);
+      
+      // Получаем подкатегории с количеством
+      const subcategoryMap = new Map<string, number>();
+      sectionProducts.forEach(product => {
+        const count = subcategoryMap.get(product.category) || 0;
+        subcategoryMap.set(product.category, count + 1);
+      });
+      
+      const subcategories = Array.from(subcategoryMap.entries())
+        .map(([name, count]) => ({ name, count }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      
+      return {
+        globalCategory,
+        globalCategoryId: section.id,
+        subcategories,
+        totalCount: sectionProducts.length,
+      };
+    });
+  }, [equipmentSections, products]);
 
   // Инициализируем состояния фильтров для всех разделов
   useEffect(() => {
@@ -137,16 +182,59 @@ const EquipmentPage = () => {
     }));
   }, [equipmentSections]);
 
+  // Отслеживание активной категории при скролле
+  useEffect(() => {
+    // Очищаем предыдущий observer
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    // Создаем новый IntersectionObserver
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        // Находим секцию, которая находится в верхней части viewport
+        const visibleSections = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => {
+            const aTop = a.boundingClientRect.top;
+            const bTop = b.boundingClientRect.top;
+            return aTop - bTop;
+          });
+
+        if (visibleSections.length > 0) {
+          const topSection = visibleSections[0];
+          if (topSection.boundingClientRect.top <= 150) {
+            setActiveGlobalCategoryId(topSection.target.id);
+          }
+        }
+      },
+      {
+        rootMargin: '-120px 0px -50% 0px',
+        threshold: [0, 0.1, 0.3, 0.5],
+      }
+    );
+
+    // Небольшая задержка для того, чтобы секции успели отрендериться
+    const timer = setTimeout(() => {
+      // Наблюдаем за всеми секциями
+      sectionRefs.current.forEach((ref) => {
+        if (ref && observerRef.current) {
+          observerRef.current.observe(ref);
+        }
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [equipmentSections]);
+
   // Функция для получения продуктов по глобальной категории
   const getProductsByGlobalCategory = (globalCategory: string): Product[] => {
     return products.filter(p => p.globalCategory === globalCategory);
-  };
-
-  // Получаем категории (подкатегории) для секции
-  const getCategoriesForSection = (globalCategory: string): string[] => {
-    const sectionProducts = getProductsByGlobalCategory(globalCategory);
-    const categories = Array.from(new Set(sectionProducts.map(p => p.category)));
-    return categories.sort();
   };
 
   // Фильтруем продукты для секции
@@ -160,21 +248,31 @@ const EquipmentPage = () => {
     return sectionProducts.filter(p => p.category === selectedCategory);
   };
 
-  // Подсчитываем количество продуктов по категориям для секции
-  const getCategoryCountsForSection = (globalCategory: string): Record<string, number> => {
-    const sectionProducts = getProductsByGlobalCategory(globalCategory);
-    const counts: Record<string, number> = {};
-    sectionProducts.forEach(product => {
-      counts[product.category] = (counts[product.category] || 0) + 1;
-    });
-    return counts;
-  };
-
-  const handleCategoryChange = (sectionId: string, category: string | null) => {
-    setSelectedCategories(prev => ({
-      ...prev,
-      [sectionId]: category,
-    }));
+  // Обработчик выбора категории/подкатегории в едином фильтре
+  const handleCategorySelect = (globalCategoryId: string | null, subcategory: string | null) => {
+    setSelectedGlobalCategory(globalCategoryId);
+    setSelectedSubcategory(subcategory);
+    
+    // Если выбрана подкатегория, устанавливаем фильтр для соответствующей секции
+    if (globalCategoryId && subcategory) {
+      setSelectedCategories(prev => ({
+        ...prev,
+        [globalCategoryId]: subcategory,
+      }));
+    } else if (globalCategoryId) {
+      // Если выбрана только категория, сбрасываем фильтр для этой секции
+      setSelectedCategories(prev => ({
+        ...prev,
+        [globalCategoryId]: null,
+      }));
+    } else {
+      // Если выбрано "Все категории", сбрасываем все фильтры
+      const resetFilters: Record<string, string | null> = {};
+      equipmentSections.forEach(section => {
+        resetFilters[section.id] = null;
+      });
+      setSelectedCategories(resetFilters);
+    }
   };
 
   // Показываем индикатор загрузки
@@ -247,56 +345,59 @@ const EquipmentPage = () => {
             }}>
               <h2>Нет доступных разделов</h2>
               <p>Не удалось определить категории оборудования. Проверьте данные в консоли браузера.</p>
-              <details style={{ marginTop: '20px', textAlign: 'left', maxWidth: '600px', margin: '20px auto' }}>
-                <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>Информация для отладки</summary>
-                <pre style={{ 
-                  background: '#f5f5f5', 
-                  padding: '16px', 
-                  borderRadius: '8px', 
-                  overflow: 'auto',
-                  marginTop: '10px',
-                  fontSize: '12px'
-                }}>
-                  {JSON.stringify({ 
-                    totalProducts: products.length,
-                    productsWithGlobalCategory: products.filter(p => p.globalCategory).length,
-                    uniqueCategories: Array.from(new Set(products.map(p => p.category))),
-                    mapping: categoryToGlobalCategoryMapping
-                  }, null, 2)}
-                </pre>
-              </details>
             </div>
           ) : (
-            equipmentSections.map((section) => {
-              const globalCategory = section.name;
-              const sectionProducts = getProductsByGlobalCategory(globalCategory);
-              const categories = getCategoriesForSection(globalCategory);
-              const filteredProducts = getFilteredProductsForSection(section.id, globalCategory);
-              const categoryCounts = getCategoryCountsForSection(globalCategory);
-              const selectedCategory = selectedCategories[section.id];
+            <div className={styles.pageContainer}>
+              <IonGrid>
+                <IonRow>
+                  {/* Единый фильтр слева */}
+                  <IonCol size="12" sizeMd="4" sizeLg="3" className={styles.filterCol}>
+                    <EquipmentFilter
+                      categoryStructure={categoryStructure}
+                      selectedGlobalCategory={selectedGlobalCategory}
+                      selectedSubcategory={selectedSubcategory}
+                      onCategorySelect={handleCategorySelect}
+                      activeGlobalCategoryId={activeGlobalCategoryId}
+                    />
+                  </IonCol>
+                  
+                  {/* Контент справа */}
+                  <IonCol size="12" sizeMd="8" sizeLg="9" className={styles.contentCol}>
+                    {equipmentSections.map((section) => {
+                      const globalCategory = section.name;
+                      const filteredProducts = getFilteredProductsForSection(section.id, globalCategory);
+                      const sectionProducts = getProductsByGlobalCategory(globalCategory);
 
-              // Показываем секцию только если в ней есть продукты
-              if (sectionProducts.length === 0) {
-                return null;
-              }
+                      // Показываем секцию только если в ней есть продукты
+                      if (sectionProducts.length === 0) {
+                        return null;
+                      }
 
-              return (
-                <section key={section.id} id={section.id} className={styles.equipmentSection}>
-                  <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>{section.name}</h2>
-                    <div className={styles.sectionDivider} />
-                  </div>
-                  <EquipmentLayout
-                    categories={categories}
-                    selectedCategory={selectedCategory}
-                    onCategoryChange={(category) => handleCategoryChange(section.id, category)}
-                    products={filteredProducts}
-                    categoryCounts={categoryCounts}
-                    totalCount={sectionProducts.length}
-                  />
-                </section>
-              );
-            })
+                      return (
+                        <section 
+                          key={section.id} 
+                          id={section.id} 
+                          className={styles.equipmentSection}
+                          ref={(el) => {
+                            if (el) {
+                              sectionRefs.current.set(section.id, el);
+                            } else {
+                              sectionRefs.current.delete(section.id);
+                            }
+                          }}
+                        >
+                          <div className={styles.sectionHeader}>
+                            <h2 className={styles.sectionTitle}>{section.name}</h2>
+                            <div className={styles.sectionDivider} />
+                          </div>
+                          <EquipmentLayout products={filteredProducts} />
+                        </section>
+                      );
+                    })}
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+            </div>
           )}
 
           <CooperationFormSection />
