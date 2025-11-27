@@ -122,6 +122,17 @@ const EquipmentPage = () => {
     });
   }, [productsData]);
 
+  // Определяем правильный порядок категорий (должен совпадать с порядком в Header)
+  // Порядок: 1. Оборудование для приготовления и хранения, 2. Фасовочное оборудование,
+  // 3. Насосное оборудование, 4. СИП станции, 5. Лабораторное оборудование
+  const categoryOrder = useMemo(() => [
+    'Оборудование для приготовления и хранения',
+    'Фасовочное оборудование',
+    'Насосное оборудование',
+    'СИП станции',
+    'Лабораторное оборудование'
+  ], []);
+
   // Получаем уникальные глобальные категории из продуктов (динамически)
   const globalCategories = useMemo(() => {
     const categories = new Set<string>();
@@ -131,10 +142,18 @@ const EquipmentPage = () => {
         categories.add(globalCategory);
       }
     });
-    // Сортируем категории для стабильного порядка
-    const sorted = Array.from(categories).sort();
+    // Сортируем категории по заданному порядку
+    const sorted = Array.from(categories).sort((a, b) => {
+      const indexA = categoryOrder.indexOf(a);
+      const indexB = categoryOrder.indexOf(b);
+      // Если категория есть в порядке - используем её индекс, иначе ставим в конец
+      if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    });
     return sorted;
-  }, [products]);
+  }, [products, categoryOrder]);
 
   // Создаем структуру разделов динамически на основе globalCategories
   const equipmentSections = useMemo(() => {
@@ -143,6 +162,38 @@ const EquipmentPage = () => {
       name: category,
     }));
   }, [globalCategories]);
+
+  // Определяем порядок подкатегорий для каждой глобальной категории
+  const getSubcategoryOrder = (globalCat: string): string[] => {
+    const orders: Record<string, string[]> = {
+      'Оборудование для приготовления и хранения': [
+        'Вакуумные эмульгаторы',
+        'Планетарные миксеры',
+        'Реакторы / Промышленные смесители'
+      ],
+      'Фасовочное оборудование': [
+        'Дозирующие системы',
+        'Фасовочные автоматы',
+        'Упаковочные линии'
+      ],
+      'Насосное оборудование': [
+        'Центробежные насосы',
+        'Поршневые насосы',
+        'Винтовые насосы'
+      ],
+      'СИП станции': [
+        'Мобильные СИП станции',
+        'Стационарные СИП станции',
+        'Компактные СИП станции'
+      ],
+      'Лабораторное оборудование': [
+        'Лабораторные миксеры',
+        'Лабораторные реакторы',
+        'Лабораторные сушильные шкафы'
+      ]
+    };
+    return orders[globalCat] || [];
+  };
 
   // Создаем структуру категорий для единого фильтра
   const categoryStructure: CategoryStructure[] = useMemo(() => {
@@ -156,10 +207,19 @@ const EquipmentPage = () => {
         const count = subcategoryMap.get(product.category) || 0;
         subcategoryMap.set(product.category, count + 1);
       });
-      
+
+      const subcategoryOrder = getSubcategoryOrder(globalCategory);
       const subcategories = Array.from(subcategoryMap.entries())
         .map(([name, count]) => ({ name, count }))
-        .sort((a, b) => a.name.localeCompare(b.name));
+        .sort((a, b) => {
+          const indexA = subcategoryOrder.indexOf(a.name);
+          const indexB = subcategoryOrder.indexOf(b.name);
+          // Если подкатегория есть в порядке - используем её индекс, иначе ставим в конец
+          if (indexA === -1 && indexB === -1) return a.name.localeCompare(b.name);
+          if (indexA === -1) return 1;
+          if (indexB === -1) return -1;
+          return indexA - indexB;
+        });
       
       return {
         globalCategory,
@@ -189,28 +249,57 @@ const EquipmentPage = () => {
       observerRef.current.disconnect();
     }
 
+    // Вычисляем середину экрана для rootMargin
+    const viewportHeight = window.innerHeight;
+    const middlePoint = viewportHeight / 2;
+    // rootMargin: отрицательный отступ сверху равен половине экрана,
+    // чтобы срабатывать, когда элемент пересекает середину экрана
+    const rootMarginTop = `-${middlePoint}px`;
+
     // Создаем новый IntersectionObserver
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        // Находим секцию, которая находится в верхней части viewport
-        const visibleSections = entries
+        const middleY = viewportHeight / 2;
+        
+        // Находим все видимые секции и вычисляем расстояние их начала (где находится заголовок) до середины экрана
+        const sectionsWithDistance = entries
           .filter(entry => entry.isIntersecting)
+          .map(entry => {
+            // Используем верхнюю границу секции (где находится заголовок)
+            const sectionTop = entry.boundingClientRect.top;
+            
+            // Вычисляем расстояние от начала секции (заголовка) до середины экрана
+            const distanceFromMiddle = Math.abs(sectionTop - middleY);
+            
+            return {
+              id: entry.target.id,
+              distance: distanceFromMiddle,
+              top: sectionTop
+            };
+          })
           .sort((a, b) => {
-            const aTop = a.boundingClientRect.top;
-            const bTop = b.boundingClientRect.top;
-            return aTop - bTop;
+            // Сначала сортируем по расстоянию до середины экрана
+            if (Math.abs(a.distance - b.distance) > 10) {
+              return a.distance - b.distance;
+            }
+            // Если расстояния близки, предпочитаем секцию, которая выше (при прокрутке вниз следующая категория активируется)
+            return a.top - b.top;
           });
 
-        if (visibleSections.length > 0) {
-          const topSection = visibleSections[0];
-          if (topSection.boundingClientRect.top <= 150) {
-            setActiveGlobalCategoryId(topSection.target.id);
+        if (sectionsWithDistance.length > 0) {
+          // Берем секцию, заголовок которой ближе всего к середине экрана
+          const activeSection = sectionsWithDistance[0];
+          
+          // Активируем категорию, если её заголовок находится в пределах видимости
+          // (не слишком далеко от середины экрана - в пределах одного экрана)
+          if (activeSection.distance < viewportHeight) {
+            setActiveGlobalCategoryId(activeSection.id);
           }
         }
       },
       {
-        rootMargin: '-120px 0px -50% 0px',
-        threshold: [0, 0.1, 0.3, 0.5],
+        rootMargin: `${rootMarginTop} 0px -50% 0px`,
+        threshold: [0, 0.1, 0.3, 0.5, 0.7, 1.0],
       }
     );
 
