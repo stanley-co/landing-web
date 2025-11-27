@@ -191,6 +191,10 @@ const Header = () => {
       <IonToolbar style={{ zIndex: 999999 }}>
         <div slot="start" className={styles.logoContainer}>
           <IonTitle className={styles.title} onClick={() => navigate('/equipment')}>СТАНОК ПРО</IonTitle>
+          <div className={styles.tagline}>
+            <span>Промышленное оборудование</span>
+            <span>для производства</span>
+          </div>
         </div>
         <IonButtons slot="end" className="ion-hide-md-up">
           <IonButton onClick={() => setMenuOpen(!menuOpen)}>

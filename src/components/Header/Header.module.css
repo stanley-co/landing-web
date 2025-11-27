@@ -20,6 +20,7 @@
 .logoContainer {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .title {
@@ -33,6 +34,26 @@
 
 .title:hover {
   opacity: 0.8;
+}
+
+.tagline {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #6b7280;
+  font-weight: 400;
+  max-width: 200px;
+}
+
+.tagline span {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .tagline {
+    display: none;
+  }
 }
 
 .ctaButton {
