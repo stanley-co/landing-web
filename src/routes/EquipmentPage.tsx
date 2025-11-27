@@ -5,9 +5,8 @@ import EquipmentCarousel from '../components/EquipmentCarousel/EquipmentCarousel
 import EquipmentLayout from '../components/EquipmentLayout/EquipmentLayout';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
-import { fetchStaticData, S3_URLS } from '../utils/fetchStaticData';
+import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { Product } from '../types/product';
-import testImage from '../assets/images/test-image.png';
 import styles from './EquipmentPage.module.css';
 
 // Функция для преобразования названия категории в ID якоря
@@ -90,7 +89,7 @@ const EquipmentPage = () => {
       const globalCategory = getGlobalCategory(product);
       const result = {
         ...product,
-        image: testImage, // Используем локальное изображение
+        image: getImageUrl(product.image), // Используем изображение из S3
         globalCategory: globalCategory || product.globalCategory, // Добавляем globalCategory если определили
       };
       

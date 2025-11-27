@@ -1,7 +1,6 @@
 .pageHero {
   padding: 100px 16px 120px;
   background: linear-gradient(135deg, #001B36 0%, #003366 100%);
-  background-image: url('../../assets/images/test-image.png');
   background-size: cover;
   background-position: center;
   background-blend-mode: overlay;

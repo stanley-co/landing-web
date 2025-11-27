@@ -4,11 +4,17 @@
     "name": "Вакуумный эмульгатор VM-01",
     "globalCategory": "Оборудование для приготовления и хранения",
     "category": "Вакуумные эмульгаторы",
-    "image": "/assets/images/test-image.png",
+    "image": "images/products/vm-01.jpg",
+    "galleryImages": [
+      "images/products/vm-01.jpg",
+      "images/products/vm-01-1.jpg",
+      "images/products/vm-01-2.jpg",
+      "images/products/vm-01-3.jpg"
+    ],
     "description": "Высокоточный вакуумный эмульгатор для косметической промышленности с интеллектуальным PLC управлением.",
     "specs": {
       "ОБЪЕМ": "1000-3000 л",
-      "power": "15-30 кВт",
+      "Test": "15-30 кВт",
       "speed": "0-3000 об/мин",
       "material": "Нержавеющая сталь 316L",
       "temperature": "0-150°C",

@@ -12,7 +12,6 @@ import Footer from '../components/Footer/Footer';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { Product } from '../types/product';
 import type { News } from '../types/news';
-import testImage from '../assets/images/test-image.png';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -61,6 +60,20 @@ const ProductDetailPage = () => {
       }));
   }, [articlesData]);
 
+  // Используем изображения из S3 (галерея продукта)
+  const images = useMemo(() => {
+    if (!product) return [];
+    
+    // Если есть galleryImages, используем их
+    if (product.galleryImages && product.galleryImages.length > 0) {
+      return product.galleryImages.map(img => getImageUrl(img));
+    }
+    
+    // Иначе используем главное изображение
+    const mainImage = getImageUrl(product.image);
+    return [mainImage];
+  }, [product]);
+
   // Показываем индикатор загрузки
   if (loading) {
     return (
@@ -101,9 +114,6 @@ const ProductDetailPage = () => {
       </IonPage>
     );
   }
-
-  // Используем локальное изображение (можно расширить позже с реальными изображениями)
-  const images = [testImage, testImage, testImage];
 
   return (
     <IonPage>

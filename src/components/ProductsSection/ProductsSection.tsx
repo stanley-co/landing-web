@@ -1,6 +1,6 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonChip, IonImg, IonIcon } from '@ionic/react';
 import { informationCircleOutline } from 'ionicons/icons';
-import testImage from '../../assets/images/test-image.png';
+import { getImageUrl } from '../../utils/fetchStaticData';
 import styles from "./ProductsSection.module.css";
 
 const products = [
@@ -8,25 +8,25 @@ const products = [
     name: "Машина для производства лосьонов и шампуней большой партией 2T/3T", 
     category: "Вакуумные эмульгаторы",
     description: "Профессиональное оборудование для крупносерийного производства косметических и гигиенических продуктов с вакуумной эмульгацией",
-    image: testImage
+    image: "images/products/vm-01.jpg"
   },
   { 
     name: "Двухсторонний эмульгатор-миксер для вакуумной косметики", 
     category: "Косметическое оборудование",
     description: "Современное оборудование для производства кремов и косметических эмульсий с двойным способом эмульгации",
-    image: testImage
+    image: "images/products/vm-05.jpg"
   },
   { 
     name: "Подъемная вакуумная машина для производства зубных паст и мазей", 
     category: "Фармацевтическое оборудование",
     description: "Вакуумный гомогенизатор-миксер для фармацевтической и косметической промышленности с подъемным механизмом",
-    image: testImage
+    image: "images/products/vm-01.jpg"
   },
   { 
     name: "1000л гомогенизатор-миксер для жидких моющих средств с двойной рубашкой", 
     category: "Резервуары и миксеры",
     description: "Промышленный миксер с двойной рубашкой для термостатирования и гомогенизации жидких моющих средств",
-    image: testImage
+    image: "images/products/sr-04.jpg"
   },
 ];
 
@@ -40,7 +40,7 @@ const ProductsSection = () => (
             <IonCol size="12" sizeMd="6" sizeLg="3" key={i}>
               <IonCard className={styles.productCard}>
                 <div className={styles.imageContainer}>
-                  <IonImg src={p.image} alt={p.name} className={styles.productImage} />
+                  <IonImg src={getImageUrl(p.image)} alt={p.name} className={styles.productImage} />
                 </div>
                 <IonCardHeader>
                   <IonChip color="primary" className={styles.chip}>{p.category}</IonChip>

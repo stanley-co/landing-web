@@ -61,6 +61,14 @@ const Header = () => {
   // Таймеры для задержки закрытия выпадающего меню
   const hoverTimeoutRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
+  // Функция для проверки, является ли путь активным
+  const isActivePath = (path: string): boolean => {
+    if (path === '/equipment' || path === '/') {
+      return location.pathname === '/equipment' || location.pathname === '/' || location.pathname.startsWith('/equipment/');
+    }
+    return location.pathname.startsWith(path);
+  };
+
   const handleMenuClick = (path: string, anchor?: string) => {
     if (anchor) {
       navigate(path);
@@ -203,7 +211,7 @@ const Header = () => {
             <IonButton 
               fill="clear" 
               onClick={() => handleMenuClick('/equipment')}
-              className={styles.navButton}
+              className={`${styles.navButton} ${isActivePath('/equipment') ? styles.active : ''}`}
             >
               Оборудование
               <IonIcon icon={chevronDownOutline} slot="end" className={styles.chevron} />
@@ -254,9 +262,9 @@ const Header = () => {
             <IonButton 
               fill="clear" 
               onClick={() => handleMenuClick('/information')}
-              className={styles.navButton}
+              className={`${styles.navButton} ${isActivePath('/information') ? styles.active : ''}`}
             >
-              Информация
+              Новости и статьи
               <IonIcon icon={chevronDownOutline} slot="end" className={styles.chevron} />
             </IonButton>
             {activeDropdown === 'information' && createPortal(
@@ -305,7 +313,7 @@ const Header = () => {
             <IonButton 
               fill="clear" 
               onClick={() => handleMenuClick('/about')}
-              className={styles.navButton}
+              className={`${styles.navButton} ${isActivePath('/about') ? styles.active : ''}`}
             >
               О компании
               <IonIcon icon={chevronDownOutline} slot="end" className={styles.chevron} />
@@ -356,7 +364,7 @@ const Header = () => {
             <IonButton 
               fill="clear" 
               onClick={() => handleMenuClick('/contacts')}
-              className={styles.navButton}
+              className={`${styles.navButton} ${isActivePath('/contacts') ? styles.active : ''}`}
             >
               Контакты
               <IonIcon icon={chevronDownOutline} slot="end" className={styles.chevron} />
@@ -395,17 +403,18 @@ const Header = () => {
           </div>
 
           <IonButton color="primary" onClick={() => handleMenuClick('/contacts', 'contact-form')} className={styles.ctaButton}>
-            Связаться
+            Оставить заявку
           </IonButton>
         </div>
       </IonToolbar>
       {menuOpen && (
         <div className={styles.mobileMenu}>
-          <div className={styles.mobileNavItem}>
+          <div className={`${styles.mobileNavItem} ${isActivePath('/equipment') ? styles.active : ''}`}>
             <IonButton 
               fill="clear" 
               expand="block" 
               onClick={() => handleDropdownToggle('mobile-equipment')}
+              className={isActivePath('/equipment') ? styles.active : ''}
             >
               Оборудование
               <IonIcon icon={chevronDownOutline} slot="end" />
@@ -427,13 +436,14 @@ const Header = () => {
             )}
           </div>
 
-          <div className={styles.mobileNavItem}>
+          <div className={`${styles.mobileNavItem} ${isActivePath('/information') ? styles.active : ''}`}>
             <IonButton 
               fill="clear" 
               expand="block" 
               onClick={() => handleDropdownToggle('mobile-information')}
+              className={isActivePath('/information') ? styles.active : ''}
             >
-              Информация
+              Новости и статьи
               <IonIcon icon={chevronDownOutline} slot="end" />
             </IonButton>
             {activeDropdown === 'mobile-information' && (
@@ -453,11 +463,12 @@ const Header = () => {
             )}
           </div>
 
-          <div className={styles.mobileNavItem}>
+          <div className={`${styles.mobileNavItem} ${isActivePath('/about') ? styles.active : ''}`}>
             <IonButton 
               fill="clear" 
               expand="block" 
               onClick={() => handleDropdownToggle('mobile-about')}
+              className={isActivePath('/about') ? styles.active : ''}
             >
               О компании
               <IonIcon icon={chevronDownOutline} slot="end" />
@@ -479,11 +490,12 @@ const Header = () => {
             )}
           </div>
 
-          <div className={styles.mobileNavItem}>
+          <div className={`${styles.mobileNavItem} ${isActivePath('/contacts') ? styles.active : ''}`}>
             <IonButton 
               fill="clear" 
               expand="block" 
               onClick={() => handleDropdownToggle('mobile-contacts')}
+              className={isActivePath('/contacts') ? styles.active : ''}
             >
               Контакты
               <IonIcon icon={chevronDownOutline} slot="end" />
@@ -506,7 +518,7 @@ const Header = () => {
           </div>
 
           <IonButton color="primary" expand="block" onClick={() => handleMenuClick('/contacts', 'contact-form')} className={styles.ctaButton}>
-            Связаться
+            Оставить заявку
           </IonButton>
         </div>
       )}

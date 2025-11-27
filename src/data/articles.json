@@ -4,7 +4,7 @@
     "title": "Руководство по оптимизации производственных процессов",
     "date": "2025-01-15",
     "category": "Статьи",
-    "image": "/assets/images/test-image.png",
+    "image": "images/articles/2025-01-optimization-guide.jpg",
     "preview": "Подробное руководство по оптимизации производственных процессов с использованием современного оборудования. Узнайте, как повысить эффективность и снизить затраты.",
     "content": [
       {
@@ -17,7 +17,7 @@
       },
       {
         "type": "image",
-        "src": "/assets/images/test-image.png",
+        "src": "images/articles/content/2025-01-optimization-guide-content-1.jpg",
         "caption": "Современное производственное оборудование."
       },
       {
@@ -41,7 +41,7 @@
     "title": "Советы по техническому обслуживанию оборудования",
     "date": "2024-12-20",
     "category": "Статьи",
-    "image": "/assets/images/test-image.png",
+    "image": "images/articles/2024-12-maintenance-tips.jpg",
     "preview": "Практические советы по техническому обслуживанию промышленного оборудования. Регулярное обслуживание продлевает срок службы и обеспечивает стабильную работу.",
     "content": [
       {
@@ -54,7 +54,7 @@
       },
       {
         "type": "image",
-        "src": "/assets/images/test-image.png",
+        "src": "images/articles/content/2024-12-maintenance-tips-content-1.jpg",
         "caption": "Процесс технического обслуживания."
       },
       {
@@ -74,7 +74,7 @@
     "title": "Системы контроля качества в производстве",
     "date": "2024-11-10",
     "category": "Статьи",
-    "image": "/assets/images/test-image.png",
+    "image": "images/articles/2024-11-quality-control.jpg",
     "preview": "Обзор современных систем контроля качества в производстве косметики и бытовой химии. Как обеспечить стабильное качество продукции.",
     "content": [
       {
@@ -87,7 +87,7 @@
       },
       {
         "type": "image",
-        "src": "/assets/images/test-image.png",
+        "src": "images/articles/content/2024-11-quality-control-content-1.jpg",
         "caption": "Система контроля качества."
       },
       {
@@ -107,7 +107,7 @@
     "title": "Энергоэффективность в промышленном производстве",
     "date": "2024-10-05",
     "category": "Статьи",
-    "image": "/assets/images/test-image.png",
+    "image": "images/articles/2024-10-energy-efficiency.jpg",
     "preview": "Как снизить энергопотребление и повысить эффективность производства. Практические рекомендации по энергосбережению.",
     "content": [
       {
@@ -120,7 +120,7 @@
       },
       {
         "type": "image",
-        "src": "/assets/images/test-image.png",
+        "src": "images/articles/content/2024-10-energy-efficiency-content-1.jpg",
         "caption": "Энергоэффективное оборудование."
       },
       {
@@ -140,7 +140,7 @@
     "title": "Преимущества автоматизации производственных процессов",
     "date": "2024-09-18",
     "category": "Статьи",
-    "image": "/assets/images/test-image.png",
+    "image": "images/articles/2024-09-automation-benefits.jpg",
     "preview": "Автоматизация производства: основные преимущества и возможности. Как автоматизация повышает производительность и качество продукции.",
     "content": [
       {
@@ -153,7 +153,7 @@
       },
       {
         "type": "image",
-        "src": "/assets/images/test-image.png",
+        "src": "images/articles/content/2024-09-automation-benefits-content-1.jpg",
         "caption": "Автоматизированная производственная линия."
       },
       {

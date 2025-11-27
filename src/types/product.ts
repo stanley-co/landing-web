@@ -20,7 +20,8 @@ export interface Product {
   name: string;
   globalCategory?: string; // Общая категория для распределения по разделам (Оборудование для приготовления и хранения, Фасовочное оборудование и т.д.)
   category: string; // Подкатегория (Вакуумные эмульгаторы, Планетарные миксеры и т.д.)
-  image: string;
+  image: string; // Главное изображение продукта
+  galleryImages?: string[]; // Массив путей к изображениям для галереи (относительные пути из S3, например: "images/products/vm-01-1.jpg")
   description: string;
   specs: ProductSpecs;
   fullDescription: string;

@@ -1,7 +1,7 @@
 import { IonGrid, IonRow, IonCol, IonButton, IonImg, IonIcon } from '@ionic/react';
 import { arrowForwardOutline } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
-import testImage from '../../assets/images/test-image.png';
+import { getImageUrl } from '../../utils/fetchStaticData';
 import styles from "./AboutSection.module.css";
 
 const AboutSection = () => {
@@ -14,7 +14,7 @@ const AboutSection = () => {
           <IonRow className={styles.row}>
             <IonCol size="12" sizeMd="6">
               <div className={styles.imageContainer}>
-                <IonImg src={testImage} alt="Производственный цех" className={styles.image} />
+                <IonImg src={getImageUrl("images/carousel/equipment-hero-1.jpg")} alt="Производственный цех" className={styles.image} />
               </div>
             </IonCol>
             <IonCol size="12" sizeMd="6">

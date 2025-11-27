@@ -1,13 +1,19 @@
 import { IonButton, IonIcon } from '@ionic/react';
 import { arrowForwardOutline } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
+import { getImageUrl } from '../../utils/fetchStaticData';
 import styles from "./Hero.module.css";
 
 const Hero = () => {
   const navigate = useNavigate();
+  const backgroundImageUrl = getImageUrl("images/carousel/equipment-hero-1.jpg");
 
   return (
-    <section id="home" className={styles.hero}>
+    <section 
+      id="home" 
+      className={styles.hero}
+      style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+    >
       <div className={styles.overlay}></div>
       <div className={styles.container}>
         <div className={styles.content}>

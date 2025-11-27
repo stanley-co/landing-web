@@ -1,44 +1,50 @@
-import { IonImg } from '@ionic/react';
+import { IonImg, IonSpinner } from '@ionic/react';
 import { useState, useEffect, useRef } from 'react';
 import styles from './EquipmentCarousel.module.css';
-import testImage from '../../assets/images/test-image.png';
+import { fetchStaticData, S3_URLS, getImageUrl } from '../../utils/fetchStaticData';
 
 type CarouselSlide = {
   id: number;
   image: string;
   title: string;
-  subtitle: string;
+  description: string;
 };
-
-const carouselSlides: CarouselSlide[] = [
-  {
-    id: 1,
-    image: testImage,
-    title: 'Промышленное оборудование мирового уровня',
-    subtitle: 'Производство и поставка смесительных и эмульгирующих систем для фармацевтики, косметики и пищевой промышленности',
-  },
-  {
-    id: 2,
-    image: testImage,
-    title: 'Вакуумные эмульгаторы Stanley',
-    subtitle: 'Высокоточное оборудование для косметической и фармацевтической промышленности',
-  },
-  {
-    id: 3,
-    image: testImage,
-    title: 'Производственные линии',
-    subtitle: 'Автоматизированные системы для крупносерийного производства',
-  },
-];
 
 const EquipmentCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [slides, setSlides] = useState<CarouselSlide[]>([]);
+  const [loading, setLoading] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    const loadCarouselData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchStaticData<CarouselSlide[]>(S3_URLS.CAROUSEL);
+        // Преобразуем пути изображений в полные URL S3
+        const slidesWithUrls = data.map(slide => ({
+          ...slide,
+          image: getImageUrl(slide.image)
+        }));
+        setSlides(slidesWithUrls);
+      } catch (err) {
+        console.error('[EquipmentCarousel] Ошибка при загрузке данных карусели:', err);
+        // В случае ошибки используем пустой массив
+        setSlides([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCarouselData();
+  }, []);
+
+  useEffect(() => {
+    if (slides.length === 0) return;
+
     // Автоматическая смена слайдов каждые 5.5 секунд
     intervalRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5500);
 
     return () => {
@@ -46,12 +52,36 @@ const EquipmentCarousel = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, []);
+  }, [slides.length]);
+
+  if (loading) {
+    return (
+      <section className={styles.carousel}>
+        <div className={styles.carouselContainer}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            height: '100%',
+            flexDirection: 'column',
+            gap: '16px'
+          }}>
+            <IonSpinner name="crescent" style={{ width: '48px', height: '48px' }} />
+            <p style={{ color: 'white' }}>Загрузка карусели...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (slides.length === 0) {
+    return null;
+  }
 
   return (
     <section className={styles.carousel}>
       <div className={styles.carouselContainer}>
-        {carouselSlides.map((slide, index) => (
+        {slides.map((slide, index) => (
           <div
             key={slide.id}
             className={`${styles.slide} ${index === currentSlide ? styles.active : ''} ${
@@ -64,7 +94,7 @@ const EquipmentCarousel = () => {
             </div>
             <div className={styles.content}>
               <h1 className={styles.title}>{slide.title}</h1>
-              <p className={styles.subtitle}>{slide.subtitle}</p>
+              <p className={styles.subtitle}>{slide.description}</p>
             </div>
           </div>
         ))}

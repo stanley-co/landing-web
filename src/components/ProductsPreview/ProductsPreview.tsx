@@ -2,9 +2,8 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonGri
 import { informationCircleOutline, arrowForwardOutline } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
 import { useMemo, useState, useEffect } from 'react';
-import { fetchStaticData, S3_URLS } from '../../utils/fetchStaticData';
+import { fetchStaticData, S3_URLS, getImageUrl } from '../../utils/fetchStaticData';
 import type { Product } from '../../types/product';
-import testImage from '../../assets/images/test-image.png';
 import styles from "./ProductsPreview.module.css";
 
 const ProductsPreview = () => {
@@ -35,7 +34,7 @@ const ProductsPreview = () => {
       name: product.name,
       category: product.category,
       description: product.description,
-      image: testImage
+      image: getImageUrl(product.image)
     }));
   }, [productsData]);
 
