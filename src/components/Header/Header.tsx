@@ -71,13 +71,14 @@ const Header = () => {
 
   const handleMenuClick = (path: string, anchor?: string) => {
     if (anchor) {
-      navigate(path);
+      // Добавляем hash в URL для правильной обработки якорей
+      navigate(`${path}#${anchor}`);
       setTimeout(() => {
         const element = document.getElementById(anchor);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }, 100);
+      }, 200);
     } else {
       navigate(path);
     }

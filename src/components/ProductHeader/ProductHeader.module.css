@@ -6,6 +6,39 @@
 .container {
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+}
+
+.backButtonWrapper {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.backButton {
+  --border-radius: 8px;
+  --border-width: 1.5px;
+  --border-color: #6b7280;
+  --color: #1a202c;
+  --background: transparent;
+  --background-hover: #f3f4f6;
+  --color-hover: #008CFF;
+  --border-color-hover: #008CFF;
+  height: 36px;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  padding: 0 16px;
+  transition: all 0.2s ease;
+  margin: 0;
+}
+
+.backButton:hover {
+  --background-hover: #f3f4f6;
+}
+
+.backButton ion-icon {
+  font-size: 16px;
+  margin-right: 6px;
 }
 
 .content {
@@ -24,7 +57,8 @@
 .rightSection {
   flex-shrink: 0;
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: flex-end;
   padding-top: 4px;
 }
 
@@ -57,6 +91,23 @@
     padding: 48px 16px 16px;
   }
 
+  .backButtonWrapper {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .backButton {
+    height: 34px;
+    font-size: 0.75rem;
+    padding: 0 14px;
+  }
+
+  .backButton ion-icon {
+    font-size: 14px;
+    margin-right: 5px;
+  }
+
   .content {
     flex-direction: column;
     gap: 12px;
@@ -69,6 +120,7 @@
   .rightSection {
     width: 100%;
     padding-top: 0;
+    align-items: flex-start;
   }
 
   .title {

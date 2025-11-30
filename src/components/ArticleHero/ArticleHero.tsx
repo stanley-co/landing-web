@@ -1,3 +1,5 @@
+import { IonButton, IonIcon } from '@ionic/react';
+import { arrowBackOutline } from 'ionicons/icons';
 import styles from "./ArticleHero.module.css";
 
 type ArticleHeroProps = {
@@ -5,9 +7,10 @@ type ArticleHeroProps = {
   date: string;
   category?: string;
   image: string;
+  backButtonText?: string;
 };
 
-const ArticleHero = ({ title, date, category, image }: ArticleHeroProps) => {
+const ArticleHero = ({ title, date, category, image, backButtonText = 'Вернуться к новостям' }: ArticleHeroProps) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('ru-RU', {
@@ -15,6 +18,10 @@ const ArticleHero = ({ title, date, category, image }: ArticleHeroProps) => {
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  const handleBack = () => {
+    window.history.back();
   };
 
   return (
@@ -33,6 +40,14 @@ const ArticleHero = ({ title, date, category, image }: ArticleHeroProps) => {
           <h1 className={styles.title}>{title}</h1>
           <div className={styles.meta}>
             <span className={styles.date}>{formatDate(date)}</span>
+            <IonButton
+              fill="solid"
+              className={styles.backButton}
+              onClick={handleBack}
+            >
+              <IonIcon icon={arrowBackOutline} slot="start" />
+              <span className={styles.backButtonText}>{backButtonText}</span>
+            </IonButton>
           </div>
         </div>
       </div>

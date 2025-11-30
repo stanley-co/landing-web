@@ -1,6 +1,6 @@
 .hero {
   position: relative;
-  padding: 120px 16px 80px;
+  padding: 80px 16px 80px;
   background: linear-gradient(135deg, #001B36 0%, #003366 100%);
   overflow: hidden;
   min-height: 400px;
@@ -36,10 +36,51 @@
   z-index: 1;
 }
 
+.backButton {
+  --background: rgba(255, 255, 255, 0.98);
+  --color: #008CFF;
+  --border-radius: 8px;
+  --border-width: 1.5px;
+  --border-color: #008CFF;
+  --background-hover: rgba(255, 255, 255, 1);
+  --color-hover: #0066CC;
+  --border-color-hover: #0066CC;
+  height: 36px;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  padding: 0 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: none;
+  transition: all 0.2s ease;
+  margin: 0;
+  margin-left: auto;
+}
+
+.backButtonText {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.backButton:hover {
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.backButton:active {
+  transform: translateY(0);
+}
+
+.backButton ion-icon {
+  font-size: 16px;
+  margin-right: 6px;
+}
+
 .content {
   max-width: 800px;
+  margin: 0 auto;
   animation: fadeInUp 0.8s ease-out;
 }
+
 
 @keyframes fadeInUp {
   from {
@@ -77,7 +118,9 @@
 .meta {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
+  width: 100%;
 }
 
 .date {
@@ -88,8 +131,20 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding: 100px 16px 60px;
+    padding: 80px 12px 60px;
     min-height: 300px;
+  }
+
+
+  .backButton {
+    height: 32px;
+    font-size: 0.75rem;
+    padding: 0 12px;
+  }
+
+  .backButton ion-icon {
+    font-size: 14px;
+    margin-right: 5px;
   }
 
   .title {
@@ -99,6 +154,11 @@
 
   .date {
     font-size: 1rem;
+  }
+
+  .meta {
+    flex-wrap: wrap;
+    gap: 12px;
   }
 }
 

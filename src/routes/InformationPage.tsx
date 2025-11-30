@@ -1,6 +1,7 @@
 import { IonContent, IonPage, IonSpinner, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonIcon, IonChip } from '@ionic/react';
 import { searchOutline, calendarOutline } from 'ionicons/icons';
 import { useMemo, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import PageWrapper from '../components/layout/PageWrapper';
 import PageHero from '../components/PageHero/PageHero';
 import NewsGrid from '../components/NewsGrid/NewsGrid';
@@ -20,6 +21,7 @@ type NewsItem = {
 };
 
 const InformationPage = () => {
+  const location = useLocation();
   const [newsData, setNewsData] = useState<News[]>([]);
   const [articlesData, setArticlesData] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,6 +51,35 @@ const InformationPage = () => {
 
     loadData();
   }, []);
+
+  // Обработка якорей из URL для переключения табов
+  useEffect(() => {
+    const hash = location.hash.replace('#', '');
+    if (hash === 'articles') {
+      setActiveTab('articles');
+      // Прокручиваем к секции после задержки для рендеринга и загрузки данных
+      setTimeout(() => {
+        const element = document.getElementById('articles');
+        if (element) {
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
+      }, 300);
+    } else if (hash === 'news') {
+      setActiveTab('news');
+      setTimeout(() => {
+        const element = document.getElementById('news');
+        if (element) {
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
+      }, 300);
+    }
+  }, [location.hash, loading]);
 
   // Преобразуем новости и используем реальные URL изображений из S3
   const news: NewsItem[] = useMemo(() => {
