@@ -10,9 +10,10 @@
 
 .galleryLayout {
   display: grid;
-  grid-template-columns: 1fr 150px;
+  grid-template-columns: 2fr 1fr;
   gap: 24px;
   align-items: start;
+  max-width: 100%;
 }
 
 .mainImageWrapper {
@@ -21,7 +22,8 @@
 
 .mainImage {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  max-width: 75vw;
+  aspect-ratio: 4 / 3;
   border-radius: 16px;
   overflow: hidden;
   background: #f7f8fa;
@@ -98,8 +100,7 @@
 .counter {
   position: absolute;
   bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 16px;
   background: rgba(0, 0, 0, 0.7);
   color: white;
   padding: 8px 16px;
@@ -110,13 +111,50 @@
   z-index: 10;
 }
 
+.ctaButton {
+  --background: #008CFF;
+  --background-hover: #0070CC;
+  --color: white;
+  --border-radius: 8px;
+  --box-shadow: none;
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 10;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.3px;
+  box-shadow: none;
+  transition: transform 0.2s ease;
+  height: auto;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.ctaButton:active {
+  transform: translateY(0);
+}
+
+.ctaButton ion-icon {
+  font-size: 18px;
+  margin-right: 6px;
+}
+
 .thumbnails {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-height: 800px;
+  gap: 24px;
+  max-height: 600px;
   overflow-y: auto;
+  overflow-x: visible;
   padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   scrollbar-width: thin;
   scrollbar-color: var(--ion-color-medium, #9ca3af) transparent;
   width: 100%;
@@ -137,15 +175,17 @@
 
 .thumbnail {
   flex-shrink: 0;
-  width: 150px;
-  height: 150px;
-  border-radius: 8px;
+  width: 95%;
+  aspect-ratio: 1;
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   border: 3px solid transparent;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: #f7f8fa;
   position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin: 4px 0;
 }
 
 .thumbnail::after {
@@ -155,32 +195,62 @@
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 2px solid transparent;
-  transition: border-color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(0, 140, 255, 0);
+  z-index: 1;
 }
 
 .thumbnail:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 140, 255, 0.2);
+  border-color: rgba(0, 140, 255, 0.3);
 }
 
 .thumbnail:hover::after {
   border-color: var(--ion-color-primary, #008CFF);
+  background: rgba(0, 140, 255, 0.05);
 }
 
 .thumbnail.active {
   border-color: var(--ion-color-primary, #008CFF);
-  box-shadow: 0 0 0 2px rgba(0, 140, 255, 0.2);
+  box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.15), 0 4px 16px rgba(0, 140, 255, 0.2);
+  transform: translateY(-2px);
 }
 
 .thumbnail.active::after {
   border-color: var(--ion-color-primary, #008CFF);
+  background: rgba(0, 140, 255, 0.08);
 }
 
-.thumbnail img {
+.thumbnail img,
+.thumbnail ion-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.thumbnail:hover img,
+.thumbnail:hover ion-img {
+  transform: scale(1.03);
+}
+
+@media (max-width: 1024px) {
+  .galleryLayout {
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+  }
+
+  .mainImage {
+    max-width: 100%;
+  }
+
+  .thumbnails {
+    max-height: 500px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -193,6 +263,11 @@
     gap: 16px;
   }
 
+  .mainImage {
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+  }
+
   .thumbnails {
     flex-direction: row;
     overflow-x: auto;
@@ -200,6 +275,8 @@
     max-height: none;
     padding-right: 0;
     padding-bottom: 8px;
+    padding-top: 4px;
+    gap: 16px;
   }
 
   .thumbnails::-webkit-scrollbar {
@@ -207,8 +284,22 @@
     height: 6px;
   }
 
-  .mainImage {
-    aspect-ratio: 4 / 3;
+  .thumbnail {
+    width: 95px;
+    height: 95px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+    border-radius: 10px;
+    margin: 0;
+  }
+
+  .thumbnail:hover {
+    transform: translateY(-2px);
+  }
+
+  .thumbnail:hover img,
+  .thumbnail:hover ion-img {
+    transform: scale(1.03);
   }
 
   .navButton,
@@ -217,9 +308,21 @@
     height: 40px;
   }
 
-  .thumbnail {
-    width: 100px;
-    height: 100px;
+  .ctaButton {
+    bottom: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    box-shadow: none;
+  }
+
+  .ctaButton:hover {
+    box-shadow: none;
+  }
+
+  .ctaButton ion-icon {
+    font-size: 16px;
+    margin-right: 4px;
   }
 }
 

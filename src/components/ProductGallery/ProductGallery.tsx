@@ -1,6 +1,7 @@
 import { IonImg, IonButton, IonIcon } from '@ionic/react';
-import { chevronBackOutline, chevronForwardOutline, expandOutline } from 'ionicons/icons';
+import { chevronBackOutline, chevronForwardOutline, expandOutline, documentTextOutline } from 'ionicons/icons';
 import { useState, useRef } from 'react';
+import { useContactFormModal } from '../../contexts/ContactFormModalContext';
 import styles from "./ProductGallery.module.css";
 
 type ProductGalleryProps = {
@@ -9,12 +10,24 @@ type ProductGalleryProps = {
 };
 
 const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
+  const { openModal } = useContactFormModal();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLDivElement>(null);
 
-  const displayImages = images.length > 0 ? images : [images[0] || ''];
+  // Логируем для отладки
+  console.log('[ProductGallery] Received images:', images);
+  console.log('[ProductGallery] Images count:', images?.length || 0);
+
+  // Исправляем логику: если images пустой или undefined, возвращаем пустой массив, иначе используем images
+  const displayImages = images && Array.isArray(images) && images.length > 0 ? images : [];
+  
+  // Если нет изображений, не рендерим галерею
+  if (displayImages.length === 0) {
+    console.warn('[ProductGallery] No images to display, returning null');
+    return null;
+  }
 
   const handlePrevious = () => {
     setSelectedIndex((prev) => (prev > 0 ? prev - 1 : displayImages.length - 1));
@@ -60,7 +73,7 @@ const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
             onMouseLeave={handleMouseLeave}
           >
             <IonImg 
-              src={displayImages[selectedIndex]} 
+              src={displayImages[selectedIndex] || displayImages[0]} 
               alt={`${productName} - вид ${selectedIndex + 1}`}
               className={styles.image}
               style={isZoomed ? {
@@ -106,6 +119,17 @@ const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
                 {selectedIndex + 1} / {displayImages.length}
               </div>
             )}
+            <IonButton
+              color="primary"
+              className={styles.ctaButton}
+              onClick={(e) => {
+                e.stopPropagation();
+                openModal();
+              }}
+            >
+              <IonIcon icon={documentTextOutline} slot="start" />
+              Отправить заявку
+            </IonButton>
           </div>
         </div>
         {displayImages.length > 1 && (

@@ -1,8 +1,6 @@
-import { IonContent, IonPage, IonSpinner, IonButton, IonIcon } from '@ionic/react';
-import { documentTextOutline } from 'ionicons/icons';
+import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
-import { useContactFormModal } from '../contexts/ContactFormModalContext';
 import PageWrapper from '../components/layout/PageWrapper';
 import ProductHeader from '../components/ProductHeader/ProductHeader';
 import ProductGallery from '../components/ProductGallery/ProductGallery';
@@ -13,11 +11,9 @@ import Footer from '../components/Footer/Footer';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { Product } from '../types/product';
 import type { News } from '../types/news';
-import styles from './ProductDetailPage.module.css';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
-  const { openModal } = useContactFormModal();
   const [product, setProduct] = useState<Product | null>(null);
   const [articlesData, setArticlesData] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,8 +32,14 @@ const ProductDetailPage = () => {
         const foundProduct = products.find(p => p.id === id);
         
         if (foundProduct) {
+          console.log('[ProductDetailPage] Found product:', foundProduct.id);
+          console.log('[ProductDetailPage] Product has galleryImages:', !!foundProduct.galleryImages);
+          console.log('[ProductDetailPage] galleryImages count:', foundProduct.galleryImages?.length || 0);
+          console.log('[ProductDetailPage] galleryImages data:', foundProduct.galleryImages);
           setProduct(foundProduct);
         } else {
+          console.error('[ProductDetailPage] Product not found with id:', id);
+          console.log('[ProductDetailPage] Available products:', products.map(p => p.id));
           setError('Продукт не найден');
         }
         
@@ -65,15 +67,29 @@ const ProductDetailPage = () => {
 
   // Используем изображения из S3 (галерея продукта)
   const images = useMemo(() => {
-    if (!product) return [];
+    if (!product) {
+      console.log('[ProductDetailPage] No product, returning empty images array');
+      return [];
+    }
+    
+    console.log('[ProductDetailPage] Product loaded:', product.id);
+    console.log('[ProductDetailPage] Product galleryImages:', product.galleryImages);
+    console.log('[ProductDetailPage] Product image:', product.image);
     
     // Если есть galleryImages, используем их
     if (product.galleryImages && product.galleryImages.length > 0) {
-      return product.galleryImages.map(img => getImageUrl(img));
+      const galleryUrls = product.galleryImages.map(img => {
+        const url = getImageUrl(img);
+        console.log('[ProductDetailPage] Converting gallery image:', img, '->', url);
+        return url;
+      });
+      console.log('[ProductDetailPage] Final gallery URLs:', galleryUrls);
+      return galleryUrls;
     }
     
     // Иначе используем главное изображение
     const mainImage = getImageUrl(product.image);
+    console.log('[ProductDetailPage] No galleryImages, using main image:', mainImage);
     return [mainImage];
   }, [product]);
 
@@ -133,18 +149,6 @@ const ProductDetailPage = () => {
             fullDescription={product.fullDescription}
             advantages={product.advantages}
           />
-          <div className={styles.ctaSection}>
-            <IonButton
-              color="primary"
-              size="large"
-              expand="block"
-              onClick={openModal}
-              className={styles.ctaButton}
-            >
-              <IonIcon icon={documentTextOutline} slot="start" />
-              Оставить заявку
-            </IonButton>
-          </div>
           <ProductSpecs specs={product.specs} />
           {relatedArticles.length > 0 && (
             <ProductRelatedArticles articles={relatedArticles} />
