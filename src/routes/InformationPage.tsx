@@ -5,7 +5,6 @@ import { useLocation } from 'react-router-dom';
 import PageWrapper from '../components/layout/PageWrapper';
 import PageHero from '../components/PageHero/PageHero';
 import NewsGrid from '../components/NewsGrid/NewsGrid';
-import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { News } from '../types/news';
@@ -181,7 +180,6 @@ const InformationPage = () => {
               <IonSpinner name="crescent" style={{ width: '48px', height: '48px' }} />
               <p>Загрузка информации...</p>
             </div>
-            <CooperationFormSection />
             <Footer />
           </IonContent>
         </PageWrapper>
@@ -204,7 +202,6 @@ const InformationPage = () => {
               <h2>Ошибка загрузки данных</h2>
               <p>{error}</p>
             </div>
-            <CooperationFormSection />
             <Footer />
           </IonContent>
         </PageWrapper>
@@ -368,7 +365,6 @@ const InformationPage = () => {
           </section>
           )}
 
-          <CooperationFormSection />
           <Footer />
         </IonContent>
       </PageWrapper>

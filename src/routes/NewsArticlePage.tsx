@@ -6,7 +6,6 @@ import ArticleHero from '../components/ArticleHero/ArticleHero';
 import ArticleBody from '../components/ArticleBody/ArticleBody';
 import ArticleShare from '../components/ArticleShare/ArticleShare';
 import RelatedNews from '../components/RelatedNews/RelatedNews';
-import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { News } from '../types/news';
@@ -120,7 +119,6 @@ const NewsArticlePage = () => {
               <h2>Статья не найдена</h2>
               <p>{error || 'Запрашиваемая статья не существует.'}</p>
             </div>
-            <CooperationFormSection />
             <Footer />
           </IonContent>
         </PageWrapper>
@@ -143,7 +141,6 @@ const NewsArticlePage = () => {
           <ArticleBody content={article.content} />
           <ArticleShare title={article.title} url={shareUrl} />
           <RelatedNews news={allNews} currentId={article.id} />
-          <CooperationFormSection />
           <Footer />
         </IonContent>
       </PageWrapper>

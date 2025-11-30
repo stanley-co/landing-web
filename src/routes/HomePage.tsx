@@ -7,7 +7,6 @@ import ProductsPreview from '../components/ProductsPreview/ProductsPreview';
 import Advantages from '../components/Advantages/Advantages';
 import Certificates from '../components/Certificates/Certificates';
 import NewsPreview from '../components/NewsPreview/NewsPreview';
-import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
 
 const HomePage = () => (
@@ -21,7 +20,6 @@ const HomePage = () => (
         <Advantages />
         <Certificates />
         <NewsPreview />
-        <CooperationFormSection />
         <Footer />
       </IonContent>
     </PageWrapper>

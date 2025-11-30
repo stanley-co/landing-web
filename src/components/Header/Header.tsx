@@ -3,6 +3,7 @@ import { menuOutline, closeOutline, chevronDownOutline } from 'ionicons/icons';
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useContactFormModal } from '../../contexts/ContactFormModalContext';
 import styles from "./Header.module.css";
 
 const Header = () => {
@@ -10,6 +11,7 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { openModal } = useContactFormModal();
   const headerRef = useRef<HTMLIonHeaderElement>(null);
   const dropdownRefs = useRef<Record<string, { trigger: HTMLDivElement | null, dropdown: HTMLDivElement | null }>>({});
 
@@ -407,7 +409,7 @@ const Header = () => {
             )}
           </div>
 
-          <IonButton color="primary" onClick={() => handleMenuClick('/contacts', 'contact-form')} className={styles.ctaButton}>
+          <IonButton color="primary" onClick={openModal} className={styles.ctaButton}>
             Оставить заявку
           </IonButton>
         </div>
@@ -522,7 +524,7 @@ const Header = () => {
             )}
           </div>
 
-          <IonButton color="primary" expand="block" onClick={() => handleMenuClick('/contacts', 'contact-form')} className={styles.ctaButton}>
+          <IonButton color="primary" expand="block" onClick={openModal} className={styles.ctaButton}>
             Оставить заявку
           </IonButton>
         </div>

@@ -2,7 +2,6 @@ import { IonContent, IonPage } from '@ionic/react';
 import PageWrapper from '../components/layout/PageWrapper';
 import CompanyIntro from '../components/CompanyIntro/CompanyIntro';
 import Certificates from '../components/Certificates/Certificates';
-import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
 import styles from './AboutPage.module.css';
 
@@ -125,7 +124,6 @@ const AboutPage = () => {
             </div>
           </section>
 
-          <CooperationFormSection />
           <Footer />
         </IonContent>
       </PageWrapper>

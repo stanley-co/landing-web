@@ -1,0 +1,89 @@
+.formCard {
+  --background: white;
+  --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0;
+}
+
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ion-color-dark, #1a202c);
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nameRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.formItem {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --background: transparent;
+}
+
+.submitButton {
+  --border-radius: 12px;
+  height: 56px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-top: 8px;
+  box-shadow: 0 4px 16px rgba(0, 140, 255, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 140, 255, 0.4);
+}
+
+.successMessage {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.successIcon {
+  font-size: 64px;
+  color: var(--ion-color-success, #10b981);
+  margin-bottom: 24px;
+}
+
+.successMessage h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ion-color-dark, #1a202c);
+  margin: 0 0 12px 0;
+}
+
+.successMessage p {
+  font-size: 1rem;
+  color: var(--ion-color-medium, #6b7280);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.errorMessage {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .nameRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+

@@ -1,0 +1,26 @@
+.ctaSection {
+  padding: 40px 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ctaButton {
+  --border-radius: 12px;
+  height: 56px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  box-shadow: 0 4px 16px rgba(0, 140, 255, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 140, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+  .ctaSection {
+    padding: 32px 16px;
+  }
+}
+

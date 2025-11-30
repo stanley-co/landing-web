@@ -4,7 +4,6 @@ import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageWrapper from '../components/layout/PageWrapper';
 import NewsGrid from '../components/NewsGrid/NewsGrid';
-import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { News } from '../types/news';
@@ -101,7 +100,6 @@ const NewsPage = () => {
               <IonSpinner name="crescent" style={{ width: '48px', height: '48px' }} />
               <p>Загрузка новостей...</p>
             </div>
-            <CooperationFormSection />
             <Footer />
           </IonContent>
         </PageWrapper>
@@ -131,7 +129,6 @@ const NewsPage = () => {
               <h2>Ошибка загрузки данных</h2>
               <p>{error}</p>
             </div>
-            <CooperationFormSection />
             <Footer />
           </IonContent>
         </PageWrapper>
@@ -195,7 +192,6 @@ const NewsPage = () => {
           )}
           
           <NewsGrid news={filteredAndSortedNews} />
-          <CooperationFormSection />
           <Footer />
         </IonContent>
       </PageWrapper>
