@@ -36,8 +36,6 @@ const EquipmentCarousel = () => {
       
       // Если ссылка начинается с #, это якорь без пути
       if (link.startsWith('#')) {
-        const currentPath = window.location.pathname;
-        
         // Пытаемся найти элемент на текущей странице
         const element = document.getElementById(elementId!);
         if (element) {
