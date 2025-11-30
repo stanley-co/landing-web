@@ -56,6 +56,30 @@
   }
 }
 
+.searchButton {
+  --color: #1a202c;
+  --color-hover: #008CFF;
+  margin-right: 4px;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.searchButton:hover {
+  --background: rgba(0, 140, 255, 0.1);
+}
+
+.searchButton ion-icon {
+  font-size: 26px;
+}
+
+.mobileSearchButton {
+  --color: #1a202c;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
 .ctaButton {
   margin-left: 8px;
   --border-radius: 8px;

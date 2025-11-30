@@ -1,7 +1,7 @@
 import { IonGrid, IonRow, IonCol, IonButton, IonIcon } from '@ionic/react';
 import { mailOutline } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import EquipmentCard from '../EquipmentCard/EquipmentCard';
 import styles from "./EquipmentGrid.module.css";
 
@@ -55,12 +55,39 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
     );
   }
 
+  // Для мобильной версии показываем только первый продукт из каждой категории
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const productsToShow = useMemo(() => {
+    if (!isMobile) {
+      return displayProducts;
+    }
+    
+    // Группируем по категориям и берем первый из каждой
+    const categoryMap = new Map<string, Product>();
+    displayProducts.forEach(product => {
+      if (!categoryMap.has(product.category)) {
+        categoryMap.set(product.category, product);
+      }
+    });
+    return Array.from(categoryMap.values());
+  }, [displayProducts, isMobile]);
+
   return (
     <section className={styles.grid}>
       <div className={styles.container}>
         <IonGrid>
           <IonRow className={isAnimating ? styles.animating : ''}>
-            {displayProducts.map((product, index) => (
+            {productsToShow.map((product, index) => (
               <IonCol 
                 size="12" 
                 sizeMd="6" 

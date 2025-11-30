@@ -1,19 +1,61 @@
 import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon } from '@ionic/react';
-import { menuOutline, closeOutline, chevronDownOutline } from 'ionicons/icons';
+import { menuOutline, closeOutline, chevronDownOutline, searchOutline } from 'ionicons/icons';
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useContactFormModal } from '../../contexts/ContactFormModalContext';
+import SearchModal from '../SearchModal/SearchModal';
 import styles from "./Header.module.css";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [isMobileMenu, setIsMobileMenu] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { openModal } = useContactFormModal();
   const headerRef = useRef<HTMLIonHeaderElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
   const dropdownRefs = useRef<Record<string, { trigger: HTMLDivElement | null, dropdown: HTMLDivElement | null }>>({});
+
+  // Проверяем, помещаются ли элементы меню в доступное пространство
+  useEffect(() => {
+    const checkMenuFit = () => {
+      if (!navRef.current || !headerRef.current) return;
+      
+      const navElement = navRef.current;
+      const headerElement = headerRef.current;
+      const toolbar = headerElement.querySelector('ion-toolbar');
+      const logoContainer = headerElement.querySelector('[slot="start"]') as HTMLElement;
+      
+      if (!toolbar || !logoContainer) return;
+      
+      // Получаем доступную ширину для меню
+      const toolbarWidth = toolbar.getBoundingClientRect().width;
+      const logoWidth = logoContainer.getBoundingClientRect().width;
+      const availableWidth = toolbarWidth - logoWidth - 200; // 200px для кнопок справа
+      
+      // Получаем необходимую ширину для меню
+      const navWidth = navElement.scrollWidth;
+      
+      // Если меню не помещается или экран меньше 992px, переключаемся на мобильное меню
+      const shouldUseMobile = navWidth > availableWidth || window.innerWidth < 992;
+      setIsMobileMenu(shouldUseMobile);
+    };
+
+    // Проверяем при загрузке и изменении размера окна
+    checkMenuFit();
+    window.addEventListener('resize', checkMenuFit);
+    
+    // Также проверяем после небольшой задержки, чтобы элементы успели отрендериться
+    const timer = setTimeout(checkMenuFit, 100);
+    
+    return () => {
+      window.removeEventListener('resize', checkMenuFit);
+      clearTimeout(timer);
+    };
+  }, [location.pathname]);
 
   // Закрываем выпадающие меню при изменении роута
   useEffect(() => {
@@ -199,12 +241,16 @@ const Header = () => {
             <span>для производства</span>
           </div>
         </div>
-        <IonButtons slot="end" className="ion-hide-md-up">
+        <IonButtons slot="end" className={isMobileMenu ? '' : 'ion-hide-md-up'}>
           <IonButton onClick={() => setMenuOpen(!menuOpen)}>
             <IonIcon icon={menuOpen ? closeOutline : menuOutline} />
           </IonButton>
         </IonButtons>
-        <div slot="end" className={`${styles.nav} ion-hide-md-down`}>
+        <div 
+          ref={navRef}
+          slot="end" 
+          className={`${styles.nav} ${isMobileMenu ? 'ion-hide' : 'ion-hide-md-down'}`}
+        >
           {/* Оборудование */}
           <div 
             ref={(el) => {
@@ -409,6 +455,13 @@ const Header = () => {
             )}
           </div>
 
+          <IonButton 
+            fill="clear" 
+            onClick={() => setSearchModalOpen(true)}
+            className={styles.searchButton}
+          >
+            <IonIcon icon={searchOutline} />
+          </IonButton>
           <IonButton color="primary" onClick={openModal} className={styles.ctaButton}>
             Оставить заявку
           </IonButton>
@@ -524,11 +577,21 @@ const Header = () => {
             )}
           </div>
 
+          <IonButton 
+            fill="clear" 
+            expand="block"
+            onClick={() => setSearchModalOpen(true)}
+            className={styles.mobileSearchButton}
+          >
+            <IonIcon icon={searchOutline} slot="start" />
+            Поиск
+          </IonButton>
           <IonButton color="primary" expand="block" onClick={openModal} className={styles.ctaButton}>
             Оставить заявку
           </IonButton>
         </div>
       )}
+      <SearchModal isOpen={searchModalOpen} onClose={() => setSearchModalOpen(false)} />
     </IonHeader>
   );
 };
