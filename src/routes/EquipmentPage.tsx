@@ -350,8 +350,8 @@ const EquipmentPage = () => {
       }));
     } else if (globalCategoryId) {
       // Если выбрана только категория, сбрасываем фильтр для этой секции
-      setSelectedCategories(prev => ({
-        ...prev,
+    setSelectedCategories(prev => ({
+      ...prev,
         [globalCategoryId]: null,
       }));
     } else {
@@ -453,16 +453,16 @@ const EquipmentPage = () => {
                   {/* Контент справа */}
                   <IonCol size="12" sizeMd="8" sizeLg="9" className={styles.contentCol}>
                     {equipmentSections.map((section) => {
-                      const globalCategory = section.name;
+              const globalCategory = section.name;
                       const filteredProducts = getFilteredProductsForSection(section.id, globalCategory);
-                      const sectionProducts = getProductsByGlobalCategory(globalCategory);
+              const sectionProducts = getProductsByGlobalCategory(globalCategory);
 
-                      // Показываем секцию только если в ней есть продукты
-                      if (sectionProducts.length === 0) {
-                        return null;
-                      }
+              // Показываем секцию только если в ней есть продукты
+              if (sectionProducts.length === 0) {
+                return null;
+              }
 
-                      return (
+              return (
                         <section 
                           key={section.id} 
                           id={section.id} 
@@ -475,13 +475,13 @@ const EquipmentPage = () => {
                             }
                           }}
                         >
-                          <div className={styles.sectionHeader}>
-                            <h2 className={styles.sectionTitle}>{section.name}</h2>
-                            <div className={styles.sectionDivider} />
-                          </div>
+                  <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>{section.name}</h2>
+                    <div className={styles.sectionDivider} />
+                  </div>
                           <EquipmentLayout products={filteredProducts} />
-                        </section>
-                      );
+                </section>
+              );
                     })}
                   </IonCol>
                 </IonRow>

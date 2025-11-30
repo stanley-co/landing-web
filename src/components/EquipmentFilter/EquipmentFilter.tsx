@@ -146,19 +146,19 @@ const EquipmentFilter = ({
                       const isSubcategorySelected = 
                         isSelected && selectedSubcategory === subcategory.name;
                       
-                      return (
-                        <IonItem
+            return (
+              <IonItem
                           key={subcategory.name}
-                          button
-                          detail={false}
+                button
+                detail={false}
                           onClick={() => handleSubcategoryClick(category.globalCategoryId, subcategory.name)}
                           className={`${styles.subcategoryItem} ${isSubcategorySelected ? styles.active : ''}`}
-                        >
-                          <div className={styles.itemContent}>
+              >
+                <div className={styles.itemContent}>
                             <span>{subcategory.name}</span>
                             <span className={styles.count}>{subcategory.count}</span>
-                          </div>
-                        </IonItem>
+                </div>
+              </IonItem>
                       );
                     })}
                   </div>
@@ -236,19 +236,19 @@ const EquipmentFilter = ({
                           const isSubcategorySelected = 
                             isSelected && selectedSubcategory === subcategory.name;
                           
-                          return (
-                            <IonItem
+                return (
+                  <IonItem
                               key={subcategory.name}
-                              button
-                              detail={false}
+                    button
+                    detail={false}
                               onClick={() => handleSubcategoryClick(category.globalCategoryId, subcategory.name)}
                               className={isSubcategorySelected ? styles.selectedItem : ''}
-                            >
-                              <div className={styles.itemContent}>
+                  >
+                    <div className={styles.itemContent}>
                                 <span>{subcategory.name}</span>
                                 <span className={styles.count}>{subcategory.count}</span>
-                              </div>
-                            </IonItem>
+                    </div>
+                  </IonItem>
                           );
                         })}
                       </div>
