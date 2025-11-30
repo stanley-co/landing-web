@@ -67,46 +67,77 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const productsToShow = useMemo(() => {
-    if (!isMobile) {
-      return displayProducts;
-    }
-    
-    // Группируем по категориям и берем первый из каждой
-    const categoryMap = new Map<string, Product>();
-    displayProducts.forEach(product => {
-      if (!categoryMap.has(product.category)) {
-        categoryMap.set(product.category, product);
-      }
-    });
-    return Array.from(categoryMap.values());
-  }, [displayProducts, isMobile]);
+  const firstProduct = useMemo(() => {
+    return displayProducts.length > 0 ? displayProducts[0] : null;
+  }, [displayProducts]);
+
+  const restProducts = useMemo(() => {
+    return displayProducts.length > 1 ? displayProducts.slice(1) : [];
+  }, [displayProducts]);
 
   return (
     <section className={styles.grid}>
       <div className={styles.container}>
-        <IonGrid>
-          <IonRow className={isAnimating ? styles.animating : ''}>
-            {productsToShow.map((product, index) => (
-              <IonCol 
-                size="12" 
-                sizeMd="6" 
-                sizeLg="4"
-                key={product.id}
-                className={styles.col}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
+        {isMobile ? (
+          <>
+            {/* Первый элемент в grid на мобильных */}
+            {firstProduct && (
+              <div className={styles.firstProductWrapper}>
                 <EquipmentCard
-                  id={product.id}
-                  name={product.name}
-                  category={product.category}
-                  image={product.image}
-                  description={product.description}
+                  id={firstProduct.id}
+                  name={firstProduct.name}
+                  category={firstProduct.category}
+                  image={firstProduct.image}
+                  description={firstProduct.description}
                 />
-              </IonCol>
-            ))}
-          </IonRow>
-        </IonGrid>
+              </div>
+            )}
+            
+            {/* Остальные элементы в карусели на мобильных */}
+            {restProducts.length > 0 && (
+              <div className={styles.carouselWrapper}>
+                <h3 className={styles.carouselTitle}>Еще оборудование</h3>
+                <div className={styles.carouselContainer}>
+                  {restProducts.map((product) => (
+                    <div key={product.id} className={styles.carouselItem}>
+                      <EquipmentCard
+                        id={product.id}
+                        name={product.name}
+                        category={product.category}
+                        image={product.image}
+                        description={product.description}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          /* Десктопная версия - grid как раньше */
+          <IonGrid>
+            <IonRow className={isAnimating ? styles.animating : ''}>
+              {displayProducts.map((product, index) => (
+                <IonCol 
+                  size="12" 
+                  sizeMd="6" 
+                  sizeLg="4"
+                  key={product.id}
+                  className={styles.col}
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <EquipmentCard
+                    id={product.id}
+                    name={product.name}
+                    category={product.category}
+                    image={product.image}
+                    description={product.description}
+                  />
+                </IonCol>
+              ))}
+            </IonRow>
+          </IonGrid>
+        )}
       </div>
     </section>
   );

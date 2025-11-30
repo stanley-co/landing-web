@@ -70,6 +70,74 @@
   padding: 0 32px;
 }
 
+/* Мобильная версия - первый элемент */
+.firstProductWrapper {
+  margin-bottom: 24px;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* Мобильная версия - карусель */
+.carouselWrapper {
+  margin-top: 32px;
+  padding-bottom: 16px;
+}
+
+.carouselTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ion-color-dark, #1a202c);
+  margin: 0 0 20px 16px;
+}
+
+.carouselContainer {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 20px;
+  padding: 0 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #008CFF #f7f8fa;
+}
+
+.carouselContainer::-webkit-scrollbar {
+  height: 6px;
+}
+
+.carouselContainer::-webkit-scrollbar-track {
+  background: #f7f8fa;
+  border-radius: 3px;
+}
+
+.carouselContainer::-webkit-scrollbar-thumb {
+  background: #008CFF;
+  border-radius: 3px;
+}
+
+.carouselItem {
+  flex: 0 0 calc(100% - 32px);
+  min-width: calc(100% - 32px);
+  max-width: calc(100% - 32px);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  animation: fadeInUp 0.4s ease-out;
+  padding: 0;
+}
+
+.carouselItem > * {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 480px) {
+  .carouselItem {
+    flex: 0 0 calc(85% - 32px);
+    min-width: calc(85% - 32px);
+    max-width: calc(85% - 32px);
+  }
+}
+
 @media (max-width: 768px) {
   .col {
     margin-bottom: 20px;
