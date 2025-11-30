@@ -19,6 +19,12 @@ jobs:
           node-version: 20
 
       - name: Install dependencies and build
+        env:
+          # Переменные окружения для сборки (из GitHub Secrets)
+          # Если секреты не установлены, будут использованы значения по умолчанию из src/config/bitrix.ts
+          VITE_BITRIX_WEBHOOK_URL: ${{ secrets.VITE_BITRIX_WEBHOOK_URL }}
+          VITE_BITRIX_DEMO_MODE: ${{ secrets.VITE_BITRIX_DEMO_MODE }}
+          VITE_FORM_DISABLED: ${{ secrets.VITE_FORM_DISABLED }}
         run: |
           npm ci
           npm run build
