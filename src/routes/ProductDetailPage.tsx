@@ -6,6 +6,7 @@ import ProductHeader from '../components/ProductHeader/ProductHeader';
 import ProductGallery from '../components/ProductGallery/ProductGallery';
 import ProductSpecs from '../components/ProductSpecs/ProductSpecs';
 import ProductDescription from '../components/ProductDescription/ProductDescription';
+import ProductVideo from '../components/ProductVideo/ProductVideo';
 import ProductRelatedArticles from '../components/ProductRelatedArticles/ProductRelatedArticles';
 import Footer from '../components/Footer/Footer';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
@@ -150,6 +151,9 @@ const ProductDetailPage = () => {
             advantages={product.advantages}
           />
           <ProductSpecs specs={product.specs} />
+          {product.materialsAndNews?.video && (
+            <ProductVideo videoUrl={product.materialsAndNews.video} />
+          )}
           {relatedArticles.length > 0 && (
             <ProductRelatedArticles articles={relatedArticles} />
           )}

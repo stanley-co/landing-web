@@ -14,6 +14,11 @@ export interface ProductSpecs {
   [key: string]: string;
 }
 
+// Интерфейс для материалов и новостей продукта
+export interface ProductMaterialsAndNews {
+  video?: string; // URL видео на Rutube (например: "https://rutube.ru/video/...")
+}
+
 // Основной интерфейс продукта
 export interface Product {
   id: string;
@@ -26,5 +31,6 @@ export interface Product {
   specs: ProductSpecs;
   fullDescription: string;
   advantages?: ProductAdvantage[]; // Опциональное поле для преимуществ
+  materialsAndNews?: ProductMaterialsAndNews; // Опциональное поле для видео и других материалов
 }
 

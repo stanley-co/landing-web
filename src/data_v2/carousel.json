@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "image": "images/carousel/equipment-hero-1.webp",
+    "title": "Промышленное оборудование мирового уровня",
+    "description": "Производство и поставка смесительных и эмульгирующих систем для фармацевтики, косметики и пищевой промышленности",
+    "link": "/equipment",
+    "buttonText": "Перейти в каталог"
+  },
+  {
+    "id": 2,
+    "image": "images/carousel/vacuum-emulsifiers.webp",
+    "title": "Вакуумные эмульгаторы Stanley",
+    "description": "Высокоточное оборудование для косметической и фармацевтической промышленности",
+    "link": "/about",
+    "buttonText": "О компании"
+  },
+  {
+    "id": 3,
+    "image": "images/carousel/production-lines.webp",
+    "title": "Производственные линии",
+    "description": "Автоматизированные системы для крупносерийного производства",
+    "link": "https://t.me/dmitrii_derendyaev",
+    "buttonText": "Связаться с нами"
+  }
+]
+
+
+
+
