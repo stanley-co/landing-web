@@ -17,6 +17,8 @@ export interface ProductSpecs {
 // Интерфейс для материалов и новостей продукта
 export interface ProductMaterialsAndNews {
   video?: string; // URL видео на Rutube (например: "https://rutube.ru/video/...")
+  articles?: string[]; // Массив ID статей для отображения (например: ["2025-01-optimization-guide"])
+  atricles?: string[]; // Опечатка в данных (для обратной совместимости)
 }
 
 // Основной интерфейс продукта

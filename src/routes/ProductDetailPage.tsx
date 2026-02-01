@@ -56,15 +56,29 @@ const ProductDetailPage = () => {
     loadData();
   }, [id]);
 
-  // Получаем полезные статьи (первые 3)
+  // Получаем полезные статьи - фильтруем по ID из materialsAndNews.articles
   const relatedArticles = useMemo(() => {
-    return articlesData
-      .slice(0, 3)
+    if (!product?.materialsAndNews) {
+      return [];
+    }
+
+    // Поддерживаем оба варианта написания (articles и atricles - опечатка)
+    const articleIds = product.materialsAndNews.articles || product.materialsAndNews.atricles || [];
+    
+    if (articleIds.length === 0) {
+      return [];
+    }
+
+    // Фильтруем статьи по ID из массива
+    const filtered = articlesData
+      .filter(article => articleIds.includes(article.id))
       .map(item => ({
         ...item,
         image: getImageUrl(item.image)
       }));
-  }, [articlesData]);
+
+    return filtered;
+  }, [articlesData, product]);
 
   // Используем изображения из S3 (галерея продукта)
   const images = useMemo(() => {
@@ -151,7 +165,10 @@ const ProductDetailPage = () => {
             advantages={product.advantages}
           />
           <ProductSpecs specs={product.specs} />
-          {product.materialsAndNews?.video && (
+          {product.materialsAndNews?.video && 
+           typeof product.materialsAndNews.video === 'string' &&
+           product.materialsAndNews.video.trim() !== '' && 
+           product.materialsAndNews.video !== '-' && (
             <ProductVideo videoUrl={product.materialsAndNews.video} />
           )}
           {relatedArticles.length > 0 && (

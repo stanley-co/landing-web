@@ -236,7 +236,11 @@
       }
     ],
     "materialsAndNews": {
-      "video": "https://rutube.ru/video/6d0bef4e12a4b0f3d6ab3ec31fa1b2e7/"
+      "video": "https://rutube.ru/video/6d0bef4e12a4b0f3d6ab3ec31fa1b2e7/",
+      "atricles": [
+        "2025-01-optimization-guide",
+        "2024-12-maintenance-tips"
+      ]
     }
   },
   {

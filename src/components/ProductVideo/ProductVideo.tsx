@@ -25,8 +25,8 @@ const ProductVideo = ({ videoUrl }: ProductVideoProps) => {
         <h2 className={styles.title}>Видео</h2>
         <div className={styles.videoWrapper}>
           <iframe
-            width="720"
-            height="405"
+            width="900"
+            height="450"
             src={embedUrl}
             style={{ border: 'none' }}
             allow="clipboard-write; autoplay"
