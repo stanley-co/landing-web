@@ -1079,17 +1079,17 @@
     }
   },
   {
-    "id": "sip-water-vm-32",
+    "id": "water-water-vm-32",
     "name": "HRO-ASUS Автоматическая двухступенчатая очистка воды",
-    "globalCategory": "СИП станции",
+    "globalCategory": "Водоподготовка",
     "category": "Водоподготовка",
-    "image": "images/products/sip/water/sip-water-vm-32/sip-water-vm-32-img-img-main-1.jpg",
+    "image": "images/products/water/water/vm-32/water-water-vm-32-img-1.jpg",
     "galleryImages": [
-      "images/products/sip/water/sip-water-vm-32/sip-water-vm-32-img-1.jpg",
-      "images/products/sip/water/sip-water-vm-32/sip-water-vm-32-img-2.jpg",
-      "images/products/sip/water/sip-water-vm-32/sip-water-vm-32-img-3.jpg",
-      "images/products/sip/water/sip-water-vm-32/sip-water-vm-32-img-4.jpg",
-      "images/products/sip/water/sip-water-vm-32/sip-water-vm-32-img-5.jpg"
+      "images/products/water/water/vm-32/water-water-vm-32-img-1.jpg",
+      "images/products/water/water/vm-32/water-water-vm-32-img-2.jpg",
+      "images/products/water/water/vm-32/water-water-vm-32-img-3.jpg",
+      "images/products/water/water/vm-32/water-water-vm-32-img-4.jpg",
+      "images/products/water/water/vm-32/water-water-vm-32-img-5.jpg"
     ],
     "description": "Автоматическая двухступенчатая очистка воды основана на разделении исходной воды на две среды: чистую воду (пермеат) и неочищенную воду (концентрат) под давлением. Происходит на поверхности обратноосмотической мембраны, которая пропускает только молекулы воды, задерживая примеси.",
     "specs": {
@@ -1127,21 +1127,21 @@
     "materialsAndNews": {
       "video": "-"
     }
-  },
+  },  
   {
-    "id": "sip-water-vm-33",
+    "id": "water-water-vm-33",
     "name": "Одноступенчатая RO-очистка воды HRO-SUS",
-    "globalCategory": "СИП станции",
+    "globalCategory": "Водоподготовка",
     "category": "Водоподготовка",
-    "image": "images/products/sip/water/sip-water-vm-33/sip-water-vm-33-img-main-1.jpg",
+    "image": "images/products/water/water/vm-33/water-water-vm-33-img-1.jpg",
     "galleryImages": [
-      "images/products/sip/water/sip-water-vm-33/sip-water-vm-33-img-1.jpg",
-      "images/products/sip/water/sip-water-vm-33/sip-water-vm-33-img-2.jpg",
-      "images/products/sip/water/sip-water-vm-33/sip-water-vm-33-img-3.jpg",
-      "images/products/sip/water/sip-water-vm-33/sip-water-vm-33-img-4.jpg",
-      "images/products/sip/water/sip-water-vm-33/sip-water-vm-33-img-5.jpg",
-      "images/products/sip/water/sip-water-vm-33/sip-water-vm-33-img-6.jpg",
-      "images/products/sip/water/sip-water-vm-33/sip-water-vm-33-img-7.jpg"
+      "images/products/water/water/vm-33/water-water-vm-33-img-1.jpg",
+      "images/products/water/water/vm-33/water-water-vm-33-img-2.jpg",
+      "images/products/water/water/vm-33/water-water-vm-33-img-3.jpg",
+      "images/products/water/water/vm-33/water-water-vm-33-img-4.jpg",
+      "images/products/water/water/vm-33/water-water-vm-33-img-5.jpg",
+      "images/products/water/water/vm-33/water-water-vm-33-img-6.jpg",
+      "images/products/water/water/vm-33/water-water-vm-33-img-7.jpg"
     ],
     "description": "Фильтрация воды, при которой вода проходит через полупроницаемую мембрану под давлением, без нескольких этапов очистки. Система удаляет более 98% растворённых солей, частиц, органических веществ, бактерий и пирогенов.",
     "specs": {
@@ -1178,18 +1178,18 @@
     "materialsAndNews": {
       "video": "-"
     }
-  },
+  },  
   {
-    "id": "sip-water-vm-34",
+    "id": "water-water-vm-34",
     "name": "Одноступенчатая очистка воды RO с умягчителем",
-    "globalCategory": "СИП станции",
+    "globalCategory": "Водоподготовка",
     "category": "Водоподготовка",
-    "image": "images/products/sip/water/sip-water-vm-34/sip-water-vm-34-img-main-1.jpg",
+    "image": "images/products/water/water/vm-34/water-water-vm-34-img-1.jpg",
     "galleryImages": [
-      "images/products/sip/water/sip-water-vm-34/sip-water-vm-34-img-1.jpg",
-      "images/products/sip/water/sip-water-vm-34/sip-water-vm-34-img-2.jpg",
-      "images/products/sip/water/sip-water-vm-34/sip-water-vm-34-img-3.jpg",
-      "images/products/sip/water/sip-water-vm-34/sip-water-vm-34-img-4.jpg"
+      "images/products/water/water/vm-34/water-water-vm-34-img-1.jpg",
+      "images/products/water/water/vm-34/water-water-vm-34-img-2.jpg",
+      "images/products/water/water/vm-34/water-water-vm-34-img-3.jpg",
+      "images/products/water/water/vm-34/water-water-vm-34-img-4.jpg"
     ],
     "description": "Механический фильтр для удаления взвешенных частиц (песок, ржавчина, ил) и угольный фильтр для удаления хлора и органических соединений. Этот этап защищает тонкоплёночную мембрану обратноосмоса, продлевая срок её службы.",
     "specs": {
@@ -1226,15 +1226,15 @@
     "materialsAndNews": {
       "video": "-"
     }
-  },
+  },  
   {
-    "id": "sip-water-vm-35",
+    "id": "water-water-vm-35",
     "name": "Санитарный резервуар для чистой воды",
-    "globalCategory": "СИП станции",
+    "globalCategory": "Водоподготовка",
     "category": "Водоподготовка",
-    "image": "images/products/sip/water/sip-water-vm-35/sip-water-vm-35-img-main-1.jpg",
+    "image": "images/products/water/water/vm-35/water-water-vm-35-img-1.jpg",
     "galleryImages": [
-      "images/products/sip/water/sip-water-vm-35/sip-water-vm-35-img-1.jpg"
+      "images/products/water/water/vm-35/water-water-vm-35-img-1.jpg"
     ],
     "description": "Емкость для накопления чистой воды после двухступенчатого осмоса, используемая для набора в реактор и промывки линий. Резервуар дренируемый и легко промываемый, изготовлен из нержавеющей стали SUS304/316L с зеркальной полировкой корпуса и труб. Внутри установлены моющие головы для дезинфекции емкости.",
     "specs": {
@@ -1267,19 +1267,19 @@
     "materialsAndNews": {
       "video": "-"
     }
-  },
+  },  
   {
-    "id": "sip-water-vm-36",
+    "id": "water-water-vm-36",
     "name": "HRO-УФ стерилизатор с водяным насосом",
-    "globalCategory": "СИП станции",
+    "globalCategory": "Водоподготовка",
     "category": "Водоподготовка",
-    "image": "images/products/sip/water/sip-water-vm-36/sip-water-vm-36-img-main-1.jpg",
+    "image": "images/products/water/water/vm-36/water-water-vm-36-img-1.jpg",
     "galleryImages": [
-      "images/products/sip/water/sip-water-vm-36/sip-water-vm-36-img-1.jpg"
+      "images/products/water/water/vm-36/water-water-vm-36-img-1.jpg"
     ],
     "description": "Установка для УФ-стерилизации воды, уничтожающая вредные микроорганизмы и обеспечивающая безопасное использование воды. Изготовлена из высококачественной нержавеющей стали SUS304/316L. Оснащена современной бактерицидной УФ лампой с длительным сроком службы и высоким КПД. Отличается компактностью, экономичностью, удобством монтажа и эксплуатации, совместимостью с другими системами очистки воды.",
     "specs": {
-      "Тип": "Для хранения воды",
+      "Тип": "Для стерилизации воды",
       "Производительность": "1000–10000 литров/час",
       "Материал": "нержавеющая сталь 304 /316l"
     },
@@ -1308,5 +1308,5 @@
     "materialsAndNews": {
       "video": "-"
     }
-  }        
+  }          
 ]

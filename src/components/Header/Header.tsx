@@ -212,6 +212,7 @@ const Header = () => {
     { name: 'Насосное оборудование', anchor: categoryToAnchorId('Насосное оборудование') },
     { name: 'СИП станции', anchor: categoryToAnchorId('СИП станции') },
     { name: 'Лабораторное оборудование', anchor: categoryToAnchorId('Лабораторное оборудование') },
+    { name: 'Водоподготовка', anchor: categoryToAnchorId('Водоподготовка') },
   ];
 
   const informationSections = [
