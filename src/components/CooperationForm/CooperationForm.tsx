@@ -19,9 +19,11 @@ type FormData = {
 type CooperationFormProps = {
   onSuccess?: () => void;
   showHeader?: boolean;
+  /** Название продукта, с карточки которого открыта форма (для заявки по товару) */
+  initialProductName?: string | null;
 };
 
-const CooperationForm = ({ onSuccess, showHeader = true }: CooperationFormProps) => {
+const CooperationForm = ({ onSuccess, showHeader = true, initialProductName = null }: CooperationFormProps) => {
   const [formData, setFormData] = useState<FormData>({
     company: '',
     name: '',
@@ -30,6 +32,7 @@ const CooperationForm = ({ onSuccess, showHeader = true }: CooperationFormProps)
     phone: '',
     comment: ''
   });
+  const productName = initialProductName ?? undefined;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,9 +81,10 @@ const CooperationForm = ({ onSuccess, showHeader = true }: CooperationFormProps)
         const company = formData.company || '—';
         const phone = formData.phone || '—';
         const comment = formData.comment || '—';
+        const productLine = productName ? `🛒 Продукт: ${productName}\n\n` : '';
         const text = `📩 Новая заявка с сайта
 
-🏢 Компания: ${company}
+${productLine}🏢 Компания: ${company}
 👤 ФИО: ${fullName}
 📞 Телефон: ${phone}
 
@@ -166,10 +170,15 @@ ${comment}`;
         formData.secondName
       ].filter(Boolean).join(' ').trim() || formData.name;
 
+      // В комментарий добавляем название продукта, если заявка с карточки товара
+      const commentsWithProduct = productName
+        ? (formData.comment ? `Продукт: ${productName}\n\n${formData.comment}` : `Продукт: ${productName}`)
+        : (formData.comment || '');
+
       // Формируем данные для отправки в Bitrix24
       const leadData = {
         fields: {
-          TITLE: formData.company || `Заявка с сайта от ${fullName || 'клиента'}`,
+          TITLE: formData.company || (productName ? `Заявка: ${productName}` : `Заявка с сайта от ${fullName || 'клиента'}`),
           NAME: formData.name || '',
           SECOND_NAME: formData.secondName || '',
           LAST_NAME: formData.lastName || '',
@@ -178,9 +187,9 @@ ${comment}`;
           OPENED: 'Y',
           CURRENCY_ID: 'RUB',
           PHONE: formData.phone ? [{ VALUE: formData.phone, VALUE_TYPE: 'WORK' }] : [],
-          COMMENTS: formData.comment || '',
+          COMMENTS: commentsWithProduct,
           SOURCE_ID: 'WEB',
-          SOURCE_DESCRIPTION: 'Заявка с сайта',
+          SOURCE_DESCRIPTION: productName ? `Заявка с сайта (${productName})` : 'Заявка с сайта',
         }
       };
 

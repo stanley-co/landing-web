@@ -13,7 +13,7 @@ import ContactsPage from './routes/ContactsPage';
 import NotFoundPage from './routes/NotFoundPage';
 
 const AppContent = () => {
-  const { isOpen, closeModal } = useContactFormModal();
+  const { isOpen, productName, closeModal } = useContactFormModal();
 
   return (
     <>
@@ -40,7 +40,7 @@ const AppContent = () => {
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <ContactFormModal isOpen={isOpen} onClose={closeModal} />
+      <ContactFormModal isOpen={isOpen} onClose={closeModal} productName={productName} />
     </>
   );
 };

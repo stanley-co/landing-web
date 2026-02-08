@@ -124,7 +124,7 @@ const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
               className={styles.ctaButton}
               onClick={(e) => {
                 e.stopPropagation();
-                openModal();
+                openModal(productName);
               }}
             >
               <IonIcon icon={documentTextOutline} slot="start" />

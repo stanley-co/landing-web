@@ -1,9 +1,10 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 
 type ContactFormModalContextType = {
   isOpen: boolean;
-  openModal: () => void;
+  productName: string | null;
+  openModal: (productName?: string) => void;
   closeModal: () => void;
 };
 
@@ -11,12 +12,20 @@ const ContactFormModalContext = createContext<ContactFormModalContextType | unde
 
 export const ContactFormModalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [productName, setProductName] = useState<string | null>(null);
 
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const openModal = useCallback((productNameFromCard?: string) => {
+    setProductName(productNameFromCard ?? null);
+    setIsOpen(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setIsOpen(false);
+    setProductName(null);
+  }, []);
 
   return (
-    <ContactFormModalContext.Provider value={{ isOpen, openModal, closeModal }}>
+    <ContactFormModalContext.Provider value={{ isOpen, productName, openModal, closeModal }}>
       {children}
     </ContactFormModalContext.Provider>
   );
