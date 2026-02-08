@@ -1,33 +1,33 @@
 # 🚀 Деплой на сервер
 
+## Где хранить секреты и как они попадают в сборку
+
+Сборка выполняется **в GitHub Actions**, не на сервере. Переменные Vite подставляются **в момент сборки** и попадают в статический JS. Поэтому:
+
+- **Секреты задаются только в GitHub** (Settings → Secrets and variables → Actions).
+- **На сервере** в `~/stanley-co/web/github-actions/` лежат только уже собранные файлы (`dist/`), `Dockerfile` и `nginx.conf`. Файл `.env` на сервере **не используется** для этого фронта — менять настройки формы можно только через GitHub Secrets и повторный деплой.
+
 ## Настройка переменных окружения для production
 
-### Способ 1: GitHub Secrets (рекомендуется)
+### GitHub Secrets (единственный способ для этой сборки)
 
-1. Откройте репозиторий на GitHub
-2. Перейдите в **Settings** → **Secrets and variables** → **Actions**
-3. Нажмите **New repository secret**
-4. Добавьте секреты:
+1. Откройте репозиторий на GitHub.
+2. Перейдите в **Settings** → **Secrets and variables** → **Actions**.
+3. Нажмите **New repository secret** и добавьте:
 
-   | Имя секрета | Значение | Пример |
-   |-------------|----------|--------|
-   | `VITE_BITRIX_WEBHOOK_URL` | URL вебхука Bitrix24 | `https://domain.bitrix24.ru/rest/1/key/crm.lead.add.json` |
-   | `VITE_BITRIX_DEMO_MODE` | Демо-режим | `false` |
-   | `VITE_FORM_DISABLED` | Отключение формы | `false` |
+   | Имя секрета | Обязательность | Описание |
+   |-------------|----------------|----------|
+   | `VITE_FORM_SUBMISSION_TARGET` | нет | Канал отправки формы: `telegram` (по умолчанию) или `bitrix` |
+   | `VITE_TELEGRAM_BOT_TOKEN` | да, если канал telegram | Токен бота Telegram (от @BotFather) |
+   | `VITE_TELEGRAM_CHAT_ID` | да, если канал telegram | ID чата/группы, куда слать заявки |
+   | `VITE_BITRIX_WEBHOOK_URL` | да, если канал bitrix | URL вебхука Bitrix24 |
+   | `VITE_BITRIX_DEMO_MODE` | нет | `false` для реальной отправки в Bitrix |
+   | `VITE_FORM_DISABLED` | нет | `false` — форма включена |
+   | `VPS_USER` | да | SSH-пользователь для деплоя |
+   | `VPS_HOST` | да | Хост VPS |
+   | `VPS_PASSWORD` | да | Пароль SSH |
 
-5. Сохраните секреты
-
-При следующем деплое переменные автоматически будут использованы при сборке.
-
-### Способ 2: Файл на сервере
-
-Если нужно использовать файл `.env.production`:
-
-1. Создайте файл `.env.production` на сервере в папке проекта
-2. Заполните переменные (см. `env.example`)
-3. Убедитесь, что файл не в `.gitignore` для production
-
-**Примечание:** GitHub Secrets предпочтительнее, так как не требует доступа к серверу.
+4. Сохраните секреты. При следующем деплое (push в `develop` / `feature/*`) они будут подставлены в шаг **Install dependencies and build** и попадут в билд.
 
 ---
 
@@ -47,14 +47,9 @@
 
 ## Проверка после деплоя
 
-1. Откройте консоль браузера (F12) на production сайте
-2. Найдите логи:
-   ```
-   [Bitrix Config] Demo mode: DISABLED
-   [Bitrix Config] Is configured: true
-   ```
-3. Отправьте тестовую форму
-4. Проверьте создание лида в Bitrix24
+1. Откройте сайт и отправьте тестовую заявку.
+2. Если канал **telegram**: сообщение должно прийти в указанный чат/группу.
+3. Если канал **bitrix**: в консоли браузера (F12) проверьте логи Bitrix и создание лида в Bitrix24.
 
 ---
 

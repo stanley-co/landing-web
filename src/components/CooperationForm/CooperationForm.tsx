@@ -5,6 +5,8 @@ import { BITRIX_WEBHOOK_URL, isBitrixConfigured, isDemoMode, isFormDisabled } fr
 import { parseFormError, formatErrorDetails } from '../../utils/errorHandler';
 import styles from './CooperationForm.module.css';
 
+const FORM_SUBMISSION_TARGET = (import.meta.env.VITE_FORM_SUBMISSION_TARGET === 'bitrix' ? 'bitrix' : 'telegram') as 'telegram' | 'bitrix';
+
 type FormData = {
   company: string;
   name: string;
@@ -65,7 +67,60 @@ const CooperationForm = ({ onSuccess, showHeader = true }: CooperationFormProps)
     console.log('[CooperationForm] Form submitted with data:', formData);
 
     try {
-      // Проверяем, настроен ли webhook
+      if (FORM_SUBMISSION_TARGET === 'telegram') {
+        const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+        if (!token || !chatId) {
+          setError('Отправка в Telegram не настроена. Укажите VITE_TELEGRAM_BOT_TOKEN и VITE_TELEGRAM_CHAT_ID.');
+          return;
+        }
+        const fullName = [formData.lastName, formData.name, formData.secondName].filter(Boolean).join(' ').trim() || '—';
+        const company = formData.company || '—';
+        const phone = formData.phone || '—';
+        const comment = formData.comment || '—';
+        const text = `📩 Новая заявка с сайта
+
+🏢 Компания: ${company}
+👤 ФИО: ${fullName}
+📞 Телефон: ${phone}
+
+💬 Комментарий:
+${comment}`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        let response: Response;
+        try {
+          response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text }),
+            signal: controller.signal,
+          });
+        } finally {
+          clearTimeout(timeoutId);
+        }
+        if (!response!.ok) {
+          const errData = await response!.json().catch(() => ({}));
+          throw new Error((errData as { description?: string }).description || `Ошибка Telegram API: ${response!.status}`);
+        }
+        setIsSuccess(true);
+        setFormData({
+          company: '',
+          name: '',
+          secondName: '',
+          lastName: '',
+          phone: '',
+          comment: ''
+        });
+        if (onSuccess) {
+          setTimeout(() => onSuccess(), 1000);
+        } else {
+          setTimeout(() => setIsSuccess(false), 5000);
+        }
+        return;
+      }
+
+      // Bitrix: проверяем, настроен ли webhook
       const isConfigured = isBitrixConfigured();
       console.log('[CooperationForm] Checking Bitrix configuration...');
       console.log('[CooperationForm] Webhook URL:', BITRIX_WEBHOOK_URL);
