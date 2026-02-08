@@ -464,7 +464,7 @@ const Header = () => {
           >
             <IonIcon icon={searchOutline} />
           </IonButton>
-          <IonButton color="primary" onClick={openModal} className={styles.ctaButton}>
+          <IonButton color="primary" onClick={() => openModal()} className={styles.ctaButton}>
             Оставить заявку
           </IonButton>
         </div>
@@ -588,7 +588,7 @@ const Header = () => {
             <IonIcon icon={searchOutline} slot="start" />
             Поиск
           </IonButton>
-          <IonButton color="primary" expand="block" onClick={openModal} className={styles.ctaButton}>
+          <IonButton color="primary" expand="block" onClick={() => openModal()} className={styles.ctaButton}>
             Оставить заявку
           </IonButton>
         </div>
