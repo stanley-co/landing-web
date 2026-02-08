@@ -4,7 +4,7 @@
     "image": "images/carousel/equipment-hero-1.webp",
     "title": "Промышленное оборудование мирового уровня",
     "description": "Производство и поставка смесительных и эмульгирующих систем для фармацевтики, косметики и пищевой промышленности",
-    "link": "/equipment",
+    "link": "/equipment#catalog",
     "buttonText": "Перейти в каталог"
   },
   {
@@ -20,7 +20,7 @@
     "image": "images/carousel/production-lines.webp",
     "title": "Производственные линии",
     "description": "Автоматизированные системы для крупносерийного производства",
-    "link": "https://t.me/dmitrii_derendyaev",
+    "link": "#contact-form",
     "buttonText": "Связаться с нами"
   }
 ]

@@ -437,7 +437,7 @@ const EquipmentPage = () => {
               <p>Не удалось определить категории оборудования. Проверьте данные в консоли браузера.</p>
             </div>
           ) : (
-            <div className={styles.pageContainer}>
+            <div id="catalog" className={styles.pageContainer}>
               <IonGrid>
                 <IonRow>
                   {/* Единый фильтр слева */}

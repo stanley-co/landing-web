@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './EquipmentCarousel.module.css';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../../utils/fetchStaticData';
+import { useContactFormModal } from '../../contexts/ContactFormModalContext';
 
 type CarouselSlide = {
   id: number;
@@ -16,6 +17,7 @@ type CarouselSlide = {
 
 const EquipmentCarousel = () => {
   const navigate = useNavigate();
+  const { openModal: openContactForm } = useContactFormModal();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<CarouselSlide[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,6 +25,12 @@ const EquipmentCarousel = () => {
 
   // Обработка клика по ссылке
   const handleLinkClick = (link: string) => {
+    // Специальная ссылка — открыть форму обратной связи в модальном окне
+    if (link === '#contact-form') {
+      openContactForm();
+      return;
+    }
+
     // Проверяем, является ли ссылка внешней (начинается с http:// или https://)
     if (link.startsWith('http://') || link.startsWith('https://')) {
       window.open(link, '_blank', 'noopener,noreferrer');
