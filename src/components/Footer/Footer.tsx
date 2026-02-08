@@ -13,7 +13,7 @@ const Footer = () => {
           <IonRow>
             <IonCol size="12" sizeMd="4">
               <div className={styles.footerSection}>
-                <IonTitle className={styles.footerTitle}>СТАНОК ПРО</IonTitle>
+                <IonTitle className={styles.footerTitle}>ФКИТ</IonTitle>
                 <p className={styles.description}>
                   Ведущий производитель машин для косметики и бытовой химии. 
                   Ваш эксперт по смесительным решениям.
@@ -54,7 +54,7 @@ const Footer = () => {
           </IonRow>
         </IonGrid>
         <div className={styles.bottomBar}>
-          <p className={styles.rights}>© 2025 СТАНОК ПРО / Honemix. Все права защищены</p>
+          <p className={styles.rights}>© 2025 ФКИТ / Honemix. Все права защищены</p>
         </div>
       </div>
     </footer>

@@ -1,32 +1,43 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, IonGrid, IonRow, IonCol, IonIcon, IonImg } from '@ionic/react';
 import { shieldCheckmarkOutline, flaskOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { getImageUrl } from '../../utils/fetchStaticData';
 import styles from "./CompanyIntro.module.css";
+
+const COMPANY_IMAGE = 'images/carousel/production-lines.webp';
 
 const CompanyIntro = () => (
   <section id="company" className={styles.company}>
     <div className={styles.container}>
-      <IonCard className={styles.introCard}>
-        <IonCardHeader>
-          <IonCardTitle className={styles.title}>ABOUT US</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <p className={styles.description}>
-            Мы специализируемся на исследованиях, разработке, производстве, продаже и сервисном обслуживании 
-            оборудования для жидкостей, лосьонов, кремов, зубных паст и клеев, таких как вакуумные эмульгаторы, 
-            миксеры и фасовочные машины. Наша компания развилась в профессиональное предприятие, объединяющее 
-            научные исследования, производство, установку и сервис. Мы всегда основывались на технологических 
-            инновациях.
-          </p>
-          <p className={styles.description}>
-            Наши сертификаты подтверждают соответствие международным стандартам качества и безопасности.
-          </p>
-          <div className={styles.certifications}>
-            <IonChip color="primary">ISO9001:2000</IonChip>
-            <IonChip color="success">CE</IonChip>
-            <IonChip color="tertiary">GMP</IonChip>
-          </div>
-        </IonCardContent>
-      </IonCard>
+      <div className={styles.introLayout}>
+        <div className={styles.imageWrap}>
+          <IonImg
+            src={getImageUrl(COMPANY_IMAGE)}
+            alt="Здание компании"
+            className={styles.companyImage}
+          />
+        </div>
+        <IonCard className={styles.introCard}>
+          <IonCardHeader>
+            <IonCardTitle className={styles.title}>О компании</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <p className={styles.description}>
+              Наша компания разрабатывает инженерные и технологические решения для сквозных процессов «от склада до склада» с минимизацией потерь.
+            </p>
+            <p className={styles.description}>
+              Основные направления работы: инженерно-конструкторская проработка производственных линий по техническому заданию; технологическая проработка и оптимизация: производственных и складских процессов, использования ресурсов, систем мойки CIP и др.
+            </p>
+            <p className={styles.description}>
+              Интеграция оборудования: между машинами; с верхнеуровневыми системами (MES, ERP) — с полной автоматизацией производства; внедрение методологий учёта потерь и управления производством (подбираются индивидуально под задачи заказчика).
+            </p>
+            <div className={styles.certifications}>
+              <IonChip color="primary">ISO9001:2000</IonChip>
+              <IonChip color="success">CE</IonChip>
+              <IonChip color="tertiary">GMP</IonChip>
+            </div>
+          </IonCardContent>
+        </IonCard>
+      </div>
       
       <IonGrid className={styles.badgesGrid}>
         <IonRow>

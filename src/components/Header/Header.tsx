@@ -222,6 +222,7 @@ const Header = () => {
 
   const aboutSections = [
     { name: 'О нас', anchor: 'about-us' },
+    { name: 'Наша миссия', anchor: 'mission' },
     { name: 'Наши компетенции', anchor: 'competences' },
     { name: 'Сертификаты', anchor: 'certificates' },
     { name: 'Наши клиенты', anchor: 'clients' },
@@ -236,7 +237,7 @@ const Header = () => {
     <IonHeader className={styles.header} ref={headerRef} style={{ zIndex: 999999 }}>
       <IonToolbar style={{ zIndex: 999999 }}>
         <div slot="start" className={styles.logoContainer}>
-          <IonTitle className={styles.title} onClick={() => navigate('/equipment')}>СТАНОК ПРО</IonTitle>
+          <IonTitle className={styles.title} onClick={() => navigate('/equipment')}>ФКИТ</IonTitle>
           <div className={styles.tagline}>
             <span>Промышленное оборудование</span>
             <span>для производства</span>

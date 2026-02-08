@@ -1,10 +1,10 @@
 .section {
-  padding: 80px 0;
+  padding: 24px 0;
   scroll-margin-top: 80px;
 }
 
 .section:first-of-type {
-  padding-top: 60px;
+  padding-top: 20px;
 }
 
 .container {
@@ -57,13 +57,17 @@
 }
 
 .competencesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 32px;
   margin-top: 48px;
 }
 
 .competenceCard {
+  width: 100%;
+  max-width: 340px;
+  min-width: 280px;
   background: white;
   padding: 32px;
   border-radius: 16px;
@@ -167,9 +171,12 @@
   }
 
   .competencesGrid {
-    grid-template-columns: 1fr;
     gap: 24px;
     margin-top: 32px;
+  }
+
+  .competenceCard {
+    max-width: none;
   }
 
   .clientsGrid {

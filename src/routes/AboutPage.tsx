@@ -2,6 +2,7 @@ import { IonContent, IonPage } from '@ionic/react';
 import PageWrapper from '../components/layout/PageWrapper';
 import CompanyIntro from '../components/CompanyIntro/CompanyIntro';
 import Certificates from '../components/Certificates/Certificates';
+import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
 import styles from './AboutPage.module.css';
 
@@ -13,11 +14,20 @@ const AboutPage = () => {
           {/* Секция "О нас" */}
           <section id="about-us" className={styles.section}>
             <div className={styles.container}>
-              <div className={styles.sectionHeader}>
-                <h1 className={styles.pageTitle}>О компании</h1>
-                <div className={styles.pageDivider} />
-              </div>
               <CompanyIntro />
+            </div>
+          </section>
+
+          {/* Секция "Миссия" */}
+          <section id="mission" className={styles.section}>
+            <div className={styles.container}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>Наша миссия</h2>
+                <div className={styles.sectionDivider} />
+                <p className={styles.sectionDescription}>
+                  Мы меняем правила игры: делаем производство лёгким в управлении, а его процессы — абсолютно прозрачными для бизнеса.
+                </p>
+              </div>
             </div>
           </section>
 
@@ -28,64 +38,60 @@ const AboutPage = () => {
                 <h2 className={styles.sectionTitle}>Наши компетенции</h2>
                 <div className={styles.sectionDivider} />
                 <p className={styles.sectionDescription}>
-                  Профессиональные знания и опыт в области промышленного оборудования
+                  Опыт команды: наши специалисты обладают более чем 15-летним опытом: работы в крупных международных компаниях; разработки сложных технологических проектов; компоновки и запуска машин на базе интегрированной автоматики.
                 </p>
               </div>
               <div className={styles.competencesGrid}>
                 <div className={styles.competenceCard}>
                   <div className={styles.competenceIcon}>🔬</div>
-                  <h3 className={styles.competenceTitle}>Исследования и разработка</h3>
+                  <h3 className={styles.competenceTitle}>Инжиниринг</h3>
                   <p className={styles.competenceDescription}>
-                    Постоянные исследования и инновации в области технологий производства
+                    Разработка проектов различного уровня сложности. Организация производства «под ключ»
                   </p>
                 </div>
                 <div className={styles.competenceCard}>
                   <div className={styles.competenceIcon}>🏭</div>
-                  <h3 className={styles.competenceTitle}>Производство</h3>
+                  <h3 className={styles.competenceTitle}>Комплексная автоматизация</h3>
                   <p className={styles.competenceDescription}>
-                    Современное производство с применением передовых технологий и материалов
+                    Полная автоматизация производства. Мы максимально придерживаемся в своей работе принципа производства «тёмная фабрика»
                   </p>
                 </div>
                 <div className={styles.competenceCard}>
                   <div className={styles.competenceIcon}>🔧</div>
-                  <h3 className={styles.competenceTitle}>Установка и сервис</h3>
+                  <h3 className={styles.competenceTitle}>Оптимизация производства</h3>
                   <p className={styles.competenceDescription}>
-                    Профессиональная установка и комплексное сервисное обслуживание оборудования
+                    Проводим анализ производственных потерь, внедряем методологию для эффективной и быстрой минимизации потерь.
                   </p>
                 </div>
                 <div className={styles.competenceCard}>
                   <div className={styles.competenceIcon}>💡</div>
-                  <h3 className={styles.competenceTitle}>Инновации</h3>
+                  <h3 className={styles.competenceTitle}>Поставка оборудования</h3>
                   <p className={styles.competenceDescription}>
-                    Внедрение инновационных решений и адаптация под специфические требования клиентов
+                    Подберём оптимальный вариант оборудования под требуемые задачи по наиболее важным для вас критериям.
                   </p>
                 </div>
                 <div className={styles.competenceCard}>
                   <div className={styles.competenceIcon}>🌍</div>
-                  <h3 className={styles.competenceTitle}>Международный опыт</h3>
+                  <h3 className={styles.competenceTitle}>Монтаж и сервис</h3>
                   <p className={styles.competenceDescription}>
-                    Работа с клиентами по всему миру, соответствие международным стандартам
-                  </p>
-                </div>
-                <div className={styles.competenceCard}>
-                  <div className={styles.competenceIcon}>✅</div>
-                  <h3 className={styles.competenceTitle}>Качество</h3>
-                  <p className={styles.competenceDescription}>
-                    Строгий контроль качества на всех этапах производства и поставки
+                    Интегрируем новое оборудование в существующие технологические цепочки с минимальным временем простоя основного производства. Поможем организовать высокоэффективный процесс обслуживания оборудования.
                   </p>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Секция "Сертификаты" */}
+          {/* Секция "Сертификаты" — пока отключено */}
+          {false && (
           <section id="certificates" className={styles.section}>
             <div className={styles.container}>
               <Certificates />
             </div>
           </section>
+          )}
 
-          {/* Секция "Наши клиенты" */}
+          {/* Секция "Наши клиенты" — пока отключено */}
+          {false && (
           <section id="clients" className={styles.section}>
             <div className={styles.container}>
               <div className={styles.sectionHeader}>
@@ -123,6 +129,13 @@ const AboutPage = () => {
               </div>
             </div>
           </section>
+          )}
+
+          {/* Секция "Форма сотрудничества" */}
+          <CooperationFormSection
+            title="Начните сотрудничество с нами"
+            subtitle="Свяжитесь с нами для получения консультации и расчёта стоимости оборудования"
+          />
 
           <Footer />
         </IonContent>

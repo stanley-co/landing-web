@@ -2,7 +2,15 @@ import { isFormDisabled } from '../../config/bitrix';
 import CooperationForm from '../CooperationForm/CooperationForm';
 import styles from "./CooperationFormSection.module.css";
 
-const CooperationFormSection = () => {
+type CooperationFormSectionProps = {
+  title?: string;
+  subtitle?: string;
+};
+
+const DEFAULT_TITLE = 'Готовы начать сотрудничество?';
+const DEFAULT_SUBTITLE = 'Заполните форму, и наш специалист свяжется с вами, чтобы обсудить проект или подобрать оборудование.';
+
+const CooperationFormSection = ({ title = DEFAULT_TITLE, subtitle = DEFAULT_SUBTITLE }: CooperationFormSectionProps) => {
   // Проверяем, отключена ли форма
   if (isFormDisabled()) {
     console.log('[CooperationFormSection] Form is disabled. Returning null.');
@@ -13,10 +21,8 @@ const CooperationFormSection = () => {
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Готовы начать сотрудничество?</h2>
-          <p className={styles.subtitle}>
-            Заполните форму, и наш специалист свяжется с вами, чтобы обсудить проект или подобрать оборудование.
-          </p>
+          <h2 className={styles.title}>{title}</h2>
+          <p className={styles.subtitle}>{subtitle}</p>
         </div>
         <CooperationForm showHeader={true} />
       </div>

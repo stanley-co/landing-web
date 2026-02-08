@@ -8,11 +8,33 @@
   margin: 0 auto;
 }
 
+.introLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+
+.imageWrap {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.companyImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  min-height: 280px;
+  background: var(--ion-color-light, #f4f5f8);
+}
+
 .introCard {
   --background: white;
   --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
-  margin-bottom: 48px;
 }
 
 .title {
@@ -76,6 +98,15 @@
 @media (max-width: 768px) {
   .company {
     padding: 48px 16px;
+  }
+
+  .introLayout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .companyImage {
+    min-height: 200px;
   }
 
   .title {

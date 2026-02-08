@@ -1232,9 +1232,9 @@
     "name": "Санитарный резервуар для чистой воды",
     "globalCategory": "Водоподготовка",
     "category": "Водоподготовка",
-    "image": "images/products/water/water/vm-35/water-water-vm-35-img-1.jpg",
+    "image": "images/products/water/water/vm-35/water-water-vm-35-img-main-1.jpg",
     "galleryImages": [
-      "images/products/water/water/vm-35/water-water-vm-35-img-1.jpg"
+      "images/products/water/water/vm-35/water-water-vm-35-img-main-1.jpg"
     ],
     "description": "Емкость для накопления чистой воды после двухступенчатого осмоса, используемая для набора в реактор и промывки линий. Резервуар дренируемый и легко промываемый, изготовлен из нержавеющей стали SUS304/316L с зеркальной полировкой корпуса и труб. Внутри установлены моющие головы для дезинфекции емкости.",
     "specs": {
@@ -1273,9 +1273,9 @@
     "name": "HRO-УФ стерилизатор с водяным насосом",
     "globalCategory": "Водоподготовка",
     "category": "Водоподготовка",
-    "image": "images/products/water/water/vm-36/water-water-vm-36-img-1.jpg",
+    "image": "images/products/water/water/vm-36/water-water-vm-36-img-main-1.jpg",
     "galleryImages": [
-      "images/products/water/water/vm-36/water-water-vm-36-img-1.jpg"
+      "images/products/water/water/vm-36/water-water-vm-36-img-main-1.jpg"
     ],
     "description": "Установка для УФ-стерилизации воды, уничтожающая вредные микроорганизмы и обеспечивающая безопасное использование воды. Изготовлена из высококачественной нержавеющей стали SUS304/316L. Оснащена современной бактерицидной УФ лампой с длительным сроком службы и высоким КПД. Отличается компактностью, экономичностью, удобством монтажа и эксплуатации, совместимостью с другими системами очистки воды.",
     "specs": {
@@ -1308,5 +1308,48 @@
     "materialsAndNews": {
       "video": "-"
     }
-  }          
+  },
+  {
+    "id": "sim-main-vm-37",
+    "name": "Интеллектуальная система очистки CIP",
+    "globalCategory": "СИП станции",
+    "category": "СИП",
+    "image": "images/products/sip/main/vm-37/sip-main-vm-37-img-main-1.jpg",
+    "galleryImages": [
+      "images/products/sip/main/vm-37/sip-main-vm-37-img-main-1.jpg"
+    ],
+    "description": "Интеллектуальная система CIP широко используется в биологической ферментации и фармацевтической промышленности с высокими требованиями к чистоте. Обеспечивает эффективную санитарную и стерильную очистку оборудования без его разборки.",
+    "specs": {
+      "Тип": "CIP мойка",
+      "Производительность": "500–1000 литров",
+      "Источник питания": "6–10 кВт, 380 В / 50 Гц",
+      "Управляемый тип": "электрический",
+      "Материал": "нержавеющая сталь 304 / 316l"
+    },
+    "advantages": [
+      {
+        "icon": "shieldCheckmarkOutline",
+        "title": "Высокие санитарные стандарты",
+        "description": "Обеспечивает санитарную и стерильную очистку оборудования"
+      },
+      {
+        "icon": "settingsOutline",
+        "title": "Интеллектуальное управление",
+        "description": "Электрическое управление с точным контролем параметров мойки"
+      },
+      {
+        "icon": "trendingUpOutline",
+        "title": "Повышение эффективности производства",
+        "description": "Сокращает время простоя оборудования и повышает стабильность процессов"
+      },
+      {
+        "icon": "swapHorizontalOutline",
+        "title": "Очистка без разборки",
+        "description": "CIP-мойка выполняется без демонтажа оборудования"
+      }
+    ],
+    "materialsAndNews": {
+      "video": "-"
+    }
+  }  
 ]
