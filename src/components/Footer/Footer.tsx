@@ -1,5 +1,4 @@
-import { IonTitle, IonButtons, IonButton, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
-import { logoLinkedin, paperPlaneOutline, mailOutline } from 'ionicons/icons';
+import { IonTitle, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import styles from "./Footer.module.css";
 
@@ -35,20 +34,16 @@ const Footer = () => {
               <div className={styles.footerSection}>
                 <h3 className={styles.sectionTitle}>Контакты</h3>
                 <div className={styles.contactInfo}>
-                  <p><strong>Email:</strong> info@stanok-pro.ru</p>
-                  <p><strong>Телефон:</strong> +7 922 507-02-32</p>
+                  <p><strong>Адрес:</strong> Екатеринбург, ул. Лучистая 4</p>
+                  <p><strong>Телефоны:</strong> +7 953 429-35-94, +7 912 289-22-65</p>
+                  <p><strong>Отдел продаж:</strong> <a href="mailto:sales@kitexp.ru" className={styles.mailLink}>sales@kitexp.ru</a></p>
+                  <p><strong>Общие вопросы:</strong> <a href="mailto:info@kitexp.ru" className={styles.mailLink}>info@kitexp.ru</a></p>
                 </div>
-                <IonButtons className={styles.socialButtons}>
-                  <IonButton fill="clear" size="small">
-                    <IonIcon icon={mailOutline} />
-                  </IonButton>
-                  <IonButton fill="clear" size="small">
-                    <IonIcon icon={logoLinkedin} />
-                  </IonButton>
-                  <IonButton fill="clear" size="small">
-                    <IonIcon icon={paperPlaneOutline} />
-                  </IonButton>
-                </IonButtons>
+                <div className={styles.socialButtons}>
+                  <a href="https://rutube.ru/channel/71449914/videos/" target="_blank" rel="noopener noreferrer" className={styles.rutubeLink} aria-label="Rutube">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Rutube_logo.svg" alt="Rutube" className={styles.rutubeLogo} />
+                  </a>
+                </div>
               </div>
             </IonCol>
           </IonRow>

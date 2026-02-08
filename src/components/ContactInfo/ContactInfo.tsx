@@ -1,6 +1,10 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
-import { locationOutline, callOutline, mailOutline, logoFacebook, logoWhatsapp, logoVk } from 'ionicons/icons';
+import { locationOutline, callOutline, mailOutline } from 'ionicons/icons';
 import styles from './ContactInfo.module.css';
+
+const ADDRESS = 'Екатеринбург, ул. Лучистая 4';
+const RUTUBE_LOGO_SRC = 'https://upload.wikimedia.org/wikipedia/commons/3/33/Rutube_logo.svg';
+const RUTUBE_CHANNEL_URL = 'https://rutube.ru/channel/71449914/videos/';
 
 const ContactInfo = () => {
   return (
@@ -20,7 +24,7 @@ const ContactInfo = () => {
                   <IonCardTitle className={styles.cardTitle}>Физический адрес</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <p className={styles.text}>г. Москва<br />ул. Примерная, д. 1</p>
+                  <p className={styles.text}>{ADDRESS}</p>
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -32,7 +36,7 @@ const ContactInfo = () => {
                   <IonCardTitle className={styles.cardTitle}>Юридический адрес</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <p className={styles.text}>г. Москва<br />ул. Юридическая, д. 2</p>
+                  <p className={styles.text}>{ADDRESS}</p>
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -44,7 +48,7 @@ const ContactInfo = () => {
                   <IonCardTitle className={styles.cardTitle}>Почтовый адрес</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <p className={styles.text}>123456, г. Москва<br />а/я 123</p>
+                  <p className={styles.text}>{ADDRESS}</p>
                 </IonCardContent>
               </IonCard>
             </IonCol>
@@ -57,8 +61,8 @@ const ContactInfo = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <p className={styles.text}>
-                    <a href="tel:+79991234567" className={styles.link}>+7 (999) 123-45-67</a><br />
-                    <a href="tel:+79991234568" className={styles.link}>+7 (999) 123-45-68</a>
+                    <a href="tel:+79534293594" className={styles.link}>+7 953 429-35-94</a><br />
+                    <a href="tel:+79122892265" className={styles.link}>+7 912 289-22-65</a>
                   </p>
                 </IonCardContent>
               </IonCard>
@@ -74,8 +78,10 @@ const ContactInfo = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <p className={styles.text}>
-                    <a href="mailto:info@stanok-pro.ru" className={styles.link}>info@stanok-pro.ru</a><br />
-                    <a href="mailto:sales@stanok-pro.ru" className={styles.link}>sales@stanok-pro.ru</a>
+                    <span className={styles.label}>Отдел продаж:</span>{' '}
+                    <a href="mailto:sales@kitexp.ru" className={styles.link}>sales@kitexp.ru</a><br />
+                    <span className={styles.label}>Общие вопросы:</span>{' '}
+                    <a href="mailto:info@kitexp.ru" className={styles.link}>info@kitexp.ru</a>
                   </p>
                 </IonCardContent>
               </IonCard>
@@ -88,14 +94,14 @@ const ContactInfo = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <div className={styles.socialLinks}>
-                    <a href="#" className={styles.socialLink} aria-label="Facebook">
-                      <IonIcon icon={logoFacebook} />
-                    </a>
-                    <a href="#" className={styles.socialLink} aria-label="WhatsApp">
-                      <IonIcon icon={logoWhatsapp} />
-                    </a>
-                    <a href="#" className={styles.socialLink} aria-label="VKontakte">
-                      <IonIcon icon={logoVk} />
+                    <a
+                      href={RUTUBE_CHANNEL_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.socialLink}
+                      aria-label="Rutube"
+                    >
+                      <img src={RUTUBE_LOGO_SRC} alt="Rutube" className={styles.rutubeLogo} />
                     </a>
                   </div>
                 </IonCardContent>

@@ -85,9 +85,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 8px 12px;
+  border-radius: 12px;
   background: var(--ion-color-light, #f4f5f8);
   color: var(--ion-color-primary, #3880ff);
   font-size: 1.5rem;
@@ -100,6 +101,22 @@
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(56, 128, 255, 0.3);
+}
+
+.socialLink:hover .rutubeLogo {
+  filter: brightness(0) invert(1);
+}
+
+.label {
+  color: var(--ion-color-medium, #666);
+}
+
+.rutubeLogo {
+  height: 32px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  display: block;
 }
 
 @media (max-width: 768px) {

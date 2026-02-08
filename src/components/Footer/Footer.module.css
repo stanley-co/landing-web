@@ -78,11 +78,39 @@
 
 .socialButtons {
   margin-top: 8px;
+  display: flex;
+  align-items: center;
 }
 
 .socialButtons ion-button {
   --color: var(--ion-color-dark, #1a202c);
   --color-hover: var(--ion-color-primary, #3880ff);
+}
+
+.mailLink {
+  color: var(--ion-color-primary, #3880ff);
+  text-decoration: none;
+}
+
+.mailLink:hover {
+  text-decoration: underline;
+}
+
+.rutubeLink {
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.rutubeLink:hover {
+  opacity: 0.85;
+}
+
+.rutubeLogo {
+  height: 28px;
+  width: auto;
+  max-width: 100px;
+  object-fit: contain;
 }
 
 .bottomBar {
