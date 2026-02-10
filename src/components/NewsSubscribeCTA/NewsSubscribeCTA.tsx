@@ -7,6 +7,7 @@ const NewsSubscribeCTA = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isConsentGiven, setIsConsentGiven] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +19,7 @@ const NewsSubscribeCTA = () => {
     setIsSubmitting(false);
     setIsSuccess(true);
     setEmail('');
+    setIsConsentGiven(false);
 
     setTimeout(() => setIsSuccess(false), 5000);
   };
@@ -37,7 +39,7 @@ const NewsSubscribeCTA = () => {
                   <p>Спасибо за подписку! Мы отправили вам письмо с подтверждением.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className={styles.form}>
+              <form onSubmit={handleSubmit} className={styles.form}>
                   <IonItem className={styles.inputItem}>
                     <IonLabel position="stacked">Email</IonLabel>
                     <IonInput
@@ -48,11 +50,38 @@ const NewsSubscribeCTA = () => {
                       required
                     />
                   </IonItem>
+
+                  <div className={styles.consent}>
+                    <label className={styles.consentLabel}>
+                      <input
+                        type="checkbox"
+                        checked={isConsentGiven}
+                        onChange={(e) => setIsConsentGiven(e.target.checked)}
+                        className={styles.consentCheckbox}
+                      />
+                      <span>
+                        Я соглашаюсь с{' '}
+                        <a
+                          href="https://storage.yandexcloud.net/stanley-co/docs/privacy/processingPersonalData.pdf"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          обработкой моих персональных данных
+                        </a>
+                      </span>
+                    </label>
+                  </div>
+
                   <IonButton
                     type="submit"
                     color="primary"
                     size="large"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !isConsentGiven}
+                    title={
+                      !isConsentGiven
+                        ? "Для отправки формы необходимо принять согласие на обработку персональных данных"
+                        : undefined
+                    }
                     className={styles.submitButton}
                   >
                     <IonIcon icon={sendOutline} slot="start" />

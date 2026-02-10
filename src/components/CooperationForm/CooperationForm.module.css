@@ -1,13 +1,13 @@
 .formCard {
   --background: white;
   --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   margin: 0;
 }
 
 .formTitle {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--ion-color-dark, #1a202c);
   margin: 0;
@@ -16,13 +16,13 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .nameRow {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 
 .formItem {
@@ -31,11 +31,32 @@
   --background: transparent;
 }
 
+.consent {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium, #6b7280);
+}
+
+.consentLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.consentCheckbox {
+  margin-top: 4px;
+}
+
+.consent a {
+  color: var(--ion-color-primary, #008CFF);
+  text-decoration: underline;
+}
+
 .submitButton {
   --border-radius: 12px;
-  height: 56px;
+  height: 48px;
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   margin-top: 8px;
   box-shadow: 0 4px 16px rgba(0, 140, 255, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;

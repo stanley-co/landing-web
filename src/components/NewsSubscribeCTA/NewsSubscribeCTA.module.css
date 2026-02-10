@@ -1,5 +1,5 @@
 .cta {
-  padding: 80px 16px;
+  padding: 64px 16px;
   background: white;
 }
 
@@ -21,13 +21,13 @@
 }
 
 .icon {
-  font-size: 48px;
+  font-size: 40px;
   color: var(--ion-color-primary, #008CFF);
   margin-bottom: 24px;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--ion-color-dark, #1a202c);
   margin: 0 0 12px 0;
@@ -35,7 +35,7 @@
 }
 
 .subtitle {
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: var(--ion-color-medium, #6b7280);
   margin: 0 0 32px 0;
   line-height: 1.6;
@@ -44,7 +44,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   max-width: 500px;
   margin: 0 auto;
 }
@@ -57,11 +57,32 @@
   margin-bottom: 8px;
 }
 
+.consent {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium, #6b7280);
+}
+
+.consentLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.consentCheckbox {
+  margin-top: 4px;
+}
+
+.consent a {
+  color: var(--ion-color-primary, #008CFF);
+  text-decoration: underline;
+}
+
 .submitButton {
   --border-radius: 12px;
-  height: 56px;
+  height: 48px;
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   margin-top: 8px;
 }
 

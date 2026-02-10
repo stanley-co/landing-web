@@ -9,6 +9,7 @@ const ContactForm = () => {
   const [email, setEmail] = useState("");
   const [tel, setTel] = useState("");
   const [message, setMessage] = useState("");
+  const [isConsentGiven, setIsConsentGiven] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,6 +19,7 @@ const ContactForm = () => {
     setEmail("");
     setTel("");
     setMessage("");
+    setIsConsentGiven(false);
   };
 
   return (
@@ -81,10 +83,38 @@ const ContactForm = () => {
                     </IonItem>
                   </IonCol>
                   <IonCol size="12">
+                    <div className={styles.consent}>
+                      <label className={styles.consentLabel}>
+                        <input
+                          type="checkbox"
+                          checked={isConsentGiven}
+                          onChange={(e) => setIsConsentGiven(e.target.checked)}
+                          className={styles.consentCheckbox}
+                        />
+                        <span>
+                          Я соглашаюсь с{" "}
+                          <a
+                            href="https://storage.yandexcloud.net/stanley-co/docs/privacy/processingPersonalData.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            обработкой моих персональных данных
+                          </a>
+                        </span>
+                      </label>
+                    </div>
+                  </IonCol>
+                  <IonCol size="12">
                     <IonButton 
                       type="submit" 
                       expand="block" 
                       size="large"
+                      disabled={!isConsentGiven}
+                      title={
+                        !isConsentGiven
+                          ? "Для отправки формы необходимо принять согласие на обработку персональных данных"
+                          : undefined
+                      }
                       className={styles.submitButton}
                     >
                       Отправить

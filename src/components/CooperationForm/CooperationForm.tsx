@@ -36,6 +36,7 @@ const CooperationForm = ({ onSuccess, showHeader = true, initialProductName = nu
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isConsentGiven, setIsConsentGiven] = useState(false);
 
   // Проверяем, отключена ли форма
   if (isFormDisabled()) {
@@ -116,6 +117,7 @@ ${comment}`;
           phone: '',
           comment: ''
         });
+        setIsConsentGiven(false);
         if (onSuccess) {
           setTimeout(() => onSuccess(), 1000);
         } else {
@@ -151,6 +153,7 @@ ${comment}`;
           phone: '',
           comment: ''
         });
+        setIsConsentGiven(false);
         if (onSuccess) {
           setTimeout(() => {
             onSuccess();
@@ -296,6 +299,7 @@ ${comment}`;
         phone: '',
         comment: ''
       });
+      setIsConsentGiven(false);
       
       if (onSuccess) {
         setTimeout(() => {
@@ -425,6 +429,27 @@ ${comment}`;
               />
             </IonItem>
 
+            <div className={styles.consent}>
+              <label className={styles.consentLabel}>
+                <input
+                  type="checkbox"
+                  checked={isConsentGiven}
+                  onChange={(e) => setIsConsentGiven(e.target.checked)}
+                  className={styles.consentCheckbox}
+                />
+                <span>
+                  Я соглашаюсь с{" "}
+                  <a
+                    href="https://storage.yandexcloud.net/stanley-co/docs/privacy/processingPersonalData.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    обработкой моих персональных данных
+                  </a>
+                </span>
+              </label>
+            </div>
+
             {error && (
               <div className={styles.errorMessage}>
                 {error}
@@ -436,7 +461,12 @@ ${comment}`;
               expand="block"
               color="primary"
               size="large"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isConsentGiven}
+              title={
+                !isConsentGiven
+                  ? "Для отправки формы необходимо принять согласие на обработку персональных данных"
+                  : undefined
+              }
               className={styles.submitButton}
             >
               {isSubmitting ? (
