@@ -82,14 +82,38 @@ export function clearCache(url?: string) {
 }
 
 /**
+ * Базовые настройки для S3-хранилища (host и bucket)
+ * Значения могут быть переопределены через Vite-переменные окружения:
+ * - VITE_S3_HOST   — хост/endpoint для S3 (по умолчанию https://storage.yandexcloud.net)
+ * - VITE_S3_BUCKET — название bucket (по умолчанию stanley-co)
+ */
+const S3_HOST =
+  (typeof import.meta !== 'undefined' &&
+    import.meta.env &&
+    import.meta.env.VITE_S3_HOST) ||
+  'https://storage.yandexcloud.net';
+
+const S3_BUCKET =
+  (typeof import.meta !== 'undefined' &&
+    import.meta.env &&
+    import.meta.env.VITE_S3_BUCKET) ||
+  'stanley-co';
+
+// Нормализуем host (убираем завершающий слэш, если есть)
+const NORMALIZED_S3_HOST = S3_HOST.replace(/\/+$/, '');
+
+// Базовый URL для bucket
+const S3_BASE_URL = `${NORMALIZED_S3_HOST}/${S3_BUCKET}`;
+
+/**
  * URL-константы для S3-хранилища
  */
 export const S3_URLS = {
-  PRODUCTS: 'https://storage.yandexcloud.net/stanley-co/data/products/products.json',
-  NEWS: 'https://storage.yandexcloud.net/stanley-co/data/news/news.json',
-  ARTICLES: 'https://storage.yandexcloud.net/stanley-co/data/articles/articles.json',
-  CAROUSEL: 'https://storage.yandexcloud.net/stanley-co/data/carousel/carousel.json',
-  BASE: 'https://storage.yandexcloud.net/stanley-co'
+  PRODUCTS: `${S3_BASE_URL}/data/products/products.json`,
+  NEWS: `${S3_BASE_URL}/data/news/news.json`,
+  ARTICLES: `${S3_BASE_URL}/data/articles/articles.json`,
+  CAROUSEL: `${S3_BASE_URL}/data/carousel/carousel.json`,
+  BASE: S3_BASE_URL
 } as const;
 
 /**
