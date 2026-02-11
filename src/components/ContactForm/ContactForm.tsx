@@ -2,6 +2,7 @@ import { useState } from "react";
 import type React from "react";
 import { IonCard, IonCardContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import { sendOutline } from 'ionicons/icons';
+import { getS3FileUrl } from "../../utils/fetchStaticData";
 import styles from "./ContactForm.module.css";
 
 const ContactForm = () => {
@@ -94,7 +95,7 @@ const ContactForm = () => {
                         <span>
                           Я соглашаюсь с{" "}
                           <a
-                            href="https://storage.yandexcloud.net/stanley-co/docs/privacy/processingPersonalData.pdf"
+                            href={getS3FileUrl("docs/privacy/processingPersonalData.pdf")}
                             target="_blank"
                             rel="noopener noreferrer"
                           >

@@ -117,6 +117,15 @@ export const S3_URLS = {
 } as const;
 
 /**
+ * Возвращает полный URL для произвольного файла в S3 bucket
+ * @param relativePath - относительный путь внутри bucket (например, "docs/privacy/processingPersonalData.pdf")
+ */
+export function getS3FileUrl(relativePath: string): string {
+  const cleanPath = relativePath.startsWith('/') ? relativePath.slice(1) : relativePath;
+  return `${S3_BASE_URL}/${cleanPath}`;
+}
+
+/**
  * Преобразует относительный путь изображения в полный URL S3
  * @param imagePath - Относительный путь изображения из S3 (например, "images/products/vm-01.jpg")
  * @returns Полный URL изображения в S3

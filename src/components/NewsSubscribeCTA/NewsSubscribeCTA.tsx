@@ -1,6 +1,7 @@
 import { IonCard, IonCardContent, IonItem, IonLabel, IonInput, IonButton, IonIcon } from '@ionic/react';
 import { mailOutline, sendOutline } from 'ionicons/icons';
 import { useState } from 'react';
+import { getS3FileUrl } from "../../utils/fetchStaticData";
 import styles from "./NewsSubscribeCTA.module.css";
 
 const NewsSubscribeCTA = () => {
@@ -62,7 +63,7 @@ const NewsSubscribeCTA = () => {
                       <span>
                         Я соглашаюсь с{' '}
                         <a
-                          href="https://storage.yandexcloud.net/stanley-co/docs/privacy/processingPersonalData.pdf"
+                          href={getS3FileUrl('docs/privacy/processingPersonalData.pdf')}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
