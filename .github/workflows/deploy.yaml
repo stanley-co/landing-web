@@ -122,26 +122,28 @@ jobs:
 
       - name: Deploy to PROD Server
         run: |
-          rsync -avz --delete \
-            dist Dockerfile nginx.conf \
-            ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:/root/fkit/web/landing/releases/${VERSION}/
-
+          # Создаём папку релиза
           ssh ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} "
-            set -euo pipefail
+            mkdir -p /root/fkit/web/landing/releases/${VERSION}
+          "
+
+          # Загружаем билд в релиз
+          rsync -avz --delete \
+            dist/ \
+            ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:/root/fkit/web/landing/releases/${VERSION}/dist/
+
+          # Копируем конфиги и Dockerfile
+          rsync -avz \
+            Dockerfile nginx.conf \
+            ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:/root/fkit/web/landing/
+
+          # Сборка и запуск контейнера
+          ssh ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} "
+            set -e
             cd /root/fkit/web/landing
-
-            ln -sfn releases/${VERSION} current
-
-            rm -rf dist
-            cp -r releases/${VERSION}/dist dist
-
-            docker build -t stanok-landing:${VERSION} -t stanok-landing:latest .
-
-            if docker ps -a --format '{{.Names}}' | grep -q '^stanok-landing-prod$'; then
-              docker stop stanok-landing-prod || true
-              docker rm stanok-landing-prod || true
-            fi
-
+            docker build --build-arg RELEASE_VERSION=${VERSION} -t stanok-landing:${VERSION} -t stanok-landing:latest .
+            docker stop stanok-landing-prod || true
+            docker rm stanok-landing-prod || true
             docker run -d \
               --name stanok-landing-prod \
               -p ${{ vars.APP_PORT }}:80 \
@@ -149,3 +151,4 @@ jobs:
               --restart unless-stopped \
               stanok-landing:${VERSION}
           "
+
