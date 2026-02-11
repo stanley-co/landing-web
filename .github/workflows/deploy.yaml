@@ -12,9 +12,9 @@ concurrency:
 
 jobs:
 
-  # =========================
-  # DEV BUILD + DEPLOY
-  # =========================
+# ==========================================================
+# DEV DEPLOY
+# ==========================================================
   deploy-dev:
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install & Build (dev)
+      - name: Install & Build (DEV)
         env:
           VITE_S3_HOST: ${{ secrets.VITE_S3_HOST }}
           VITE_S3_BUCKET: ${{ secrets.VITE_S3_BUCKET }}
@@ -42,24 +42,22 @@ jobs:
           npm ci
           npm run build
 
-      - name: Setup SSH (dev)
+      - name: Setup SSH (DEV)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to Dev
+      - name: Deploy to DEV Server
         run: |
-          # Синхронизируем билд + Dockerfile + nginx.conf на dev-сервер
           rsync -avz --delete \
             dist/ Dockerfile nginx.conf \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/app/dev/
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/homic/stanley-co/web/github-actions/
 
-          # Собираем и перезапускаем dev-контейнер
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
             set -e
-            cd ~/app/dev &&
+            cd /home/homic/stanley-co/web/github-actions &&
             docker build -t stanok-landing-dev:latest . &&
             docker stop stanok-landing-dev || true &&
             docker rm stanok-landing-dev || true &&
@@ -71,9 +69,9 @@ jobs:
               stanok-landing-dev:latest
           "
 
-  # =========================
-  # PRODUCTION BUILD + DEPLOY
-  # =========================
+# ==========================================================
+# PRODUCTION DEPLOY
+# ==========================================================
   deploy-prod:
     if: startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
@@ -83,11 +81,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Extract version
-        id: version
         run: |
           VERSION="${GITHUB_REF#refs/heads/release/}"
           if [ -z "$VERSION" ]; then
-            echo "Version is empty, check branch name (expected release/x.y.z)"
+            echo "Invalid release branch"
             exit 1
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
@@ -97,7 +94,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install & Build (prod)
+      - name: Install & Build (PROD)
         env:
           VITE_S3_HOST: ${{ secrets.VITE_S3_HOST }}
           VITE_S3_BUCKET: ${{ secrets.VITE_S3_BUCKET }}
@@ -111,41 +108,33 @@ jobs:
           npm ci
           npm run build
 
-      - name: Setup SSH (prod)
+      - name: Setup SSH (PROD)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to Production
+      - name: Deploy to PROD Server
         run: |
-          # 1. Заливаем билд в папку релиза на prod-сервере
           rsync -avz --delete \
             dist/ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/app/prod/releases/${VERSION}/
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/fkit/web/landing/releases/${VERSION}/
 
-          # 2. Обновляем Dockerfile и nginx.conf в корне prod-приложения
           rsync -avz \
             Dockerfile nginx.conf \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/app/prod/
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/fkit/web/landing/
 
-          # 3. Переключаем current, собираем версионный образ и перезапускаем контейнер
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
             set -e
-            cd ~/app/prod
+            cd /root/fkit/web/landing
 
-            # Обновляем symlink на текущий релиз (для удобства и возможных статики)
             ln -sfn releases/${VERSION} current
 
-            # Готовим build-контекст: dist соответствует текущему релизу
             rm -rf dist
             cp -r releases/${VERSION}/ dist
 
-            # Собираем образ с версионным тегом и latest
             docker build -t stanok-landing:${VERSION} -t stanok-landing:latest . &&
-
-            # Мягкая замена контейнера (минимальный downtime)
             docker stop stanok-landing-prod || true &&
             docker rm stanok-landing-prod || true &&
             docker run -d \
@@ -154,209 +143,4 @@ jobs:
               --network ${{ secrets.DOCKER_NETWORK }} \
               --restart unless-stopped \
               stanok-landing:${VERSION}
-          "
-name: Build and Deploy React Web to VPS
-
-on:
-  push:
-    branches:
-      # Dev окружение
-      - develop
-      # Prod окружение: ветки вида release/x.y.z
-      - 'release/**'
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    # Определяем тип окружения и тег образа один раз и пробрасываем в deploy-* jobs
-    outputs:
-      environment: ${{ steps.set-env.outputs.environment }}
-      image_tag: ${{ steps.set-env.outputs.image_tag }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Determine environment and image tag
-        id: set-env
-        shell: bash
-        run: |
-          echo "GITHUB_REF=${GITHUB_REF}"
-
-          if [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
-            # Dev-окружение
-            echo "environment=dev" >> "$GITHUB_OUTPUT"
-            # Для dev можно использовать develop/latest — здесь выбрано develop
-            echo "image_tag=develop" >> "$GITHUB_OUTPUT"
-          elif [[ "${GITHUB_REF}" == refs/heads/release/* ]]; then
-            # Prod-окружение: извлекаем версию из ветки release/x.y.z
-            VERSION="${GITHUB_REF#refs/heads/release/}"
-
-            if [[ -z "${VERSION}" ]]; then
-              echo "Не удалось извлечь версию из ветки ${GITHUB_REF}"
-              exit 1
-            fi
-
-            echo "environment=prod" >> "$GITHUB_OUTPUT"
-            echo "image_tag=${VERSION}" >> "$GITHUB_OUTPUT"
-          else
-            echo "Ветка ${GITHUB_REF} не поддерживается этим workflow"
-            exit 1
-          fi
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install dependencies and build
-        env:
-          # Переменные окружения для сборки (из GitHub Secrets / Environments)
-          # Bitrix (если не заданы — используются значения по умолчанию из src/config/bitrix.ts)
-          VITE_BITRIX_WEBHOOK_URL: ${{ secrets.VITE_BITRIX_WEBHOOK_URL }}
-          VITE_BITRIX_DEMO_MODE: ${{ secrets.VITE_BITRIX_DEMO_MODE }}
-          VITE_FORM_DISABLED: ${{ secrets.VITE_FORM_DISABLED }}
-          # Канал отправки формы: "telegram" | "bitrix", по умолчанию telegram
-          VITE_FORM_SUBMISSION_TARGET: ${{ secrets.VITE_FORM_SUBMISSION_TARGET }}
-          # Telegram (для отправки заявок в бота) - для групп отрицательный ID
-          VITE_TELEGRAM_BOT_TOKEN: ${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}
-          VITE_TELEGRAM_CHAT_ID: ${{ secrets.VITE_TELEGRAM_CHAT_ID }}
-          # S3: host и bucket для загрузки данных (см. src/utils/fetchStaticData.ts)
-          # Примеры:
-          #   VITE_S3_HOST=https://storage.yandexcloud.net
-          #   VITE_S3_BUCKET=stanley-co
-          VITE_S3_HOST: ${{ secrets.VITE_S3_HOST }}
-          VITE_S3_BUCKET: ${{ secrets.VITE_S3_BUCKET }}
-        run: |
-          npm ci
-          npm run build
-          # Копируем dist в github-actions/dist для деплоя
-          rm -rf github-actions/dist
-          mkdir -p github-actions/dist
-          cp -r dist/* github-actions/dist/
-
-      - name: Upload deploy artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: react-deploy
-          path: github-actions/dist
-          retention-days: 1
-
-  # ---------------------- DEV DEPLOY (develop → dev VM) ----------------------
-  deploy-dev:
-    name: Deploy to Dev VPS
-    runs-on: ubuntu-latest
-    needs: build
-    # Запускается только для dev-окружения
-    if: needs.build.outputs.environment == 'dev'
-    # GitHub Environment для dev
-    environment: dev
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download deploy artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: react-deploy
-          path: ./deploy
-
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
-
-      - name: Deploy to Dev VPS
-        env:
-          # Используем существующие секреты (чтобы не ломать текущий деплой)
-          SSH_USER: ${{ secrets.VPS_USER }}
-          SSH_HOST: ${{ secrets.VPS_HOST }}
-          SSH_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-        run: |
-          # Создаем папку на DEV VPS
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "mkdir -p ~/stanley-co/web/github-actions/dist"
-
-          # Копируем готовый фронт + Dockerfile + nginx.conf
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./deploy/* "$SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/dist/"
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no Dockerfile "$SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/Dockerfile"
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no nginx.conf "$SSH_USER@$SSH_HOST:~/stanley-co/web/github-actions/nginx.conf"
-
-          # Сборка и запуск контейнера на DEV VPS (оставляем текущую схему для совместимости)
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" '
-            set -e
-            cd ~/stanley-co/web/github-actions
-            docker stop stanok-landing || true
-            docker rm stanok-landing || true
-            docker rmi stanok-landing:latest || true
-            docker build -t stanok-landing:latest .
-            docker run -d --name stanok-landing -p 4066:80 --network app-network --restart unless-stopped stanok-landing:latest
-          '
-
-  # ---------------------- PROD DEPLOY (release/* → prod VPS) ----------------------
-  deploy-prod:
-    name: Deploy to Prod VPS
-    runs-on: ubuntu-latest
-    needs: build
-    # Запускается только для prod-окружения
-    if: needs.build.outputs.environment == 'prod'
-    # Отдельный GitHub Environment для production
-    environment: production
-    env:
-      IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download deploy artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: react-deploy
-          path: ./deploy
-
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
-
-      - name: Deploy to Prod VPS
-        env:
-          # Полностью отдельный набор секретов для production
-          SSH_USER: ${{ secrets.PROD_VPS_USER }}
-          SSH_HOST: ${{ secrets.PROD_VPS_HOST }}
-          SSH_PASSWORD: ${{ secrets.PROD_VPS_PASSWORD }}
-          IMAGE_TAG: ${{ env.IMAGE_TAG }}
-        run: |
-          if [ -z "$IMAGE_TAG" ]; then
-            echo "IMAGE_TAG is empty, cannot deploy"
-            exit 1
-          fi
-
-          echo "Deploying version $IMAGE_TAG to production"
-
-          # Создаем отдельную папку на PROD VPS, изолированную от dev
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "mkdir -p ~/stanok-landing/prod/github-actions/dist"
-
-          # Копируем готовый фронт + Dockerfile + nginx.conf
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./deploy/* "$SSH_USER@$SSH_HOST:~/stanok-landing/prod/github-actions/dist/"
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no Dockerfile "$SSH_USER@$SSH_HOST:~/stanok-landing/prod/github-actions/Dockerfile"
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no nginx.conf "$SSH_USER@$SSH_HOST:~/stanok-landing/prod/github-actions/nginx.conf"
-
-          # Сборка и запуск контейнера на PROD VPS
-          # Используем версионный тег образа (из ветки release/x.y.z) + latest для удобства
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "
-            set -e
-            cd ~/stanok-landing/prod/github-actions
-
-            # Останавливаем и удаляем старый prod-контейнер (минимальный downtime)
-            docker stop stanok-landing-prod || true
-            docker rm stanok-landing-prod || true
-
-            # Удаляем старый образ с тем же тегом (если был)
-            docker rmi \"stanok-landing:\$IMAGE_TAG\" || true
-
-            # Собираем новый образ с версионным тегом и latest
-            docker build -t \"stanok-landing:\$IMAGE_TAG\" -t stanok-landing:latest .
-
-            # Запускаем новый prod-контейнер
-            docker run -d \
-              --name stanok-landing-prod \
-              -p 80:80 \
-              --network app-network-prod \
-              --restart unless-stopped \
-              \"stanok-landing:\$IMAGE_TAG\"
           "
