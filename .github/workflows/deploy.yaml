@@ -52,15 +52,20 @@ jobs:
       - name: Deploy to DEV Server
         run: |
           rsync -avz --delete \
-            dist/ Dockerfile nginx.conf \
+            dist Dockerfile nginx.conf \
             ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:/home/homic/stanley-co/web/github-actions/
 
           ssh ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} "
-            set -e
-            cd /home/homic/stanley-co/web/github-actions &&
-            docker build -t stanok-landing-dev:latest . &&
-            docker stop stanok-landing-dev || true &&
-            docker rm stanok-landing-dev || true &&
+            set -euo pipefail
+            cd /home/homic/stanley-co/web/github-actions
+
+            docker build -t stanok-landing-dev:latest . 
+            
+            if docker ps -a --format '{{.Names}}' | grep -q '^stanok-landing-dev$'; then
+              docker stop stanok-landing-dev || true
+              docker rm stanok-landing-dev || true
+            fi
+
             docker run -d \
               --name stanok-landing-dev \
               -p ${{ vars.APP_PORT }}:80 \
@@ -118,25 +123,25 @@ jobs:
       - name: Deploy to PROD Server
         run: |
           rsync -avz --delete \
-            dist/ \
+            dist Dockerfile nginx.conf \
             ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:/root/fkit/web/landing/releases/${VERSION}/
 
-          rsync -avz \
-            Dockerfile nginx.conf \
-            ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:/root/fkit/web/landing/
-
           ssh ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} "
-            set -e
+            set -euo pipefail
             cd /root/fkit/web/landing
 
             ln -sfn releases/${VERSION} current
 
             rm -rf dist
-            cp -r releases/${VERSION}/ dist
+            cp -r releases/${VERSION}/dist dist
 
-            docker build -t stanok-landing:${VERSION} -t stanok-landing:latest . &&
-            docker stop stanok-landing-prod || true &&
-            docker rm stanok-landing-prod || true &&
+            docker build -t stanok-landing:${VERSION} -t stanok-landing:latest .
+
+            if docker ps -a --format '{{.Names}}' | grep -q '^stanok-landing-prod$'; then
+              docker stop stanok-landing-prod || true
+              docker rm stanok-landing-prod || true
+            fi
+
             docker run -d \
               --name stanok-landing-prod \
               -p ${{ vars.APP_PORT }}:80 \
