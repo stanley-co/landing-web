@@ -31,6 +31,12 @@
   --background: transparent;
 }
 
+.contactHint {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium, #6b7280);
+  margin: 4px 0 0 0;
+}
+
 .consent {
   font-size: 0.9rem;
   color: var(--ion-color-medium, #6b7280);

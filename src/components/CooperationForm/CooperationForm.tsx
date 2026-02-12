@@ -14,6 +14,7 @@ type FormData = {
   secondName: string;
   lastName: string;
   phone: string;
+  email: string;
   comment: string;
 };
 
@@ -31,6 +32,7 @@ const CooperationForm = ({ onSuccess, showHeader = true, initialProductName = nu
     secondName: '',
     lastName: '',
     phone: '',
+    email: '',
     comment: ''
   });
   const productName = initialProductName ?? undefined;
@@ -72,6 +74,13 @@ const CooperationForm = ({ onSuccess, showHeader = true, initialProductName = nu
     console.log('[CooperationForm] Form submitted with data:', formData);
 
     try {
+      // Проверяем, что указан хотя бы один способ связи
+      if (!formData.phone.trim() && !formData.email.trim()) {
+        setError('Укажите телефон или email, чтобы мы могли с вами связаться.');
+        setIsSubmitting(false);
+        return;
+      }
+
       if (FORM_SUBMISSION_TARGET === 'telegram') {
         const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
         const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
@@ -82,6 +91,7 @@ const CooperationForm = ({ onSuccess, showHeader = true, initialProductName = nu
         const fullName = [formData.lastName, formData.name, formData.secondName].filter(Boolean).join(' ').trim() || '—';
         const company = formData.company || '—';
         const phone = formData.phone || '—';
+        const email = formData.email || '—';
         const comment = formData.comment || '—';
         const productLine = productName ? `🛒 Продукт: ${productName}\n\n` : '';
         const text = `📩 Новая заявка с сайта
@@ -89,6 +99,7 @@ const CooperationForm = ({ onSuccess, showHeader = true, initialProductName = nu
 ${productLine}🏢 Компания: ${company}
 👤 ФИО: ${fullName}
 📞 Телефон: ${phone}
+✉️ Email: ${email}
 
 💬 Комментарий:
 ${comment}`;
@@ -116,6 +127,7 @@ ${comment}`;
           secondName: '',
           lastName: '',
           phone: '',
+          email: '',
           comment: ''
         });
         setIsConsentGiven(false);
@@ -152,6 +164,7 @@ ${comment}`;
           secondName: '',
           lastName: '',
           phone: '',
+          email: '',
           comment: ''
         });
         setIsConsentGiven(false);
@@ -191,6 +204,7 @@ ${comment}`;
           OPENED: 'Y',
           CURRENCY_ID: 'RUB',
           PHONE: formData.phone ? [{ VALUE: formData.phone, VALUE_TYPE: 'WORK' }] : [],
+          EMAIL: formData.email ? [{ VALUE: formData.email, VALUE_TYPE: 'WORK' }] : [],
           COMMENTS: commentsWithProduct,
           SOURCE_ID: 'WEB',
           SOURCE_DESCRIPTION: productName ? `Заявка с сайта (${productName})` : 'Заявка с сайта',
@@ -298,6 +312,7 @@ ${comment}`;
         secondName: '',
         lastName: '',
         phone: '',
+        email: '',
         comment: ''
       });
       setIsConsentGiven(false);
@@ -409,14 +424,27 @@ ${comment}`;
               </IonItem>
             </div>
 
+            <p className={styles.contactHint}>
+              Укажите телефон или email — как вам удобнее, хотя бы одно поле должно быть заполнено.
+            </p>
+
             <IonItem className={styles.formItem}>
-              <IonLabel position="stacked">Телефон *</IonLabel>
+              <IonLabel position="stacked">Телефон</IonLabel>
               <IonInput
                 type="tel"
                 value={formData.phone}
                 onIonInput={(e) => handleInputChange('phone', e.detail.value!)}
-                required
                 placeholder="+7 (999) 555-88-88"
+              />
+            </IonItem>
+
+            <IonItem className={styles.formItem}>
+              <IonLabel position="stacked">Email</IonLabel>
+              <IonInput
+                type="email"
+                value={formData.email}
+                onIonInput={(e) => handleInputChange('email', e.detail.value!)}
+                placeholder="name@example.com"
               />
             </IonItem>
 
