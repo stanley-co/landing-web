@@ -7,6 +7,7 @@ import ArticleBody from '../components/ArticleBody/ArticleBody';
 import ArticleShare from '../components/ArticleShare/ArticleShare';
 import RelatedNews from '../components/RelatedNews/RelatedNews';
 import Footer from '../components/Footer/Footer';
+import DocumentHead from '../components/DocumentHead/DocumentHead';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { News } from '../types/news';
 
@@ -130,6 +131,13 @@ const NewsArticlePage = () => {
 
   return (
     <IonPage>
+      <DocumentHead
+        title={`${article.title} — ФКИТ`}
+        description={article.preview}
+        ogType="article"
+        ogImage={article.image}
+        canonicalPath={`/news/${article.id}`}
+      />
       <PageWrapper>
         <IonContent>
           <ArticleHero

@@ -1,5 +1,6 @@
 import { IonContent, IonPage } from '@ionic/react';
 import PageWrapper from '../components/layout/PageWrapper';
+import DocumentHead from '../components/DocumentHead/DocumentHead';
 import CompanyIntro from '../components/CompanyIntro/CompanyIntro';
 import Certificates from '../components/Certificates/Certificates';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
@@ -9,6 +10,11 @@ import styles from './AboutPage.module.css';
 const AboutPage = () => {
   return (
     <IonPage>
+      <DocumentHead
+        title="О компании — ФКИТ"
+        description="О компании ФКИТ: миссия, сертификаты, сотрудничество. Промышленное оборудование для производства."
+        canonicalPath="/about"
+      />
       <PageWrapper>
         <IonContent>
           {/* Секция "О нас" */}

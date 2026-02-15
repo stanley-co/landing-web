@@ -1,0 +1,10 @@
+# SPA: все запросы к страницам отдаём index.html (200 OK).
+# Принудительный HTTPS и единый домен настраиваются в панели Netlify (HTTPS, Domain redirects).
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
