@@ -2,6 +2,7 @@ import { IonContent, IonPage, IonButton, IonIcon } from '@ionic/react';
 import { homeOutline, arrowBackOutline } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
 import PageWrapper from '../components/layout/PageWrapper';
+import DocumentHead from '../components/DocumentHead/DocumentHead';
 import Footer from '../components/Footer/Footer';
 import styles from './NotFoundPage.module.css';
 
@@ -10,6 +11,7 @@ const NotFoundPage = () => {
 
   return (
     <IonPage>
+      <DocumentHead title="Страница не найдена — ФКИТ" noCanonical />
       <PageWrapper>
         <IonContent>
           <section className={styles.notFound}>

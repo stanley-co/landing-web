@@ -1,6 +1,7 @@
 import { IonContent, IonPage, IonSpinner, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
+import DocumentHead from '../components/DocumentHead/DocumentHead';
 import EquipmentCarousel from '../components/EquipmentCarousel/EquipmentCarousel';
 import EquipmentFilter from '../components/EquipmentFilter/EquipmentFilter';
 import EquipmentLayout from '../components/EquipmentLayout/EquipmentLayout';
@@ -416,6 +417,11 @@ const EquipmentPage = () => {
 
   return (
     <IonPage>
+      <DocumentHead
+        title="Оборудование — ФКИТ"
+        description="Промышленное оборудование: вакуумные эмульгаторы, миксеры, дозаторы, насосы. Каталог и характеристики."
+        canonicalPath="/equipment"
+      />
       <PageWrapper>
         <IonContent>
           <EquipmentCarousel />

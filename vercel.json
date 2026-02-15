@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/((?!assets/|.*\\.(js|css|ico|png|jpg|jpeg|gif|svg|woff2?|json)).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    { "source": "/(.*)", "headers": [{ "key": "X-Content-Type-Options", "value": "nosniff" }] }
+  ],
+  "trailingSlash": false
+}

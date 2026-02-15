@@ -3,6 +3,7 @@ import { searchOutline, calendarOutline } from 'ionicons/icons';
 import { useMemo, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PageWrapper from '../components/layout/PageWrapper';
+import DocumentHead from '../components/DocumentHead/DocumentHead';
 import PageHero from '../components/PageHero/PageHero';
 import NewsGrid from '../components/NewsGrid/NewsGrid';
 import Footer from '../components/Footer/Footer';
@@ -211,6 +212,11 @@ const InformationPage = () => {
 
   return (
     <IonPage>
+      <DocumentHead
+        title="Новости и статьи — ФКИТ"
+        description="Новости компании и полезные статьи о промышленном оборудовании, производстве и технологиях."
+        canonicalPath="/information"
+      />
       <PageWrapper>
         <IonContent>
           <PageHero

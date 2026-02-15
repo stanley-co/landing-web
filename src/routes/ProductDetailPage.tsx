@@ -9,6 +9,7 @@ import ProductDescription from '../components/ProductDescription/ProductDescript
 import ProductVideo from '../components/ProductVideo/ProductVideo';
 import ProductRelatedArticles from '../components/ProductRelatedArticles/ProductRelatedArticles';
 import Footer from '../components/Footer/Footer';
+import DocumentHead from '../components/DocumentHead/DocumentHead';
 import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
 import type { Product } from '../types/product';
 import type { News } from '../types/news';
@@ -150,6 +151,12 @@ const ProductDetailPage = () => {
 
   return (
     <IonPage>
+      <DocumentHead
+        title={`${product.name} — ФКИТ`}
+        description={product.description}
+        ogImage={product.galleryImages?.[0] ? getImageUrl(product.galleryImages[0]) : getImageUrl(product.image)}
+        canonicalPath={`/equipment/${product.id}`}
+      />
       <PageWrapper>
         <IonContent>
           <ProductHeader
