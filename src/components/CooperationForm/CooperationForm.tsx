@@ -425,7 +425,7 @@ ${comment}`;
             </div>
 
             <p className={styles.contactHint}>
-              Укажите телефон или email — как вам удобнее, хотя бы одно поле должно быть заполнено.
+              Укажите телефон или email — хотя бы одно поле должно быть заполнено.
             </p>
 
             <IonItem className={styles.formItem}>
