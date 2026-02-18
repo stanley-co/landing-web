@@ -77,17 +77,12 @@ jobs:
       - name: Send Telegram notification (DEV)
         if: success()
         run: |
-          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | sed 's/"/\\"/g' | head -c 200)
-          MESSAGE="🚀 *Деплой на DEV стенд успешно завершен*
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | tr '\n' ' ' | head -c 200)
 
-Ветка: \`develop\`
-Коммит: \`${{ github.sha }}\`
-Автор: ${{ github.actor }}
-Сообщение: ${COMMIT_MSG}"
-          curl -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d "chat_id=${{ vars.VITE_TELEGRAM_CHAT_ID }}" \
-            -d "text=${MESSAGE}" \
-            -d "parse_mode=Markdown"
+            -d "parse_mode=HTML" \
+            -d "text=<b>🚀 Deploy DEV завершён</b>%0A%0A<b>Branch:</b> develop%0A<b>Commit:</b> <code>${{ github.sha }}</code>%0A<b>Author:</b> ${{ github.actor }}%0A<b>Message:</b> ${COMMIT_MSG}"
 
 # ==========================================================
 # PRODUCTION DEPLOY
@@ -159,17 +154,9 @@ jobs:
       - name: Send Telegram notification (PROD)
         if: success()
         run: |
-          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | sed 's/"/\\"/g' | head -c 200)
-          MESSAGE="🚀 *Деплой на PRODUCTION стенд успешно завершен*
+          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | tr '\n' ' ' | head -c 200)
 
-Ветка: \`release/${VERSION}\`
-Версия: \`${VERSION}\`
-Коммит: \`${{ github.sha }}\`
-Автор: ${{ github.actor }}
-Сообщение: ${COMMIT_MSG}"
-          curl -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d "chat_id=${{ vars.VITE_TELEGRAM_CHAT_ID }}" \
-            -d "text=${MESSAGE}" \
-            -d "parse_mode=Markdown"
-
-
+            -d "parse_mode=HTML" \
+            -d "text=<b>🚀 Deploy PRODUCTION завершён</b>%0A%0A<b>Version:</b> <code>${{ env.VERSION }}</code>%0A<b>Commit:</b> <code>${{ github.sha }}</code>%0A<b>Author:</b> ${{ github.actor }}%0A<b>Message:</b> ${COMMIT_MSG}"
