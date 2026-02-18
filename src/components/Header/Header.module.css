@@ -20,14 +20,32 @@
 .logoContainer {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  padding-left: 12px;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    height: 32px;
+  }
 }
 
 .title {
   font-size: 20px;
   font-weight: 700;
   color: var(--ion-color-primary, #3880ff);
-  padding: 0 16px;
+  padding: 0;
   cursor: pointer;
   margin: 0;
 }

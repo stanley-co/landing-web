@@ -1,5 +1,5 @@
 .pageHero {
-  padding: 100px 16px 120px;
+  padding: 110px 16px;
   background: linear-gradient(135deg, #001B36 0%, #003366 100%);
   background-size: cover;
   background-position: center;
@@ -7,6 +7,10 @@
   position: relative;
   overflow: hidden;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: fit-content;
 }
 
 .overlay {
@@ -21,15 +25,21 @@
 
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .content {
   max-width: 800px;
+  width: 100%;
   margin: 0 auto;
   animation: fadeIn 0.8s ease-out;
+  text-align: center;
 }
 
 @keyframes fadeIn {
@@ -78,7 +88,7 @@
 
 @media (max-width: 768px) {
   .pageHero {
-    padding: 80px 16px 100px;
+    padding: 90px 16px;
   }
 
   .title {

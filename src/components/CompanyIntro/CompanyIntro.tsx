@@ -31,7 +31,7 @@ const CompanyIntro = () => (
               Интеграция оборудования: между машинами; с верхнеуровневыми системами (MES, ERP) — с полной автоматизацией производства; внедрение методологий учёта потерь и управления производством (подбираются индивидуально под задачи заказчика).
             </p>
             <div className={styles.certifications}>
-              <IonChip color="primary">ISO9001:2000</IonChip>
+              <IonChip color="primary">ISO 9001:20000</IonChip>
               <IonChip color="success">CE</IonChip>
               <IonChip color="tertiary">GMP</IonChip>
             </div>

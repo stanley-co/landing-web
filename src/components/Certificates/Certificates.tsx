@@ -3,7 +3,7 @@ import { checkmarkCircleOutline } from 'ionicons/icons';
 import styles from "./Certificates.module.css";
 
 const certificates = [
-  { name: "ISO9001:2000", description: "Система менеджмента качества" },
+  { name: "ISO 9001:20000", description: "Система менеджмента качества" },
   { name: "CE", description: "Европейское соответствие" },
   { name: "GMP", description: "Надлежащая производственная практика" },
   { name: "FDA", description: "Сертификация FDA" },

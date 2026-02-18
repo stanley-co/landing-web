@@ -26,23 +26,6 @@ const EquipmentCard = ({ id, name, image, description }: EquipmentCardProps) => 
           className={`${styles.image} ${imageLoaded ? styles.loaded : ''}`}
           onIonImgDidLoad={() => setImageLoaded(true)}
         />
-        <div className={styles.overlay}>
-          <div className={styles.overlayContent}>
-            <h3 className={styles.overlayTitle}>{name}</h3>
-            <IonButton 
-              fill="solid"
-              color="light"
-              className={styles.overlayButton}
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/equipment/${id}`);
-              }}
-            >
-              Подробнее
-              <IonIcon icon={arrowForwardOutline} slot="end" />
-            </IonButton>
-          </div>
-        </div>
       </div>
       <IonCardHeader>
         <IonCardTitle className={styles.title}>{name}</IonCardTitle>
