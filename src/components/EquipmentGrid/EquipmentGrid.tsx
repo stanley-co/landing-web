@@ -121,7 +121,7 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
                 <IonCol 
                   size="12" 
                   sizeMd="6" 
-                  sizeLg="4"
+                  sizeLg="6"
                   key={product.id}
                   className={styles.col}
                   style={{ animationDelay: `${index * 0.05}s` }}

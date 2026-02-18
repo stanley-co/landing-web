@@ -6,17 +6,19 @@
 .container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
 .col {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   animation: fadeInUp 0.4s ease-out both;
-  padding: 0;
+  padding: 0 8px;
 }
 
 @media (min-width: 992px) {
   .col {
-    padding: 0 16px;
+    padding: 0 12px;
+    margin-bottom: 24px;
   }
 }
 
