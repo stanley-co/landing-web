@@ -17,6 +17,11 @@ const Hero = () => {
       <div className={styles.overlay}></div>
       <div className={styles.container}>
         <div className={styles.content}>
+          <img 
+            src="/logo.svg" 
+            alt="ФКИТ" 
+            className={styles.logo}
+          />
           <h1 className={styles.title}>Промышленное оборудование мирового уровня</h1>
           <p className={styles.subtitle}>
             Производство и поставка смесительных и эмульгирующих систем для фармацевтики, косметики и пищевой промышленности.

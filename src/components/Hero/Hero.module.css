@@ -36,6 +36,22 @@
   animation: fadeIn 1s ease-out;
 }
 
+.logo {
+  height: 80px;
+  width: auto;
+  margin: 0 auto 32px;
+  display: block;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    height: 60px;
+    margin-bottom: 24px;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
