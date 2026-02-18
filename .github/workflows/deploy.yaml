@@ -78,14 +78,15 @@ jobs:
         if: success()
         run: |
           COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | sed 's/"/\\"/g' | head -c 200)
-          curl -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d "chat_id=${{ vars.VITE_TELEGRAM_CHAT_ID }}" \
-            -d "text=🚀 *Деплой на DEV стенд успешно завершен*
+          MESSAGE="🚀 *Деплой на DEV стенд успешно завершен*
 
 Ветка: \`develop\`
 Коммит: \`${{ github.sha }}\`
 Автор: ${{ github.actor }}
-Сообщение: ${COMMIT_MSG}" \
+Сообщение: ${COMMIT_MSG}"
+          curl -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ vars.VITE_TELEGRAM_CHAT_ID }}" \
+            -d "text=${MESSAGE}" \
             -d "parse_mode=Markdown"
 
 # ==========================================================
@@ -159,15 +160,16 @@ jobs:
         if: success()
         run: |
           COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | sed 's/"/\\"/g' | head -c 200)
-          curl -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d "chat_id=${{ vars.VITE_TELEGRAM_CHAT_ID }}" \
-            -d "text=🚀 *Деплой на PRODUCTION стенд успешно завершен*
+          MESSAGE="🚀 *Деплой на PRODUCTION стенд успешно завершен*
 
 Ветка: \`release/${VERSION}\`
 Версия: \`${VERSION}\`
 Коммит: \`${{ github.sha }}\`
 Автор: ${{ github.actor }}
-Сообщение: ${COMMIT_MSG}" \
+Сообщение: ${COMMIT_MSG}"
+          curl -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ vars.VITE_TELEGRAM_CHAT_ID }}" \
+            -d "text=${MESSAGE}" \
             -d "parse_mode=Markdown"
 
 
