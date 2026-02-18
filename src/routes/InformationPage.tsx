@@ -28,7 +28,7 @@ const InformationPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState<string>('all');
-  const [activeTab, setActiveTab] = useState<'news' | 'articles'>('news');
+  const [activeTab, setActiveTab] = useState<'news' | 'articles'>('articles');
 
   useEffect(() => {
     const loadData = async () => {
@@ -229,16 +229,16 @@ const InformationPage = () => {
           <div className={styles.tabsContainer}>
             <div className={styles.tabs}>
               <IonChip
-                className={`${styles.tabChip} ${activeTab === 'news' ? styles.tabChipActive : ''}`}
-                onClick={() => setActiveTab('news')}
-              >
-                Новости компании
-              </IonChip>
-              <IonChip
                 className={`${styles.tabChip} ${activeTab === 'articles' ? styles.tabChipActive : ''}`}
                 onClick={() => setActiveTab('articles')}
               >
                 Полезные статьи
+              </IonChip>
+              <IonChip
+                className={`${styles.tabChip} ${activeTab === 'news' ? styles.tabChipActive : ''}`}
+                onClick={() => setActiveTab('news')}
+              >
+                Новости компании
               </IonChip>
             </div>
           </div>

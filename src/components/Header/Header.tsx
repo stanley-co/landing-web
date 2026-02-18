@@ -216,8 +216,8 @@ const Header = () => {
   ];
 
   const informationSections = [
-    { name: 'Новости компании', anchor: 'news' },
     { name: 'Полезные статьи', anchor: 'articles' },
+    { name: 'Новости компании', anchor: 'news' },
   ];
 
   const aboutSections = [
