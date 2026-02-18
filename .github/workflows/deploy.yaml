@@ -82,7 +82,7 @@ jobs:
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d "chat_id=${{ vars.VITE_TELEGRAM_CHAT_ID }}" \
             -d "parse_mode=HTML" \
-            -d "text=<b>🚀 Deploy DEV завершён</b>%0A%0A<b>Branch:</b> develop%0A<b>Commit:</b> <code>${{ github.sha }}</code>%0A<b>Author:</b> ${{ github.actor }}%0A<b>Message:</b> ${COMMIT_MSG}"
+            -d "text=<b>🚀 Deploy DEV завершён успешно</b>%0A%0A<b>Branch:</b> develop%0A<b>Commit:</b> <code>${{ github.sha }}</code>%0A<b>Author:</b> ${{ github.actor }}%0A<b>Message:</b> ${COMMIT_MSG}"
 
 # ==========================================================
 # PRODUCTION DEPLOY
@@ -159,4 +159,4 @@ jobs:
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.VITE_TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d "chat_id=${{ vars.VITE_TELEGRAM_CHAT_ID }}" \
             -d "parse_mode=HTML" \
-            -d "text=<b>🚀 Deploy PRODUCTION завершён</b>%0A%0A<b>Version:</b> <code>${{ env.VERSION }}</code>%0A<b>Commit:</b> <code>${{ github.sha }}</code>%0A<b>Author:</b> ${{ github.actor }}%0A<b>Message:</b> ${COMMIT_MSG}"
+            -d "text=<b>🚀 Deploy PRODUCTION завершён успешно</b>%0A%0A<b>Version:</b> <code>${{ env.VERSION }}</code>%0A<b>Commit:</b> <code>${{ github.sha }}</code>%0A<b>Author:</b> ${{ github.actor }}%0A<b>Message:</b> ${COMMIT_MSG}"
