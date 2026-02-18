@@ -111,6 +111,51 @@
   color: var(--ion-color-medium, #666);
 }
 
+.addressNote {
+  font-size: 0.875rem;
+  color: var(--ion-color-medium-tint, #888);
+  margin: 8px 0 0 0;
+  font-style: italic;
+}
+
+.phoneList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.phoneItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: var(--ion-color-light, #f4f5f8);
+  color: var(--ion-color-dark, #1a202c);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.phoneItem:hover {
+  background: var(--ion-color-primary-tint, #e8f0fe);
+  border-color: var(--ion-color-primary, #3880ff);
+  color: var(--ion-color-primary-shade, #2d6cc0);
+  transform: translateX(4px);
+}
+
+.phoneIcon {
+  font-size: 1.25rem;
+  color: var(--ion-color-primary, #3880ff);
+  flex-shrink: 0;
+}
+
+.phoneNumber {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .rutubeLogo {
   height: 32px;
   width: auto;

@@ -17,53 +17,36 @@ const ContactInfo = () => {
         
         <IonGrid>
           <IonRow>
-            <IonCol size="12" sizeMd="6" sizeLg="3">
+            <IonCol size="12" sizeMd="6">
               <IonCard className={styles.contactCard}>
                 <IonCardHeader>
                   <IonIcon icon={locationOutline} className={styles.icon} />
-                  <IonCardTitle className={styles.cardTitle}>Физический адрес</IonCardTitle>
+                  <IonCardTitle className={styles.cardTitle}>Адрес</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
                   <p className={styles.text}>{ADDRESS}</p>
+                  <p className={styles.addressNote}>Фактический и юридический адрес</p>
                 </IonCardContent>
               </IonCard>
             </IonCol>
-            
-            <IonCol size="12" sizeMd="6" sizeLg="3">
-              <IonCard className={styles.contactCard}>
-                <IonCardHeader>
-                  <IonIcon icon={locationOutline} className={styles.icon} />
-                  <IonCardTitle className={styles.cardTitle}>Юридический адрес</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  <p className={styles.text}>{ADDRESS}</p>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-            
-            <IonCol size="12" sizeMd="6" sizeLg="3">
-              <IonCard className={styles.contactCard}>
-                <IonCardHeader>
-                  <IonIcon icon={locationOutline} className={styles.icon} />
-                  <IonCardTitle className={styles.cardTitle}>Почтовый адрес</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  <p className={styles.text}>{ADDRESS}</p>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-            
-            <IonCol size="12" sizeMd="6" sizeLg="3">
+
+            <IonCol size="12" sizeMd="6">
               <IonCard className={styles.contactCard}>
                 <IonCardHeader>
                   <IonIcon icon={callOutline} className={styles.icon} />
                   <IonCardTitle className={styles.cardTitle}>Телефоны</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <p className={styles.text}>
-                    <a href="tel:+79534293594" className={styles.link}>+7 953 429-35-94</a><br />
-                    <a href="tel:+79122892265" className={styles.link}>+7 912 289-22-65</a>
-                  </p>
+                  <div className={styles.phoneList}>
+                    <a href="tel:+79534293594" className={styles.phoneItem}>
+                      <IonIcon icon={callOutline} className={styles.phoneIcon} />
+                      <span className={styles.phoneNumber}>+7 953 429-35-94</span>
+                    </a>
+                    <a href="tel:+79122892265" className={styles.phoneItem}>
+                      <IonIcon icon={callOutline} className={styles.phoneIcon} />
+                      <span className={styles.phoneNumber}>+7 912 289-22-65</span>
+                    </a>
+                  </div>
                 </IonCardContent>
               </IonCard>
             </IonCol>
