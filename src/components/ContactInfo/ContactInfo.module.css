@@ -57,14 +57,19 @@
 }
 
 .text {
-  font-size: 1rem;
-  color: var(--ion-color-medium, #666);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ion-color-dark, #1a202c);
   line-height: 1.8;
   margin: 0;
 }
 
 .link {
   color: var(--ion-color-primary, #3880ff);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -109,11 +114,16 @@
 
 .label {
   color: var(--ion-color-medium, #666);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .addressNote {
-  font-size: 0.875rem;
-  color: var(--ion-color-medium-tint, #888);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ion-color-dark, #1a202c);
   margin: 8px 0 0 0;
   font-style: italic;
 }
@@ -154,6 +164,15 @@
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.02em;
+  color: var(--ion-color-dark, #1a202c);
+}
+
+/* Перебиваем Ionic .card-content-md p для текста адреса и телефонов */
+.contactCard .phoneNumber {
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em;
+  color: var(--ion-color-dark, #1a202c);
 }
 
 .rutubeLogo {
