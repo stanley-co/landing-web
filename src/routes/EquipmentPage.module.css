@@ -15,16 +15,12 @@
 .equipmentSection {
   padding: 32px 0;
   scroll-margin-top: 80px;
-  background: var(--ion-background-color, #f7f8fa);
+  background: transparent;
   position: relative;
 }
 
 .equipmentSection:first-of-type {
   padding-top: 24px;
-}
-
-.equipmentSection:nth-child(even) {
-  background: white;
 }
 
 .equipmentSection:not(:last-child)::after {

@@ -1,6 +1,6 @@
 .company {
   padding: 80px 16px;
-  background: var(--ion-background-color, #f7f8fa);
+  background: transparent;
 }
 
 .container {

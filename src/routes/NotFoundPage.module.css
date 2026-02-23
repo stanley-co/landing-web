@@ -1,6 +1,6 @@
 .notFound {
   padding: 120px 16px 80px;
-  background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%);
+  background: transparent;
   min-height: 70vh;
   display: flex;
   align-items: center;
