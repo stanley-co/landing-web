@@ -41,6 +41,7 @@
   overflow: hidden;
   background: #f7f8fa;
   position: relative;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {
@@ -123,7 +124,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 72px;
+  max-height: 72px; /* жёстко 3 строки */
 }
 
 .button {

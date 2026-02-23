@@ -1,6 +1,6 @@
 .productsPreview {
   padding: 80px 16px;
-  background: var(--ion-background-color, #f7f8fa);
+  background: transparent;
 }
 
 .container {
@@ -37,6 +37,7 @@
   height: 200px;
   overflow: hidden;
   background: #f7f8fa;
+  cursor: pointer;
 }
 
 .productImage {
@@ -69,7 +70,12 @@
   font-size: 0.875rem;
   line-height: 1.5;
   margin-bottom: 16px;
-  min-height: 60px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.5em;
 }
 
 .button {

@@ -18,7 +18,19 @@ const EquipmentCard = ({ id, name, image, description }: EquipmentCardProps) => 
 
   return (
     <IonCard className={styles.card}>
-      <div className={styles.imageContainer}>
+      <div
+        className={styles.imageContainer}
+        role="button"
+        tabIndex={0}
+        onClick={() => navigate(`/equipment/${id}`)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            navigate(`/equipment/${id}`);
+          }
+        }}
+        aria-label={`Перейти к карточке оборудования: ${name}`}
+      >
         {!imageLoaded && <div className={styles.imagePlaceholder} />}
         <IonImg 
           src={image} 

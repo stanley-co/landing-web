@@ -10,7 +10,6 @@ const ContactCTA = () => {
     <section id="contact-cta" className={styles.contactCTA}>
       <div className={styles.container}>
         <div className={styles.content}>
-          <h2 className={styles.title}>Готовы начать сотрудничество?</h2>
           <p className={styles.subtitle}>
             Свяжитесь с нами для консультации и получения персонального предложения
           </p>

@@ -24,8 +24,7 @@ const ContactInfo = () => {
                   <IonCardTitle className={styles.cardTitle}>Адрес</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <p className={styles.text}>{ADDRESS}</p>
-                  <p className={styles.addressNote}>Фактический и юридический адрес</p>
+                  <p className={styles.phoneNumber}>{ADDRESS}</p>
                 </IonCardContent>
               </IonCard>
             </IonCol>

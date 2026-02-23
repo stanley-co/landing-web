@@ -1,6 +1,6 @@
 .breadcrumbs {
   padding: 16px 0;
-  background: var(--ion-background-color, #ffffff);
+  background: transparent;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -54,7 +54,7 @@
 
 .pageHeader {
   padding: 32px 16px;
-  background: var(--ion-background-color, #ffffff);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.85));
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -73,7 +73,7 @@
 
 .filters {
   padding: 24px 16px;
-  background: var(--ion-background-color, #ffffff);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.85));
   border-bottom: 1px solid #e5e7eb;
 }
 

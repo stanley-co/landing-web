@@ -65,7 +65,14 @@ const ProductsPreview = () => {
             {products.map((p) => (
               <IonCol size="12" sizeMd="6" sizeLg="3" key={p.id}>
                 <IonCard className={styles.productCard}>
-                  <div className={styles.imageContainer}>
+                  <div
+                    className={styles.imageContainer}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => navigate(`/equipment/${p.id}`)}
+                    onKeyDown={(e) => e.key === 'Enter' && navigate(`/equipment/${p.id}`)}
+                    aria-label={`Перейти к карточке: ${p.name}`}
+                  >
                     <IonImg src={p.image} alt={p.name} className={styles.productImage} />
                   </div>
                   <IonCardHeader>
