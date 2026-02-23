@@ -20,6 +20,7 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  align-self: center;
 }
 
 .companyImage {
@@ -48,8 +49,29 @@
   color: var(--ion-color-medium, #6b7280);
   line-height: 1.6;
   font-size: 1.125rem;
-  text-align: center;
+  text-align: left;
   margin-bottom: 24px;
+}
+
+.descriptionHeading {
+  color: var(--ion-color-dark, #1a202c);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 8px 0 8px;
+  text-align: left;
+}
+
+.descriptionList {
+  margin: 0 0 16px;
+  padding-left: 1.25rem;
+  color: var(--ion-color-medium, #6b7280);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.descriptionList li + li {
+  margin-top: 4px;
 }
 
 .certifications {
