@@ -145,8 +145,8 @@ jobs:
             # Обновляем симлинк
             ln -sfn releases/${VERSION}/dist current
 
-            # reload nginx без даунтайма
-            docker exec nginx nginx -s reload
+            # Перезапускаем контейнер nginx, чтобы применить изменения
+            docker restart nginx
           "
 
       - name: Send Telegram notification (PROD)
