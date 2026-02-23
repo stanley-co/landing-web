@@ -37,13 +37,9 @@ const ContactInfo = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <div className={styles.phoneList}>
-                    <a href="tel:+79534293594" className={styles.phoneItem}>
+                    <a href="tel:+79150133609" className={styles.phoneItem}>
                       <IonIcon icon={callOutline} className={styles.phoneIcon} />
-                      <span className={styles.phoneNumber}>+7 953 429-35-94</span>
-                    </a>
-                    <a href="tel:+79122892265" className={styles.phoneItem}>
-                      <IonIcon icon={callOutline} className={styles.phoneIcon} />
-                      <span className={styles.phoneNumber}>+7 912 289-22-65</span>
+                      <span className={styles.phoneNumber}>+7 915 013 36-09</span>
                     </a>
                   </div>
                 </IonCardContent>
