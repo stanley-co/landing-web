@@ -35,7 +35,7 @@ const Footer = () => {
                 <h3 className={styles.sectionTitle}>Контакты</h3>
                 <div className={styles.contactInfo}>
                   <p><strong>Адрес:</strong> Екатеринбург, ул. Лучистая 4</p>
-                  <p><strong>Телефоны:</strong> +7 953 429-35-94, +7 912 289-22-65</p>
+                  <p><strong>Телефоны:</strong> +7 915 013 36-09</p>
                   <p><strong>Отдел продаж:</strong> <a href="mailto:sales@kitexp.ru" className={styles.mailLink}>sales@kitexp.ru</a></p>
                   <p><strong>Общие вопросы:</strong> <a href="mailto:info@kitexp.ru" className={styles.mailLink}>info@kitexp.ru</a></p>
                 </div>
