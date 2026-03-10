@@ -63,7 +63,7 @@ const NewsSubscribeCTA = () => {
                       <span>
                         Я соглашаюсь с{' '}
                         <a
-                          href={getS3FileUrl('docs/privacy/processingPersonalData.pdf')}
+                          href="/privacy-policy"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
