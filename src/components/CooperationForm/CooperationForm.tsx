@@ -3,7 +3,6 @@ import { sendOutline, checkmarkCircleOutline } from 'ionicons/icons';
 import { useState, useEffect } from 'react';
 import { BITRIX_WEBHOOK_URL, isBitrixConfigured, isDemoMode, isFormDisabled } from '../../config/bitrix';
 import { parseFormError, formatErrorDetails } from '../../utils/errorHandler';
-import { getS3FileUrl } from '../../utils/fetchStaticData';
 import styles from './CooperationForm.module.css';
 
 const FORM_SUBMISSION_TARGET = (import.meta.env.VITE_FORM_SUBMISSION_TARGET === 'bitrix' ? 'bitrix' : 'telegram') as 'telegram' | 'bitrix';
