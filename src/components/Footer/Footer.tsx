@@ -49,7 +49,11 @@ const Footer = () => {
           </IonRow>
         </IonGrid>
         <div className={styles.bottomBar}>
-          <p className={styles.rights}>© 2025 ФКИТ / Honemix. Все права защищены</p>
+          <p className={styles.rights}>
+            © 2025-2026 Все права защищены. Вся представленная на сайте информация не является публичной офертой,
+            определяемой статьей 437 ГК РФ. Для получения подробной информации свяжитесь с нашим менеджером{' '}
+            <a href="mailto:sales@kitexp.ru" className={styles.mailLink}>sales@kitexp.ru</a>.
+          </p>
         </div>
       </div>
     </footer>
