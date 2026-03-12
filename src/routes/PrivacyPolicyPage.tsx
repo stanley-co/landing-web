@@ -164,7 +164,7 @@ const PrivacyPolicyPage = () => (
                 </p>
                 <ul className={styles.list}>
                   <li>Email: <a href="mailto:info@kitexp.ru" className={styles.link}>info@kitexp.ru</a></li>
-                  <li>Телефон: <a href="tel:+79122892265" className={styles.link}>+7 912 289 22-65</a></li>
+                  <li>Телефон: <a href="tel:+79122892265" className={styles.link}>+7 915 013 36-09</a></li>
                 </ul>
               </section>
             </div>
