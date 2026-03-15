@@ -43,6 +43,14 @@ const ContactInfo = () => {
                     </a>
                   </div>
                 </IonCardContent>
+                <IonCardContent>
+                <div className={styles.phoneList}>
+                    <a href="tel:+79023010971" className={styles.phoneItem}>
+                      <IonIcon icon={callOutline} className={styles.phoneIcon} />
+                      <span className={styles.phoneNumber}>+7 902 301 09 71</span>
+                    </a>
+                  </div>
+                </IonCardContent>
               </IonCard>
             </IonCol>
           </IonRow>
