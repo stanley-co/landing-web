@@ -40,11 +40,11 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| BE-001 | w-backend-service | Initialize Maven/Spring Boot Java 21 modular-monolith foundation and wrapper | CT-005, IN-005 | READY | Use Docker Maven/Temurin 21 because host `java` is unavailable. |
-| BE-002 | w-backend-service | Add profiles, typed configuration, PostgreSQL connection, and Flyway foundation | BE-001 | NOT_STARTED | Local DB is available at Compose port 5432. |
-| BE-003 | w-backend-service | Add standard error response, validation, and request-ID filter | BE-001, CT-002 | NOT_STARTED | Must match `ErrorResponse` contract. |
-| BE-004 | w-backend-service | Add structured logging, Actuator health, and baseline metrics | BE-001 | NOT_STARTED | Enables `IN-006`. |
-| BE-005 | w-backend-service | Add JUnit, Mockito, MockMvc, Testcontainers foundation | BE-001, BE-002 | NOT_STARTED | Run with Docker. |
+| BE-001 | w-backend-service | Initialize Maven/Spring Boot Java 21 modular-monolith foundation and wrapper | CT-005, IN-005 | DONE | `a9caea9`; Docker Maven/Temurin 21 `verify` and local JAR startup passed. |
+| BE-002 | w-backend-service | Add profiles, typed configuration, PostgreSQL connection, and Flyway foundation | BE-001 | DONE | `a9caea9`; typed app config, Flyway V1, local PostgreSQL startup passed. |
+| BE-003 | w-backend-service | Add standard error response, validation, and request-ID filter | BE-001, CT-002 | DONE | `a9caea9`; contract-aligned error model and 3 request-ID tests. |
+| BE-004 | w-backend-service | Add structured logging, Actuator health, and baseline metrics | BE-001 | DONE | `a9caea9`; health is `200 UP`, JSON access event includes request ID. |
+| BE-005 | w-backend-service | Add JUnit, Mockito, MockMvc, Testcontainers foundation | BE-001, BE-002 | READY | Next: add reusable PostgreSQL Testcontainers base and a Flyway integration test. |
 
 ## Phase 4: Internal gateway / edge layer
 

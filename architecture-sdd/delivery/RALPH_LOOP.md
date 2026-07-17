@@ -82,7 +82,7 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`BE-001` is the active next task: initialize the Java 21 backend foundation in
-`w-backend-service`. Host Java is absent, so Maven/Temurin 21 Docker execution is
-the approved execution environment. It depends on completed contracts and local
-infrastructure.
+`BE-005` is the active next task: add reusable Testcontainers and MockMvc
+foundation in `w-backend-service`. Host Java is absent, so Maven/Temurin 21 Docker
+execution is the approved execution environment. It follows the completed backend
+foundation commit `a9caea9`.
