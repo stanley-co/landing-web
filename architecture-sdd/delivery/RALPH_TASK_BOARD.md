@@ -91,7 +91,7 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | CO-001 | w-backend-service | Model NEWS and ARTICLE with immutable external IDs and structured blocks | BE-002, ST-001, CT-003 | DONE | `985c7c1`; V10 preserves external IDs, required category string, cover/image media protection, and exactly paragraph/image/quote/link blocks; Docker Maven verify passed 38 tests. |
 | CO-002 | w-backend-service | Add public content list/detail and related-content API | CO-001, ED-001 | DONE | `073808a`; active NEWS/ARTICLE filtering and ID detail preserve `/news/:id`; active type-compatible relations receive optional summaries and unresolved IDs remain intact. Full Docker Maven verify passed. |
 | CO-003 | w-backend-service | Add admin content CRUD and ordered block editing API | CO-001, AU-003, CT-004 | DONE | `ee69c39`; protected list/create/read/update/archive, immutable IDs, typed `imageId` blocks, atomic ordered replacement, audit, and reader/write RBAC. Full Docker Maven verify passed. |
-| PA-001 | w-backend-service | Add only SDD-approved managed pages and settings | BE-002, AU-003, CT-003 | IN_PROGRESS | Define actual About/Contacts/Privacy boundary and limited settings. No universal page builder. |
+| PA-001 | w-backend-service | Add only SDD-approved managed pages and settings | BE-002, AU-003, CT-003 | READY | Contract must first narrow actual About/Contacts/Privacy ownership; no universal page builder. |
 | PA-002 | w-backend-service | Add contacts and explicitly managed menu API | PA-001, CT-003 | NOT_STARTED | Do not migrate technical routes/config. |
 | SL-001 | w-backend-service | Add carousel slide model, public API, admin CRUD/reorder | ST-001, AU-003, CT-003, CT-004 | NOT_STARTED | Supports image, mobile image, action, order, active. |
 | CO-004 | w-backend-service | Add content/page/slide integration and contract tests | CO-002, CO-003, PA-002, SL-001, BE-005 | NOT_STARTED | Verify ID compatibility and ordering. |
@@ -127,7 +127,7 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| AD-001 | w-admin-web | Initialize Vite/React/TypeScript/Ant Design foundation with generated client | CT-005, AU-002 | NOT_STARTED | ADR-007 stack. |
+| AD-001 | w-admin-web | Initialize Vite/React/TypeScript/Ant Design foundation with generated client | CT-005, AU-002 | IN_PROGRESS | Independent critical path to a usable admin; auth and content/catalog contracts are available. |
 | AD-002 | w-admin-web | Implement login, auth/session state, router, shell, error boundary, permission guards | AD-001, AU-003 | NOT_STARTED | Role-aware navigation. |
 | AD-003 | w-admin-web | Implement category and product editors with media, specs, advantages, gallery, video, relations, archive/reorder | AD-002, CA-005, ST-002 | NOT_STARTED | No raw JSON editor. |
 | AD-004 | w-admin-web | Implement media, document, and certificate management | AD-002, ST-003 | NOT_STARTED | Upload progress and safe-delete feedback. |
