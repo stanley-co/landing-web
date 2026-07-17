@@ -81,8 +81,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | CA-002 | w-backend-service | Model products with immutable external IDs and core descriptions/status/order; add active category counts and product-reference archive guard | CA-001, ST-001 | DONE | `c588d43`; V8 active counts use PostgreSQL and archive rejects any product reference. |
 | CA-003 | w-backend-service | Add ordered specs, advantages, gallery, main media, video, and related content | CA-002, ST-001 | DONE | `72feba4`; V9 atomic relation replacement/read projection, safe media usage, Rutube and duplicate-gallery validation; Docker Maven verify passed with 31 tests. |
 | CA-004 | w-backend-service | Implement public catalog list/detail/search/filter/category APIs | CA-003, CT-003, ED-001 | DONE | `17e65e7`; active list/search/filter and one detail aggregate with strict query bounds; full Docker Maven verify passed 35 tests. Related summaries remain a `CO-002` enrichment. |
-| CA-005 | w-backend-service | Implement admin catalog CRUD, archive, and reordering APIs | CA-003, AU-003, CT-004 | IN_PROGRESS | `b643d52` aligns typed related content, full description, derived SEO, and batch product reorder before backend implementation. |
-| CA-006 | w-backend-service | Add catalog integration and contract tests | CA-004, CA-005, BE-005 | NOT_STARTED | IDs, ordering, archive, relations, permissions. |
+| CA-005 | w-backend-service | Implement admin catalog CRUD, archive, and reordering APIs | CA-003, AU-003, CT-004 | DONE | `35db438`; feature owner lifecycle API, reader read-only RBAC, immutable IDs, media/spec/advantage/video/related-content relations, archive and reorder; full Docker Maven verify passed 36 tests. |
+| CA-006 | w-backend-service | Add catalog integration and contract tests | CA-004, CA-005, BE-005 | READY | Verify executable OpenAPI fields/routes against catalog HTTP behavior, IDs, ordering, archive, relations, and permissions. |
 
 ## Phase 8: Content, pages, carousel, contacts
 
