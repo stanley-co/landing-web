@@ -1,5 +1,9 @@
 # Implementation Roadmap
 
+Execution is managed by [RALPH_LOOP.md](RALPH_LOOP.md) and the current
+[RALPH_TASK_BOARD.md](RALPH_TASK_BOARD.md). The task board is the live status
+ledger; this roadmap remains the higher-level phase description.
+
 Task format:
 
 ```text
@@ -80,4 +84,3 @@ Result
 ## Phase 13 VPS Baseline
 
 - `INFRA-VPS-001`, `INFRA-BACKUP-001`.
-
