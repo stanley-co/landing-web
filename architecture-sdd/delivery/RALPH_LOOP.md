@@ -82,5 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`CA-001` is the active next task: implement the ordered product category hierarchy
-and category counts while preserving the landing's `globalCategory/category` grouping.
+`CA-002` is the active next task: implement products with immutable external IDs,
+real category counts, and product-reference archive protection while preserving
+the landing's `globalCategory/category` grouping.
