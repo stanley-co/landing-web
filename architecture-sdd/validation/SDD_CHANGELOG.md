@@ -1,5 +1,15 @@
 # SDD Changelog
 
+## 2026-07-18 Recursive Admin Category Status
+
+- Corrected `AdminProductCategoryDto`: child nodes are now recursive admin
+  nodes, not public `ProductCategoryDto` nodes.
+- This matches the backend response and ensures category editors receive the
+  required `DRAFT`/`ACTIVE`/`ARCHIVED` status at every hierarchy level.
+- Public category data remains active-only and contains no lifecycle metadata;
+  stable IDs and the `globalCategory/category` tree are unchanged.
+- Contract correction: `w-api-contracts` commit `44b306c`.
+
 ## 2026-07-18 Content Editor Contract Correction
 
 - Separated public rendered `ContentBlockDto.src` from admin

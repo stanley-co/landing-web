@@ -39,10 +39,13 @@ Core DTOs:
 - `activeProductCount`;
 - stable anchor/display name compatibility.
 
-`AdminProductCategoryDto` extends the public tree node with `status`. Category
-creation uses an immutable explicit ID; updates and archive operations address
-that ID in the path and must not replace it. A category may be archived only
-after its products and child categories have been moved or archived.
+`AdminProductCategoryDto` is a recursive administrative tree node. Every node,
+including every child category, contains `status`; it must not reuse
+`ProductCategoryDto.children`, because the public tree deliberately omits
+lifecycle state. Category creation uses an immutable explicit ID; updates and
+archive operations address that ID in the path and must not replace it. A
+category may be archived only after its products and child categories have been
+moved or archived.
 
 Compatibility:
 

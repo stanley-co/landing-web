@@ -824,12 +824,18 @@ components:
           type: array
           items: { $ref: '#/components/schemas/ProductCategoryDto' }
     AdminProductCategoryDto:
-      allOf:
-        - $ref: '#/components/schemas/ProductCategoryDto'
-        - type: object
-          required: [status]
-          properties:
-            status: { $ref: '#/components/schemas/Status' }
+      type: object
+      required: [id, name, sortOrder, activeProductCount, status, children]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        anchor: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+        activeProductCount: { type: integer, minimum: 0 }
+        status: { $ref: '#/components/schemas/Status' }
+        children:
+          type: array
+          items: { $ref: '#/components/schemas/AdminProductCategoryDto' }
     ContentListItemDto:
       type: object
       required: [id, type, title, date, category, image, preview]
