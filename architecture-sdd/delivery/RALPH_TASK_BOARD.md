@@ -79,9 +79,9 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | --- | --- | --- | --- | --- | --- |
 | CA-001 | w-backend-service | Model ordered global/category tree, stable IDs, lifecycle and public/admin tree API | BE-002, AU-003, CT-003 | DONE | `1f843a4`; V7, active-only public tree, manual order, RBAC, audit, 29-test Docker Maven verify. |
 | CA-002 | w-backend-service | Model products with immutable external IDs and core descriptions/status/order; add active category counts and product-reference archive guard | CA-001, ST-001 | DONE | `c588d43`; V8 active counts use PostgreSQL and archive rejects any product reference. |
-| CA-003 | w-backend-service | Add ordered specs, advantages, gallery, main media, video, and related content | CA-002, ST-001 | DONE | V9 plus pending backend commit: atomic relation replacement/read projection, safe media usage, Rutube and duplicate-gallery validation; Docker Maven verify 31 tests. |
-| CA-004 | w-backend-service | Implement public catalog list/detail/search/filter/category APIs | CA-003, CT-003, ED-001 | READY | Detail remains one response. |
-| CA-005 | w-backend-service | Implement admin catalog CRUD, archive, and reordering APIs | CA-003, AU-003, CT-004 | NOT_STARTED | Public ID immutable after creation. |
+| CA-003 | w-backend-service | Add ordered specs, advantages, gallery, main media, video, and related content | CA-002, ST-001 | DONE | `72feba4`; V9 atomic relation replacement/read projection, safe media usage, Rutube and duplicate-gallery validation; Docker Maven verify passed with 31 tests. |
+| CA-004 | w-backend-service | Implement public catalog list/detail/search/filter/category APIs | CA-003, CT-003, ED-001 | DONE | `17e65e7`; active list/search/filter and one detail aggregate with strict query bounds; full Docker Maven verify passed 35 tests. Related summaries remain a `CO-002` enrichment. |
+| CA-005 | w-backend-service | Implement admin catalog CRUD, archive, and reordering APIs | CA-003, AU-003, CT-004 | READY | Public ID immutable after creation. |
 | CA-006 | w-backend-service | Add catalog integration and contract tests | CA-004, CA-005, BE-005 | NOT_STARTED | IDs, ordering, archive, relations, permissions. |
 
 ## Phase 8: Content, pages, carousel, contacts
@@ -140,7 +140,7 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | --- | --- | --- | --- | --- | --- |
 | FE-001 | landing-web | Add generated client and API configuration without changing routes/UI | CT-005, ED-002 | NOT_STARTED | Preserve existing fallback/loading/error states. |
 | FE-002 | landing-web | Move site settings, menu, carousel, categories, and catalog list to public API | FE-001, CA-004, SL-001, PA-002 | NOT_STARTED | Remove only replaced direct S3 JSON fetches. |
-| FE-003 | landing-web | Move product detail/search to public API | FE-002, CA-004 | NOT_STARTED | Preserve ID route and full detail rendering. |
+| FE-003 | landing-web | Move product detail/search to public API | FE-002, CA-004, CO-002 | NOT_STARTED | Preserve ID route and full detail rendering; related article cards require content summaries. |
 | FE-004 | landing-web | Move news/articles list and `/news/:id` detail to public API | FE-001, CO-002 | NOT_STARTED | Do not require slug. |
 | FE-005 | landing-web | Move pages, contacts, documents/certificates, and lead forms to public API | FE-001, PA-002, ST-003, LD-002 | NOT_STARTED | Remove direct Telegram/Bitrix path only here. |
 | FE-006 | landing-web | Integrate legacy `/home` compatibility API and test all critical routes | FE-005, LE-001 | NOT_STARTED | Legacy blocks remain visible. |

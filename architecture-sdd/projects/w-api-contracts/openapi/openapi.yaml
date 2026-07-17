@@ -760,7 +760,11 @@ components:
             videoUrl: { type: string, format: uri }
             relatedContent:
               type: array
-              items: { $ref: '#/components/schemas/ContentListItemDto' }
+              description: >-
+                Ordered preserved references from the legacy product dataset. The optional
+                summary is populated after the content module is available; consumers that
+                render related-material cards must wait for that enrichment.
+              items: { $ref: '#/components/schemas/ProductRelatedContentDto' }
             seo: { $ref: '#/components/schemas/SeoDto' }
     ProductSpecDto:
       type: object
@@ -777,6 +781,14 @@ components:
         title: { type: string }
         description: { type: string }
         sortOrder: { type: integer, minimum: 0 }
+    ProductRelatedContentDto:
+      type: object
+      required: [id, type, sortOrder]
+      properties:
+        id: { type: string, description: Existing public NEWS or ARTICLE ID. }
+        type: { $ref: '#/components/schemas/ContentType' }
+        sortOrder: { type: integer, minimum: 0 }
+        summary: { $ref: '#/components/schemas/ContentListItemDto' }
     ProductCategoryDto:
       type: object
       required: [id, name, sortOrder, activeProductCount, children]

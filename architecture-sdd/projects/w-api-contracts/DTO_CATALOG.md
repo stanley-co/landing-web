@@ -22,7 +22,9 @@ Core DTOs:
 - ordered `specs` key/value rows or a map preserving arbitrary keys;
 - ordered `advantages` with `icon`, `title`, `description`;
 - optional `videoUrl`;
-- related article summaries by existing content ID;
+- ordered related-content references by existing content ID and type. `summary` is
+  optional until `CO-002` resolves the reference against the content module; the
+  public frontend must not migrate the related-material cards before that task;
 - `seo` derived from product fields where explicit SEO is absent.
 
 `ProductCardDto` must include `id`, `name`, `globalCategory`, `category`, `image`, `description`.
@@ -45,3 +47,12 @@ Compatibility:
 - public identifier is existing `id`;
 - slug is not required;
 - `materialsAndNews.atricles` is migration input only and never appears in public DTO.
+
+## CA-004 compatibility boundary
+
+The catalog relation table is introduced before the NEWS/ARTICLE tables. Therefore
+`ProductDetailDto.relatedContent` preserves every legacy relationship as
+`ProductRelatedContentDto` (`id`, `type`, `sortOrder`) immediately. `summary` is
+optional and is populated by `CO-002`; this is an additive, backward-compatible
+enrichment. `FE-003` depends on both `CA-004` and `CO-002` because the existing
+`ProductRelatedArticles` component renders article-card metadata, not bare IDs.
