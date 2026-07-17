@@ -82,5 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`ST-003` is the active next task: model document and certificate metadata over
-uploaded PDF media. PostgreSQL stores only metadata; the binary remains in MinIO/S3.
+`ST-004` is the active next task: verify complete storage integration, including
+upload validation and the refusal to delete PDF media referenced by documents or
+certificates.
