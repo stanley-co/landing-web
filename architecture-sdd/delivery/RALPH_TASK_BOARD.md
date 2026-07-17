@@ -50,8 +50,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| ED-001 | w-backend-service | Separate public, auth, admin, and health route policies | BE-001 | IN_PROGRESS | ADR-002; configure prefix-aware policy without business logic. |
-| ED-002 | w-backend-service | Add CORS allowlist, security headers, request-size and upload limits | ED-001, BE-003 | NOT_STARTED | Use local origins from infra template. |
+| ED-001 | w-backend-service | Separate public, auth, admin, and health route policies | BE-001 | DONE | `90a1857`; public 404/admin 401 are normalized with request IDs. |
+| ED-002 | w-backend-service | Add CORS allowlist, security headers, request-size and upload limits | ED-001, BE-003 | IN_PROGRESS | Use local origins from infra template; add integration tests. |
 | ED-003 | w-backend-service | Add rate limits for login and lead submission | ED-001 | NOT_STARTED | Must return normalized 429 errors. |
 | ED-004 | w-backend-service | Add edge-policy integration tests | ED-002, ED-003, BE-005 | NOT_STARTED | CORS, request ID, headers, limits, rate limit. |
 

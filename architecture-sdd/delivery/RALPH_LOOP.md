@@ -82,6 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`ED-001` is the active next task: configure prefix-aware public, auth, admin, and
-health route policy in `w-backend-service` under ADR-002. It must not add business
-logic and follows the completed Testcontainers foundation commit `7d8303a`.
+`ED-002` is the active next task: add CORS allowlist, security headers and
+request/upload limits to the internal edge layer in `w-backend-service`. It follows
+the completed prefix-aware edge policy commit `90a1857`.
