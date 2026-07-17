@@ -82,6 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`CO-002` is the next ready task: expose active NEWS/ARTICLE list and detail
-reads through the preserved ID route `/news/{id}`, then enrich resolved product
-related-content references with card summaries before landing integration.
+`CO-003` is in progress: implement role-protected NEWS/ARTICLE CRUD, atomic
+ordered paragraph/image/quote/link block editing by media UUID, and stable-ID
+archive behavior. Its contract is `54c6318`; public content reads are `073808a`.

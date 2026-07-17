@@ -375,6 +375,16 @@ paths:
         '200': { $ref: '#/components/responses/AdminContent' }
         '400': { $ref: '#/components/responses/ValidationError' }
         '404': { $ref: '#/components/responses/NotFound' }
+  /admin/content/{id}/archive:
+    post:
+      tags: [Admin]
+      operationId: archiveContent
+      summary: Archive content without deleting its stable public ID
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PublicId' }]
+      responses:
+        '204': { description: Archived }
+        '404': { $ref: '#/components/responses/NotFound' }
   /admin/slides:
     get:
       tags: [Admin]
@@ -835,6 +845,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/ContentListItemDto'
         - type: object
+          required: [blocks]
           properties:
             blocks:
               type: array
@@ -847,6 +858,28 @@ components:
         sortOrder: { type: integer, minimum: 0 }
         text: { type: string }
         src: { type: string, format: uri }
+        caption: { type: string }
+        url: { type: string, format: uri }
+        linkText: { type: string }
+    ContentBlockWriteDto:
+      type: object
+      required: [type, sortOrder]
+      properties:
+        type: { $ref: '#/components/schemas/ContentBlockType' }
+        sortOrder: { type: integer, minimum: 0 }
+        text: { type: string }
+        imageId: { type: string, format: uuid }
+        caption: { type: string }
+        url: { type: string, format: uri }
+        linkText: { type: string }
+    ContentBlockAdminDto:
+      type: object
+      required: [type, sortOrder]
+      properties:
+        type: { $ref: '#/components/schemas/ContentBlockType' }
+        sortOrder: { type: integer, minimum: 0 }
+        text: { type: string }
+        imageId: { type: string, format: uuid }
         caption: { type: string }
         url: { type: string, format: uri }
         linkText: { type: string }
@@ -1045,18 +1078,23 @@ components:
         category: { type: string }
         imageId: { type: string, format: uuid }
         preview: { type: string, minLength: 1 }
-        blocks: { type: array, items: { $ref: '#/components/schemas/ContentBlockDto' } }
+        blocks: { type: array, items: { $ref: '#/components/schemas/ContentBlockWriteDto' } }
         status: { $ref: '#/components/schemas/Status' }
-        seo: { $ref: '#/components/schemas/SeoDto' }
     ContentAdminDto:
-      allOf:
-        - $ref: '#/components/schemas/ContentDetailDto'
-        - type: object
-          properties:
-            imageId: { type: string, format: uuid }
-            status: { $ref: '#/components/schemas/Status' }
-            createdAt: { type: string, format: date-time }
-            updatedAt: { type: string, format: date-time }
+      type: object
+      required: [id, type, title, date, category, imageId, preview, blocks, status]
+      properties:
+        id: { type: string, description: Existing public content ID. }
+        type: { $ref: '#/components/schemas/ContentType' }
+        title: { type: string }
+        date: { type: string, format: date }
+        category: { type: string }
+        imageId: { type: string, format: uuid }
+        preview: { type: string }
+        blocks: { type: array, items: { $ref: '#/components/schemas/ContentBlockAdminDto' } }
+        status: { $ref: '#/components/schemas/Status' }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
     SlideWriteRequest:
       type: object
       required: [pageCode, imageId, title, sortOrder, active]

@@ -89,8 +89,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
 | CO-001 | w-backend-service | Model NEWS and ARTICLE with immutable external IDs and structured blocks | BE-002, ST-001, CT-003 | DONE | `985c7c1`; V10 preserves external IDs, required category string, cover/image media protection, and exactly paragraph/image/quote/link blocks; Docker Maven verify passed 38 tests. |
-| CO-002 | w-backend-service | Add public content list/detail and related-content API | CO-001, ED-001 | READY | Preserve `/news/:id`; enrich catalog references only for resolved active content. |
-| CO-003 | w-backend-service | Add admin content CRUD and ordered block editing API | CO-001, AU-003, CT-004 | NOT_STARTED | No raw-JSON primary editor. |
+| CO-002 | w-backend-service | Add public content list/detail and related-content API | CO-001, ED-001 | DONE | `073808a`; active NEWS/ARTICLE filtering and ID detail preserve `/news/:id`; active type-compatible relations receive optional summaries and unresolved IDs remain intact. Full Docker Maven verify passed. |
+| CO-003 | w-backend-service | Add admin content CRUD and ordered block editing API | CO-001, AU-003, CT-004 | IN_PROGRESS | Contract `54c6318` separates editor `imageId` blocks from public URLs and adds archive. No raw-JSON primary editor. |
 | PA-001 | w-backend-service | Add only SDD-approved managed pages and settings | BE-002, AU-003, CT-003 | NOT_STARTED | No universal page builder. |
 | PA-002 | w-backend-service | Add contacts and explicitly managed menu API | PA-001, CT-003 | NOT_STARTED | Do not migrate technical routes/config. |
 | SL-001 | w-backend-service | Add carousel slide model, public API, admin CRUD/reorder | ST-001, AU-003, CT-003, CT-004 | NOT_STARTED | Supports image, mobile image, action, order, active. |

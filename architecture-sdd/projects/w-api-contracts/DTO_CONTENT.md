@@ -5,6 +5,8 @@ DTOs:
 - `ContentListItemDto`
 - `ContentDetailDto`
 - `ContentBlockDto`
+- `ContentBlockWriteDto`
+- `ContentBlockAdminDto`
 
 Content types: `NEWS`, `ARTICLE`. Public detail endpoint uses ID.
 
@@ -37,3 +39,9 @@ separate catalog data.
 The current landing derives document title, description, image, and canonical
 path from content fields and its existing ID. Do not add separate content SEO
 fields to the public DTO or the admin write DTO in this MVP.
+
+The public block DTO exposes rendered `src` URLs. Admin writes and editor reads
+use a separate typed block model with `imageId` so that a media library can
+manage image blocks without accepting a raw storage URL. Content supports a
+simple archive operation at `POST /api/v1/admin/content/{id}/archive`; it never
+deletes or changes the stable public ID.

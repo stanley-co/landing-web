@@ -1,5 +1,17 @@
 # SDD Changelog
 
+## 2026-07-18 Content Editor Contract Correction
+
+- Separated public rendered `ContentBlockDto.src` from admin
+  `ContentBlockWriteDto`/`ContentBlockAdminDto.imageId`; editor writes must
+  select registered media rather than submit a storage URL.
+- Added stable-ID `POST /api/v1/admin/content/{id}/archive` and made public
+  detail blocks required.
+- Confirmed no content SEO, slug, category-tree, or content self-relation is
+  added to the MVP; those features have no current landing data source.
+- Recorded public content implementation `073808a` and contract correction
+  `54c6318` in the Ralph loop.
+
 ## 2026-07-18 Content Boundary Correction
 
 - Verified `RelatedNews` derives its cards from the loaded news/article list;
