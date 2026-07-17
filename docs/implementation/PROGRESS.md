@@ -10,6 +10,7 @@ Phase 0 baseline recorded. Public frontend integration is intentionally deferred
 | PH1-CONTRACTS-001 | Synchronize landing-facing API contract baseline | `w-api-contracts` `00c8739`, `e9ecdf9` | OpenAPI lint, validation, and TS generation | COMPLETE |
 | CA-004 | Public catalog API baseline available | `w-backend-service` `17e65e7` | Docker Maven `verify`: 35 tests | COMPLETE |
 | CA-006 | Catalog integration and OpenAPI compatibility coverage | `w-api-contracts` `1bf0099`, `w-backend-service` `35db438` | contract lint/validation/generation; Docker Maven `verify`: 36 tests | COMPLETE |
+| CO-001 | Structured NEWS/ARTICLE data model | `w-backend-service` `985c7c1` | Flyway V10 and Docker Maven `verify`: 38 tests | COMPLETE |
 
 ## Current task
 

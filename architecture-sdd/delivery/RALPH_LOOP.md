@@ -82,7 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`CO-001` is the next ready task: introduce NEWS/ARTICLE aggregates with stable
-public IDs and only the four validated block types. `CO-002` then enriches
-product related-content references with card summaries before landing
-integration.
+`CO-002` is the next ready task: expose active NEWS/ARTICLE list and detail
+reads through the preserved ID route `/news/{id}`, then enrich resolved product
+related-content references with card summaries before landing integration.
