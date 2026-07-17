@@ -1,184 +1,1066 @@
 openapi: 3.0.3
 info:
-  title: FKIT Web Platform API
+  title: Stanley Web Platform API
   version: 1.0.0
+  license:
+    name: Proprietary
+  description: >-
+    Contract-first API for the existing landing, administration UI, and modular-monolith backend.
+    Public IDs remain stable: product and content routes use the existing ID, never a required slug.
 servers:
   - url: /api/v1
+security: []
+tags:
+  - name: Public
+    description: Anonymous landing endpoints.
+  - name: Auth
+    description: Administrator session endpoints.
+  - name: Admin
+    description: Role-protected administration endpoints.
 paths:
   /public/site:
     get:
-      summary: Get public site settings
+      tags: [Public]
+      operationId: getPublicSite
+      summary: Get public site settings required by the landing shell
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items: { $ref: '#/components/schemas/ProductCardDto' }
+        '200': { $ref: '#/components/responses/Site' }
   /public/menu/{code}:
     get:
-      summary: Get menu by code
+      tags: [Public]
+      operationId: getPublicMenu
+      summary: Get an active public menu by stable code
       parameters:
-        - { name: code, in: path, required: true, schema: { type: string } }
+        - $ref: '#/components/parameters/MenuCode'
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/Menu' }
+        '404': { $ref: '#/components/responses/NotFound' }
   /public/pages/{route}:
     get:
-      summary: Get public page by route
+      tags: [Public]
+      operationId: getPublicPage
+      summary: Get managed page content by existing page route
       parameters:
-        - { name: route, in: path, required: true, schema: { type: string } }
+        - $ref: '#/components/parameters/PageRoute'
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/ProductDetailDto' }
+        '200': { $ref: '#/components/responses/Page' }
         '404': { $ref: '#/components/responses/NotFound' }
   /public/products:
     get:
-      summary: Get public products
+      tags: [Public]
+      operationId: listPublicProducts
+      summary: List active products for catalog, filters, and search
       parameters:
-        - { name: categoryId, in: query, schema: { type: string } }
-        - { name: search, in: query, schema: { type: string } }
-        - { name: page, in: query, schema: { type: integer, default: 0 } }
-        - { name: size, in: query, schema: { type: integer, default: 20 } }
+        - $ref: '#/components/parameters/CategoryId'
+        - $ref: '#/components/parameters/GlobalCategory'
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/ProductSort'
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/ProductPage' }
   /public/products/{id}:
     get:
-      summary: Get product by existing public ID
+      tags: [Public]
+      operationId: getPublicProduct
+      summary: Get one active product by its existing public ID
       parameters:
-        - { name: id, in: path, required: true, schema: { type: string } }
+        - $ref: '#/components/parameters/PublicId'
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/ProductDetail' }
         '404': { $ref: '#/components/responses/NotFound' }
   /public/product-categories:
     get:
-      summary: Get category tree
+      tags: [Public]
+      operationId: listPublicProductCategories
+      summary: Get ordered category tree and active product counts
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items: { $ref: '#/components/schemas/ProductCategoryDto' }
+        '200': { $ref: '#/components/responses/ProductCategoryTree' }
   /public/content:
     get:
-      summary: Get news/articles list
+      tags: [Public]
+      operationId: listPublicContent
+      summary: List active news and articles
       parameters:
-        - { name: type, in: query, schema: { $ref: '#/components/schemas/ContentType' } }
-        - { name: search, in: query, schema: { type: string } }
+        - $ref: '#/components/parameters/ContentType'
+        - $ref: '#/components/parameters/ContentCategory'
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/DateFrom'
+        - $ref: '#/components/parameters/DateTo'
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items: { $ref: '#/components/schemas/ContentListItemDto' }
+        '200': { $ref: '#/components/responses/ContentPage' }
   /public/news/{id}:
     get:
-      summary: Get news or article by existing ID
+      tags: [Public]
+      operationId: getPublicContentById
+      summary: Get news or article by existing public ID for the preserved /news/:id route
       parameters:
-        - { name: id, in: path, required: true, schema: { type: string } }
+        - $ref: '#/components/parameters/PublicId'
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/ContentDetailDto' }
+        '200': { $ref: '#/components/responses/ContentDetail' }
         '404': { $ref: '#/components/responses/NotFound' }
   /public/slides:
     get:
-      summary: Get slides
+      tags: [Public]
+      operationId: listPublicSlides
+      summary: List active carousel slides in manual order
       parameters:
-        - { name: pageCode, in: query, schema: { type: string } }
+        - $ref: '#/components/parameters/PageCode'
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items: { $ref: '#/components/schemas/SlideDto' }
+        '200': { $ref: '#/components/responses/SlideList' }
   /public/contacts:
     get:
-      summary: Get public contacts
+      tags: [Public]
+      operationId: getPublicContacts
+      summary: Get managed public contact details
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/Contacts' }
   /public/documents:
     get:
-      summary: Get public documents
+      tags: [Public]
+      operationId: listPublicDocuments
+      summary: List active public documents
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/DocumentList' }
   /public/certificates:
     get:
-      summary: Get public certificates
+      tags: [Public]
+      operationId: listPublicCertificates
+      summary: List active public certificates
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/CertificateList' }
   /public/leads:
     post:
-      summary: Create lead
+      tags: [Public]
+      operationId: createPublicLead
+      summary: Submit a public lead with consent
       requestBody:
         required: true
         content:
           application/json:
             schema: { $ref: '#/components/schemas/LeadCreateRequest' }
       responses:
-        '201': { description: Created }
-        '400': { $ref: '#/components/responses/BadRequest' }
+        '201': { $ref: '#/components/responses/LeadCreated' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
   /auth/login:
     post:
-      summary: Login
+      tags: [Auth]
+      operationId: login
+      summary: Create an administrator session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/AuthSession' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
   /auth/refresh:
     post:
-      summary: Refresh token
+      tags: [Auth]
+      operationId: refreshSession
+      summary: Refresh an administrator session
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/AuthSession' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
   /auth/logout:
     post:
-      summary: Logout
+      tags: [Auth]
+      operationId: logout
+      summary: Revoke the current administrator session
+      security: [{ bearerAuth: [] }]
       responses:
-        '204': { description: No Content }
+        '204': { description: Session revoked }
+        '401': { $ref: '#/components/responses/Unauthorized' }
   /auth/me:
     get:
-      summary: Current admin user
+      tags: [Auth]
+      operationId: getCurrentUser
+      summary: Get current administrator identity, roles, and permissions
+      security: [{ bearerAuth: [] }]
       responses:
-        '200': { description: OK }
+        '200': { $ref: '#/components/responses/AdminUser' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /admin/products:
+    get:
+      tags: [Admin]
+      operationId: listAdminProducts
+      summary: List products including non-public statuses
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Status'
+        - $ref: '#/components/parameters/CategoryId'
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200': { $ref: '#/components/responses/AdminProductPage' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      tags: [Admin]
+      operationId: createProduct
+      summary: Create a product using a caller-supplied stable public ID
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductWriteRequest' }
+      responses:
+        '201': { $ref: '#/components/responses/AdminProduct' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/products/{id}:
+    get:
+      tags: [Admin]
+      operationId: getAdminProduct
+      summary: Get a product editor model by stable public ID
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PublicId' }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminProduct' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Admin]
+      operationId: updateProduct
+      summary: Replace editable product fields without changing its public ID
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PublicId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductWriteRequest' }
+      responses:
+        '200': { $ref: '#/components/responses/AdminProduct' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/products/{id}/archive:
+    post:
+      tags: [Admin]
+      operationId: archiveProduct
+      summary: Archive a product without deleting the public identifier
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PublicId' }]
+      responses:
+        '204': { description: Archived }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/product-categories:
+    get:
+      tags: [Admin]
+      operationId: listAdminProductCategories
+      summary: Get editable category tree
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminCategoryTree' }
+    post:
+      tags: [Admin]
+      operationId: createProductCategory
+      summary: Create a global category or child category
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductCategoryWriteRequest' }
+      responses:
+        '201': { $ref: '#/components/responses/AdminCategory' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /admin/product-categories/reorder:
+    put:
+      tags: [Admin]
+      operationId: reorderProductCategories
+      summary: Persist manual category ordering
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ReorderRequest' }
+      responses:
+        '204': { description: Reordered }
+  /admin/content:
+    get:
+      tags: [Admin]
+      operationId: listAdminContent
+      summary: List news and articles, including drafts and archives
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/ContentType'
+        - $ref: '#/components/parameters/Status'
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200': { $ref: '#/components/responses/AdminContentPage' }
+    post:
+      tags: [Admin]
+      operationId: createContent
+      summary: Create a NEWS or ARTICLE item with structured blocks
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContentWriteRequest' }
+      responses:
+        '201': { $ref: '#/components/responses/AdminContent' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/content/{id}:
+    get:
+      tags: [Admin]
+      operationId: getAdminContent
+      summary: Get content editor model by stable public ID
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PublicId' }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminContent' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Admin]
+      operationId: updateContent
+      summary: Update content without changing its public ID
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PublicId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContentWriteRequest' }
+      responses:
+        '200': { $ref: '#/components/responses/AdminContent' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/slides:
+    get:
+      tags: [Admin]
+      operationId: listAdminSlides
+      summary: List carousel slides for management
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PageCode' }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminSlideList' }
+    post:
+      tags: [Admin]
+      operationId: createSlide
+      summary: Create a carousel slide
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SlideWriteRequest' }
+      responses:
+        '201': { $ref: '#/components/responses/AdminSlide' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /admin/slides/{id}:
+    put:
+      tags: [Admin]
+      operationId: updateSlide
+      summary: Update a slide
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/EntityId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SlideWriteRequest' }
+      responses:
+        '200': { $ref: '#/components/responses/AdminSlide' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/slides/reorder:
+    put:
+      tags: [Admin]
+      operationId: reorderSlides
+      summary: Persist carousel slide ordering
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ReorderRequest' }
+      responses:
+        '204': { description: Reordered }
+  /admin/pages:
+    get:
+      tags: [Admin]
+      operationId: listAdminPages
+      summary: List managed pages
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminPageList' }
+    post:
+      tags: [Admin]
+      operationId: createPage
+      summary: Create an explicitly managed page
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PageWriteRequest' }
+      responses:
+        '201': { $ref: '#/components/responses/AdminPage' }
+  /admin/pages/{route}:
+    get:
+      tags: [Admin]
+      operationId: getAdminPage
+      summary: Get managed page editor model
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PageRoute' }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminPage' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Admin]
+      operationId: updatePage
+      summary: Update a managed page
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PageRoute' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PageWriteRequest' }
+      responses:
+        '200': { $ref: '#/components/responses/AdminPage' }
+  /admin/legacy-blocks:
+    get:
+      tags: [Admin]
+      operationId: listLegacyBlocks
+      summary: List deprecated /home compatibility blocks
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/LegacyBlockList' }
+  /admin/contacts:
+    get:
+      tags: [Admin]
+      operationId: getAdminContacts
+      summary: Get managed contact settings
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/Contacts' }
+    put:
+      tags: [Admin]
+      operationId: updateContacts
+      summary: Update managed contact settings
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContactDto' }
+      responses:
+        '200': { $ref: '#/components/responses/Contacts' }
+  /admin/menus/{code}:
+    put:
+      tags: [Admin]
+      operationId: updateMenu
+      summary: Update an explicitly managed menu
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/MenuCode' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MenuDto' }
+      responses:
+        '200': { $ref: '#/components/responses/Menu' }
+  /admin/media:
+    get:
+      tags: [Admin]
+      operationId: listMedia
+      summary: List media metadata and usage
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/MediaType'
+      responses:
+        '200': { $ref: '#/components/responses/MediaPage' }
+    post:
+      tags: [Admin]
+      operationId: uploadMedia
+      summary: Upload an image or PDF file
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+                alt: { type: string, maxLength: 255 }
+                title: { type: string, maxLength: 255 }
+      responses:
+        '201': { $ref: '#/components/responses/MediaFile' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+  /admin/media/{id}:
+    delete:
+      tags: [Admin]
+      operationId: deleteMedia
+      summary: Delete an unused media object
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/EntityId' }]
+      responses:
+        '204': { description: Deleted }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/documents:
+    get:
+      tags: [Admin]
+      operationId: listAdminDocuments
+      summary: List managed documents
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminDocumentList' }
+    post:
+      tags: [Admin]
+      operationId: createDocument
+      summary: Create document metadata for an uploaded PDF
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DocumentWriteRequest' }
+      responses:
+        '201': { $ref: '#/components/responses/AdminDocument' }
+  /admin/certificates:
+    get:
+      tags: [Admin]
+      operationId: listAdminCertificates
+      summary: List managed certificates
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminCertificateList' }
+    post:
+      tags: [Admin]
+      operationId: createCertificate
+      summary: Create certificate metadata for an uploaded PDF
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CertificateWriteRequest' }
+      responses:
+        '201': { $ref: '#/components/responses/AdminCertificate' }
+  /admin/leads:
+    get:
+      tags: [Admin]
+      operationId: listAdminLeads
+      summary: List stored leads and delivery state
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/LeadStatus'
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200': { $ref: '#/components/responses/LeadPage' }
+  /admin/leads/{id}/notifications/retry:
+    post:
+      tags: [Admin]
+      operationId: retryLeadNotification
+      summary: Retry email delivery for a lead
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/EntityId' }]
+      responses:
+        '202': { $ref: '#/components/responses/NotificationEvent' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/users:
+    get:
+      tags: [Admin]
+      operationId: listAdminUsers
+      summary: List administrator users
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/AdminUserList' }
+  /admin/audit:
+    get:
+      tags: [Admin]
+      operationId: listAuditEvents
+      summary: List auditable administration events
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200': { $ref: '#/components/responses/AuditEventPage' }
+  /admin/settings:
+    get:
+      tags: [Admin]
+      operationId: getSettings
+      summary: Get editable site settings only
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/Site' }
+    put:
+      tags: [Admin]
+      operationId: updateSettings
+      summary: Update editable settings; infrastructure values are excluded
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SiteDto' }
+      responses:
+        '200': { $ref: '#/components/responses/Site' }
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    PublicId: { name: id, in: path, required: true, schema: { type: string, minLength: 1 }, description: Existing public identifier; no required slug. }
+    EntityId: { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+    MenuCode: { name: code, in: path, required: true, schema: { type: string, pattern: '^[a-z0-9-]+$' } }
+    PageRoute: { name: route, in: path, required: true, schema: { type: string, pattern: '^/[a-z0-9/_-]*$' } }
+    PageCode: { name: pageCode, in: query, required: false, schema: { type: string, default: equipment } }
+    CategoryId: { name: categoryId, in: query, required: false, schema: { type: string } }
+    GlobalCategory: { name: globalCategory, in: query, required: false, schema: { type: string } }
+    Search: { name: search, in: query, required: false, schema: { type: string, minLength: 1, maxLength: 120 } }
+    PageNumber: { name: page, in: query, required: false, schema: { type: integer, minimum: 0, default: 0 } }
+    PageSize: { name: size, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+    ProductSort: { name: sort, in: query, required: false, schema: { type: string, enum: [sortOrder, name] } }
+    ContentType: { name: type, in: query, required: false, schema: { $ref: '#/components/schemas/ContentType' } }
+    ContentCategory: { name: category, in: query, required: false, schema: { type: string } }
+    DateFrom: { name: dateFrom, in: query, required: false, schema: { type: string, format: date } }
+    DateTo: { name: dateTo, in: query, required: false, schema: { type: string, format: date } }
+    Status: { name: status, in: query, required: false, schema: { $ref: '#/components/schemas/Status' } }
+    MediaType: { name: type, in: query, required: false, schema: { $ref: '#/components/schemas/MediaType' } }
+    LeadStatus: { name: status, in: query, required: false, schema: { $ref: '#/components/schemas/LeadStatus' } }
   schemas:
-    Status:
-      type: string
-      enum: [DRAFT, ACTIVE, ARCHIVED]
-    ContentType:
-      type: string
-      enum: [NEWS, ARTICLE]
+    Status: { type: string, enum: [DRAFT, ACTIVE, ARCHIVED] }
+    ContentType: { type: string, enum: [NEWS, ARTICLE] }
+    ContentBlockType: { type: string, enum: [paragraph, image, quote, link] }
+    UserRole: { type: string, enum: [ADMIN, FEATURE_OWNER, CONTENT_READER] }
+    MediaType: { type: string, enum: [IMAGE, PDF] }
+    LeadStatus: { type: string, enum: [NEW, IN_PROGRESS, CLOSED, SPAM] }
+    DeliveryStatus: { type: string, enum: [PENDING, SENT, FAILED, SKIPPED] }
+    SlideActionType: { type: string, enum: [URL, ANCHOR, LEAD_FORM, NONE] }
     ErrorResponse:
       type: object
       required: [timestamp, status, code, message, requestId]
       properties:
         timestamp: { type: string, format: date-time }
-        status: { type: integer }
+        status: { type: integer, minimum: 100, maximum: 599 }
         code: { type: string }
         message: { type: string }
-        fields:
-          type: object
-          additionalProperties: { type: string }
+        fields: { type: object, additionalProperties: { type: string } }
         requestId: { type: string }
+    PageMetadata:
+      type: object
+      required: [page, size, totalElements, totalPages]
+      properties:
+        page: { type: integer, minimum: 0 }
+        size: { type: integer, minimum: 1 }
+        totalElements: { type: integer, format: int64, minimum: 0 }
+        totalPages: { type: integer, minimum: 0 }
+    SiteDto:
+      type: object
+      properties:
+        siteName: { type: string }
+        defaultSeo: { $ref: '#/components/schemas/SeoDto' }
+        footerText: { type: string }
+        socialLinks:
+          type: array
+          items: { $ref: '#/components/schemas/LinkDto' }
+    SeoDto:
+      type: object
+      properties:
+        title: { type: string, maxLength: 255 }
+        description: { type: string, maxLength: 500 }
+        canonical: { type: string, format: uri }
+        ogImage: { type: string, format: uri }
+    LinkDto:
+      type: object
+      required: [label, url]
+      properties:
+        label: { type: string }
+        url: { type: string, format: uri }
+        external: { type: boolean, default: false }
+    MenuDto:
+      type: object
+      required: [code, items]
+      properties:
+        code: { type: string }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/MenuItemDto' }
+    MenuItemDto:
+      type: object
+      required: [label, url, sortOrder]
+      properties:
+        label: { type: string }
+        url: { type: string }
+        external: { type: boolean, default: false }
+        sortOrder: { type: integer, minimum: 0 }
+    ProductCardDto:
+      type: object
+      required: [id, name, category, image, description]
+      properties:
+        id: { type: string, description: Existing public product ID. }
+        name: { type: string }
+        globalCategory: { type: string }
+        category: { type: string }
+        image: { type: string, format: uri }
+        description: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+    ProductDetailDto:
+      allOf:
+        - $ref: '#/components/schemas/ProductCardDto'
+        - type: object
+          properties:
+            galleryImages:
+              type: array
+              items: { type: string, format: uri }
+            fullDescription: { type: string }
+            specs:
+              type: array
+              items: { $ref: '#/components/schemas/ProductSpecDto' }
+            advantages:
+              type: array
+              items: { $ref: '#/components/schemas/ProductAdvantageDto' }
+            videoUrl: { type: string, format: uri }
+            relatedContent:
+              type: array
+              items: { $ref: '#/components/schemas/ContentListItemDto' }
+            seo: { $ref: '#/components/schemas/SeoDto' }
+    ProductSpecDto:
+      type: object
+      required: [name, value, sortOrder]
+      properties:
+        name: { type: string }
+        value: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+    ProductAdvantageDto:
+      type: object
+      required: [icon, title, description, sortOrder]
+      properties:
+        icon: { type: string }
+        title: { type: string }
+        description: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+    ProductCategoryDto:
+      type: object
+      required: [id, name, sortOrder, activeProductCount, children]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        anchor: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+        activeProductCount: { type: integer, minimum: 0 }
+        children:
+          type: array
+          items: { $ref: '#/components/schemas/ProductCategoryDto' }
+    ContentListItemDto:
+      type: object
+      required: [id, type, title, date, image, preview]
+      properties:
+        id: { type: string, description: Existing public content ID. }
+        type: { $ref: '#/components/schemas/ContentType' }
+        title: { type: string }
+        date: { type: string, format: date }
+        category: { type: string }
+        image: { type: string, format: uri }
+        preview: { type: string }
+    ContentDetailDto:
+      allOf:
+        - $ref: '#/components/schemas/ContentListItemDto'
+        - type: object
+          properties:
+            blocks:
+              type: array
+              items: { $ref: '#/components/schemas/ContentBlockDto' }
+            relatedContent:
+              type: array
+              items: { $ref: '#/components/schemas/ContentListItemDto' }
+            seo: { $ref: '#/components/schemas/SeoDto' }
+    ContentBlockDto:
+      type: object
+      required: [type, sortOrder]
+      properties:
+        type: { $ref: '#/components/schemas/ContentBlockType' }
+        sortOrder: { type: integer, minimum: 0 }
+        text: { type: string }
+        src: { type: string, format: uri }
+        caption: { type: string }
+        url: { type: string, format: uri }
+        linkText: { type: string }
+    SlideDto:
+      type: object
+      required: [id, image, title, sortOrder]
+      properties:
+        id: { type: string }
+        image: { type: string, format: uri }
+        mobileImage: { type: string, format: uri }
+        title: { type: string }
+        description: { type: string }
+        buttonText: { type: string }
+        actionType: { $ref: '#/components/schemas/SlideActionType' }
+        actionValue: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+    ContactDto:
+      type: object
+      properties:
+        address: { type: string }
+        emails: { type: array, items: { type: string, format: email } }
+        phones: { type: array, items: { type: string } }
+        workingHours: { type: string }
+        socialLinks: { type: array, items: { $ref: '#/components/schemas/LinkDto' } }
+    MediaFileDto:
+      type: object
+      required: [id, url, type, mimeType, size, checksum, originalName, status, usageCount]
+      properties:
+        id: { type: string, format: uuid }
+        url: { type: string, format: uri }
+        type: { $ref: '#/components/schemas/MediaType' }
+        mimeType: { type: string }
+        size: { type: integer, format: int64, minimum: 0 }
+        checksum: { type: string }
+        originalName: { type: string }
+        alt: { type: string }
+        title: { type: string }
+        status: { $ref: '#/components/schemas/Status' }
+        usageCount: { type: integer, minimum: 0 }
+    DocumentDto:
+      type: object
+      required: [id, title, file, status]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        description: { type: string }
+        file: { $ref: '#/components/schemas/MediaFileDto' }
+        downloadUrl: { type: string, format: uri }
+        previewUrl: { type: string, format: uri }
+        status: { $ref: '#/components/schemas/Status' }
+        sortOrder: { type: integer, minimum: 0 }
+    CertificateDto:
+      allOf:
+        - $ref: '#/components/schemas/DocumentDto'
+        - type: object
+          properties:
+            issueDate: { type: string, format: date }
+            expiryDate: { type: string, format: date }
+    PageDto:
+      type: object
+      required: [route, title, sections]
+      properties:
+        route: { type: string }
+        title: { type: string }
+        seo: { $ref: '#/components/schemas/SeoDto' }
+        sections:
+          type: array
+          items: { $ref: '#/components/schemas/PageSectionDto' }
+    PageSectionDto:
+      type: object
+      required: [code, sortOrder]
+      properties:
+        code: { type: string }
+        title: { type: string }
+        text: { type: string }
+        media: { $ref: '#/components/schemas/MediaFileDto' }
+        links: { type: array, items: { $ref: '#/components/schemas/LinkDto' } }
+        sortOrder: { type: integer, minimum: 0 }
+    LegacyBlockDto:
+      type: object
+      required: [id, code, deprecated, removable]
+      properties:
+        id: { type: string, format: uuid }
+        code: { type: string }
+        deprecated: { type: boolean, enum: [true] }
+        removable: { type: boolean }
+        warning: { type: string }
     LeadCreateRequest:
       type: object
-      required: [consentAccepted]
+      required: [source, formType, consentAccepted]
       properties:
+        source: { type: string, maxLength: 100 }
+        formType: { type: string, maxLength: 100 }
+        company: { type: string, maxLength: 255 }
+        firstName: { type: string, maxLength: 100 }
+        secondName: { type: string, maxLength: 100 }
+        lastName: { type: string, maxLength: 100 }
+        phone: { type: string, maxLength: 40 }
+        email: { type: string, format: email, maxLength: 255 }
+        comment: { type: string, maxLength: 5000 }
+        productId: { type: string }
+        productName: { type: string }
+        consentAccepted: { type: boolean, enum: [true] }
+    LeadCreateResponse:
+      type: object
+      required: [id, status]
+      properties:
+        id: { type: string, format: uuid }
+        status: { type: string, enum: [ACCEPTED] }
+    LoginRequest:
+      type: object
+      required: [login, password]
+      properties:
+        login: { type: string, minLength: 1, maxLength: 255 }
+        password: { type: string, format: password, minLength: 12, maxLength: 255 }
+    AuthSessionDto:
+      type: object
+      required: [accessToken, expiresAt, user]
+      properties:
+        accessToken: { type: string }
+        expiresAt: { type: string, format: date-time }
+        user: { $ref: '#/components/schemas/AdminUserDto' }
+    AdminUserDto:
+      type: object
+      required: [id, login, roles, permissions, status]
+      properties:
+        id: { type: string, format: uuid }
+        login: { type: string }
+        displayName: { type: string }
+        roles: { type: array, items: { $ref: '#/components/schemas/UserRole' } }
+        permissions: { type: array, items: { type: string } }
+        status: { $ref: '#/components/schemas/Status' }
+    ProductWriteRequest:
+      type: object
+      required: [id, name, categoryId, imageId, description, status]
+      properties:
+        id: { type: string, description: Stable existing/public ID; immutable after creation. }
+        name: { type: string, minLength: 1, maxLength: 255 }
+        categoryId: { type: string }
+        imageId: { type: string, format: uuid }
+        galleryImageIds: { type: array, items: { type: string, format: uuid } }
+        description: { type: string, minLength: 1 }
+        fullDescription: { type: string }
+        specs: { type: array, items: { $ref: '#/components/schemas/ProductSpecDto' } }
+        advantages: { type: array, items: { $ref: '#/components/schemas/ProductAdvantageDto' } }
+        videoUrl: { type: string, format: uri }
+        relatedContentIds: { type: array, items: { type: string } }
+        sortOrder: { type: integer, minimum: 0 }
+        status: { $ref: '#/components/schemas/Status' }
+        seo: { $ref: '#/components/schemas/SeoDto' }
+    ProductAdminDto:
+      allOf:
+        - $ref: '#/components/schemas/ProductDetailDto'
+        - type: object
+          required: [categoryId, status]
+          properties:
+            categoryId: { type: string }
+            imageId: { type: string, format: uuid }
+            galleryImageIds: { type: array, items: { type: string, format: uuid } }
+            status: { $ref: '#/components/schemas/Status' }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+    ProductCategoryWriteRequest:
+      type: object
+      required: [id, name, sortOrder]
+      properties:
+        id: { type: string }
+        parentId: { type: string }
+        name: { type: string, minLength: 1, maxLength: 255 }
+        anchor: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+    ContentWriteRequest:
+      type: object
+      required: [id, type, title, date, imageId, preview, blocks, status]
+      properties:
+        id: { type: string, description: Stable existing/public ID; immutable after creation. }
+        type: { $ref: '#/components/schemas/ContentType' }
+        title: { type: string, minLength: 1, maxLength: 255 }
+        date: { type: string, format: date }
+        category: { type: string }
+        imageId: { type: string, format: uuid }
+        preview: { type: string, minLength: 1 }
+        blocks: { type: array, items: { $ref: '#/components/schemas/ContentBlockDto' } }
+        relatedContentIds: { type: array, items: { type: string } }
+        status: { $ref: '#/components/schemas/Status' }
+        seo: { $ref: '#/components/schemas/SeoDto' }
+    ContentAdminDto:
+      allOf:
+        - $ref: '#/components/schemas/ContentDetailDto'
+        - type: object
+          properties:
+            imageId: { type: string, format: uuid }
+            status: { $ref: '#/components/schemas/Status' }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+    SlideWriteRequest:
+      type: object
+      required: [pageCode, imageId, title, sortOrder, active]
+      properties:
+        pageCode: { type: string }
+        imageId: { type: string, format: uuid }
+        mobileImageId: { type: string, format: uuid }
+        title: { type: string, minLength: 1, maxLength: 255 }
+        description: { type: string }
+        buttonText: { type: string, maxLength: 100 }
+        actionType: { $ref: '#/components/schemas/SlideActionType' }
+        actionValue: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+        active: { type: boolean }
+    SlideAdminDto:
+      allOf:
+        - $ref: '#/components/schemas/SlideDto'
+        - type: object
+          properties:
+            imageId: { type: string, format: uuid }
+            mobileImageId: { type: string, format: uuid }
+            pageCode: { type: string }
+            active: { type: boolean }
+    PageWriteRequest:
+      type: object
+      required: [route, title, sections, status]
+      properties:
+        route: { type: string, pattern: '^/[a-z0-9/_-]*$' }
+        title: { type: string }
+        sections: { type: array, items: { $ref: '#/components/schemas/PageSectionDto' } }
+        status: { $ref: '#/components/schemas/Status' }
+        seo: { $ref: '#/components/schemas/SeoDto' }
+    PageAdminDto:
+      allOf:
+        - $ref: '#/components/schemas/PageDto'
+        - type: object
+          properties:
+            status: { $ref: '#/components/schemas/Status' }
+    DocumentWriteRequest:
+      type: object
+      required: [title, fileId, status]
+      properties:
+        title: { type: string, minLength: 1 }
+        description: { type: string }
+        fileId: { type: string, format: uuid }
+        status: { $ref: '#/components/schemas/Status' }
+        sortOrder: { type: integer, minimum: 0 }
+    CertificateWriteRequest:
+      allOf:
+        - $ref: '#/components/schemas/DocumentWriteRequest'
+        - type: object
+          properties:
+            issueDate: { type: string, format: date }
+            expiryDate: { type: string, format: date }
+    ReorderRequest:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [id, sortOrder]
+            properties:
+              id: { type: string }
+              sortOrder: { type: integer, minimum: 0 }
+    LeadAdminDto:
+      type: object
+      required: [id, source, formType, consentAccepted, status, createdAt, notifications]
+      properties:
+        id: { type: string, format: uuid }
         source: { type: string }
         formType: { type: string }
         company: { type: string }
@@ -191,115 +1073,113 @@ components:
         productId: { type: string }
         productName: { type: string }
         consentAccepted: { type: boolean }
-    ProductCardDto:
+        status: { $ref: '#/components/schemas/LeadStatus' }
+        createdAt: { type: string, format: date-time }
+        notifications: { type: array, items: { $ref: '#/components/schemas/NotificationEventDto' } }
+    NotificationEventDto:
       type: object
-      required: [id, name, category, image, description]
+      required: [id, channel, status, attempt]
       properties:
-        id: { type: string, description: Existing public product ID }
-        name: { type: string }
-        globalCategory: { type: string }
-        category: { type: string }
-        image: { type: string }
-        description: { type: string }
-    ProductDetailDto:
-      allOf:
-        - { $ref: '#/components/schemas/ProductCardDto' }
-        - type: object
-          properties:
-            galleryImages:
-              type: array
-              items: { type: string }
-            fullDescription: { type: string }
-            specs:
-              type: array
-              items: { $ref: '#/components/schemas/ProductSpecDto' }
-            advantages:
-              type: array
-              items: { $ref: '#/components/schemas/ProductAdvantageDto' }
-            videoUrl: { type: string }
-            relatedArticles:
-              type: array
-              items: { $ref: '#/components/schemas/ContentListItemDto' }
-    ProductSpecDto:
+        id: { type: string, format: uuid }
+        channel: { type: string, enum: [EMAIL, TELEGRAM] }
+        status: { $ref: '#/components/schemas/DeliveryStatus' }
+        attempt: { type: integer, minimum: 0 }
+        createdAt: { type: string, format: date-time }
+        errorCode: { type: string }
+    AuditEventDto:
       type: object
-      required: [name, value]
+      required: [id, action, actorId, occurredAt]
       properties:
-        name: { type: string }
-        value: { type: string }
-        sortOrder: { type: integer }
-    ProductAdvantageDto:
+        id: { type: string, format: uuid }
+        action: { type: string }
+        actorId: { type: string, format: uuid }
+        entityType: { type: string }
+        entityId: { type: string }
+        occurredAt: { type: string, format: date-time }
+    ProductPageDto:
       type: object
-      required: [icon, title, description]
+      required: [items, page]
       properties:
-        icon: { type: string }
-        title: { type: string }
-        description: { type: string }
-        sortOrder: { type: integer }
-    ProductCategoryDto:
+        items: { type: array, items: { $ref: '#/components/schemas/ProductCardDto' } }
+        page: { $ref: '#/components/schemas/PageMetadata' }
+    AdminProductPageDto:
       type: object
-      required: [id, name, sortOrder, activeProductCount]
+      required: [items, page]
       properties:
-        id: { type: string }
-        name: { type: string }
-        anchor: { type: string }
-        sortOrder: { type: integer }
-        activeProductCount: { type: integer }
-        children:
-          type: array
-          items: { $ref: '#/components/schemas/ProductCategoryDto' }
-    SlideDto:
+        items: { type: array, items: { $ref: '#/components/schemas/ProductAdminDto' } }
+        page: { $ref: '#/components/schemas/PageMetadata' }
+    ContentPageDto:
       type: object
-      required: [id, image, title, description]
+      required: [items, page]
       properties:
-        id: { type: string }
-        image: { type: string }
-        title: { type: string }
-        description: { type: string }
-        link: { type: string }
-        buttonText: { type: string }
-    ContentListItemDto:
+        items: { type: array, items: { $ref: '#/components/schemas/ContentListItemDto' } }
+        page: { $ref: '#/components/schemas/PageMetadata' }
+    AdminContentPageDto:
       type: object
-      required: [id, type, title, date, image, preview]
+      required: [items, page]
       properties:
-        id: { type: string, description: Existing public content ID }
-        type: { $ref: '#/components/schemas/ContentType' }
-        title: { type: string }
-        date: { type: string, format: date }
-        category: { type: string }
-        image: { type: string }
-        preview: { type: string }
-    ContentDetailDto:
-      allOf:
-        - { $ref: '#/components/schemas/ContentListItemDto' }
-        - type: object
-          properties:
-            blocks:
-              type: array
-              items: { $ref: '#/components/schemas/ContentBlockDto' }
-            related:
-              type: array
-              items: { $ref: '#/components/schemas/ContentListItemDto' }
-    ContentBlockDto:
+        items: { type: array, items: { $ref: '#/components/schemas/ContentAdminDto' } }
+        page: { $ref: '#/components/schemas/PageMetadata' }
+    MediaPageDto:
       type: object
-      required: [type, sortOrder]
+      required: [items, page]
       properties:
-        type:
-          type: string
-          enum: [paragraph, image, quote, link]
-        sortOrder: { type: integer }
-        text: { type: string }
-        src: { type: string }
-        caption: { type: string }
-        url: { type: string }
-        linkText: { type: string }
+        items: { type: array, items: { $ref: '#/components/schemas/MediaFileDto' } }
+        page: { $ref: '#/components/schemas/PageMetadata' }
+    LeadPageDto:
+      type: object
+      required: [items, page]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/LeadAdminDto' } }
+        page: { $ref: '#/components/schemas/PageMetadata' }
+    AuditEventPageDto:
+      type: object
+      required: [items, page]
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/AuditEventDto' } }
+        page: { $ref: '#/components/schemas/PageMetadata' }
   responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema: { $ref: '#/components/schemas/ErrorResponse' }
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    Site: { description: Public or editable site settings, content: { application/json: { schema: { $ref: '#/components/schemas/SiteDto' } } } }
+    Menu: { description: Menu, content: { application/json: { schema: { $ref: '#/components/schemas/MenuDto' } } } }
+    Page: { description: Page, content: { application/json: { schema: { $ref: '#/components/schemas/PageDto' } } } }
+    ProductPage: { description: Products, content: { application/json: { schema: { $ref: '#/components/schemas/ProductPageDto' } } } }
+    ProductDetail: { description: Product detail, content: { application/json: { schema: { $ref: '#/components/schemas/ProductDetailDto' } } } }
+    ProductCategoryTree: { description: Category tree, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ProductCategoryDto' } } } } }
+    ContentPage: { description: Content items, content: { application/json: { schema: { $ref: '#/components/schemas/ContentPageDto' } } } }
+    ContentDetail: { description: Content detail, content: { application/json: { schema: { $ref: '#/components/schemas/ContentDetailDto' } } } }
+    SlideList: { description: Slides, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/SlideDto' } } } } }
+    Contacts: { description: Contacts, content: { application/json: { schema: { $ref: '#/components/schemas/ContactDto' } } } }
+    DocumentList: { description: Documents, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/DocumentDto' } } } } }
+    CertificateList: { description: Certificates, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/CertificateDto' } } } } }
+    LeadCreated: { description: Lead accepted, content: { application/json: { schema: { $ref: '#/components/schemas/LeadCreateResponse' } } } }
+    AuthSession: { description: Administrator session, content: { application/json: { schema: { $ref: '#/components/schemas/AuthSessionDto' } } } }
+    AdminUser: { description: Administrator user, content: { application/json: { schema: { $ref: '#/components/schemas/AdminUserDto' } } } }
+    AdminProduct: { description: Product editor model, content: { application/json: { schema: { $ref: '#/components/schemas/ProductAdminDto' } } } }
+    AdminProductPage: { description: Products, content: { application/json: { schema: { $ref: '#/components/schemas/AdminProductPageDto' } } } }
+    AdminCategory: { description: Category, content: { application/json: { schema: { $ref: '#/components/schemas/ProductCategoryDto' } } } }
+    AdminCategoryTree: { description: Category tree, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ProductCategoryDto' } } } } }
+    AdminContent: { description: Content editor model, content: { application/json: { schema: { $ref: '#/components/schemas/ContentAdminDto' } } } }
+    AdminContentPage: { description: Content, content: { application/json: { schema: { $ref: '#/components/schemas/AdminContentPageDto' } } } }
+    AdminSlide: { description: Slide editor model, content: { application/json: { schema: { $ref: '#/components/schemas/SlideAdminDto' } } } }
+    AdminSlideList: { description: Slides, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/SlideAdminDto' } } } } }
+    AdminPage: { description: Page editor model, content: { application/json: { schema: { $ref: '#/components/schemas/PageAdminDto' } } } }
+    AdminPageList: { description: Pages, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/PageAdminDto' } } } } }
+    LegacyBlockList: { description: Legacy blocks, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/LegacyBlockDto' } } } } }
+    MediaFile: { description: Media file, content: { application/json: { schema: { $ref: '#/components/schemas/MediaFileDto' } } } }
+    MediaPage: { description: Media, content: { application/json: { schema: { $ref: '#/components/schemas/MediaPageDto' } } } }
+    AdminDocument: { description: Document, content: { application/json: { schema: { $ref: '#/components/schemas/DocumentDto' } } } }
+    AdminDocumentList: { description: Documents, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/DocumentDto' } } } } }
+    AdminCertificate: { description: Certificate, content: { application/json: { schema: { $ref: '#/components/schemas/CertificateDto' } } } }
+    AdminCertificateList: { description: Certificates, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/CertificateDto' } } } } }
+    LeadPage: { description: Leads, content: { application/json: { schema: { $ref: '#/components/schemas/LeadPageDto' } } } }
+    NotificationEvent: { description: Notification event, content: { application/json: { schema: { $ref: '#/components/schemas/NotificationEventDto' } } } }
+    AdminUserList: { description: Users, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/AdminUserDto' } } } } }
+    AuditEventPage: { description: Audit events, content: { application/json: { schema: { $ref: '#/components/schemas/AuditEventPageDto' } } } }
+    BadRequest: { description: Bad request, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+    ValidationError: { description: Validation error, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+    Unauthorized: { description: Authentication required, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+    Forbidden: { description: Permission denied, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+    NotFound: { description: Not found, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+    Conflict: { description: State conflict, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+    PayloadTooLarge: { description: Upload too large, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }
+    RateLimited: { description: Too many requests, headers: { Retry-After: { schema: { type: integer } } }, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorResponse' } } } }

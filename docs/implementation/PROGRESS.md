@@ -7,10 +7,11 @@ Phase 0 baseline recorded. Public frontend integration is intentionally deferred
 | Task ID | Requirement | Commit | Tests | Status |
 |---|---|---|---|---|
 | PH0-LANDING-001 | Preserve baseline, routes, identifiers, and validated SDD package | Pending documentation commit | Existing build result is documented in `architecture-sdd/validation/LANDING_CODE_AUDIT.md` | COMPLETE |
+| PH1-CONTRACTS-001 | Synchronize landing-facing API contract baseline | `w-api-contracts` `00c8739` | OpenAPI lint, validation, and TS generation | COMPLETE |
 
 ## Current task
 
-No production frontend code changes. Keep the baseline compatible with `/home` and `/news/:id` while contracts are defined.
+No production frontend code changes. Keep the baseline compatible with `/home` and `/news/:id` while backend endpoints are implemented.
 
 ## Next tasks
 
