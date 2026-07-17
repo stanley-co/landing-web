@@ -822,7 +822,7 @@ components:
             status: { $ref: '#/components/schemas/Status' }
     ContentListItemDto:
       type: object
-      required: [id, type, title, date, image, preview]
+      required: [id, type, title, date, category, image, preview]
       properties:
         id: { type: string, description: Existing public content ID. }
         type: { $ref: '#/components/schemas/ContentType' }
@@ -1038,7 +1038,7 @@ components:
         status: { $ref: '#/components/schemas/Status' }
     ContentWriteRequest:
       type: object
-      required: [id, type, title, date, imageId, preview, blocks, status]
+      required: [id, type, title, date, category, imageId, preview, blocks, status]
       properties:
         id: { type: string, description: Stable existing/public ID; immutable after creation. }
         type: { $ref: '#/components/schemas/ContentType' }

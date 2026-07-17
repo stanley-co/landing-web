@@ -27,9 +27,9 @@ Content types: `NEWS`, `ARTICLE`. Public detail endpoint uses ID.
 - `quote`: `text`;
 - `link`: `url`, optional `linkText`, optional `text`.
 
-Do not expose a single `body` field as the source of rendered content. Existing `id` remains the public route key for `/news/:id`; slug is optional future metadata only.
+Do not expose a single `body` field as the source of rendered content. Existing `id` remains the public route key for `/news/:id`. Slug metadata is future scope and has no MVP storage, API, or admin field.
 
-`category` is a display/filter string from the current S3 JSON. The landing has
+`category` is a required display/filter string in the current S3 JSON. The landing has
 no content-category tree or explicit content-to-content links: `RelatedNews`
 derives cards from the loaded list. Therefore neither a content-category DTO nor
 `relatedContentIds` belongs in the MVP write model. Product-to-content links are

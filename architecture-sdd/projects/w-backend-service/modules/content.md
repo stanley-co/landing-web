@@ -6,7 +6,8 @@ Scope: `NEWS`, `ARTICLE`, ID-based route `/news/:id`, content blocks, cover imag
 
 Entities/tables: `content_items`, `content_blocks`.
 
-Public identifier: existing ID. `slug` nullable future field, not required by public API.
+Public identifier: existing ID. Slug is future scope and has no MVP storage,
+public API, or admin-editor field.
 
 Controllers: `/public/content`, `/public/news/{id}`, `/admin/content`.
 

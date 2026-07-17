@@ -31,7 +31,7 @@ Minimum columns/relations required by current landing:
 - `product_related_content`: `product_id`, `content_item_id`, `sort_order`, `relation_type`.
 - `product_categories`: self-referencing parent, exact display name, `sort_order`, status.
 - `slides`: `external_id`, `page_code`, `title`, `description`, `media_file_id`, `button_text`, `link`, `sort_order`, `status`.
-- `content_items`: `external_id`, `type`, `title`, `date`, display/filter `category` string, `cover_media_file_id`, `preview`, nullable `slug`, `status`; no separate category table is justified by the current JSON.
+- `content_items`: `external_id`, `type`, `title`, `date`, required display/filter `category` string, `cover_media_file_id`, `preview`, `status`; no separate category table or slug column is justified by the current MVP JSON/routes.
 - `content_blocks`: `content_item_id`, `sort_order`, `type`, typed text/url/media fields or constrained JSON payload.
 - `leads`: source/form type, company, first/second/last name, phone, email, comment, consent flag/time, optional product reference/name, status.
 

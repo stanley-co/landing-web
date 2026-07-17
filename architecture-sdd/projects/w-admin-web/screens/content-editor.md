@@ -2,7 +2,7 @@
 
 Routes: `/content/new`, `/content/:id`.
 
-Fields: ID, optional slug, type, title, preview, category display string, cover, content blocks, status.
+Fields: ID, type, title, preview, required category display string, cover, content blocks, status.
 
 Blocks: paragraph, image, quote, link.
 
