@@ -44,13 +44,13 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | BE-002 | w-backend-service | Add profiles, typed configuration, PostgreSQL connection, and Flyway foundation | BE-001 | DONE | `a9caea9`; typed app config, Flyway V1, local PostgreSQL startup passed. |
 | BE-003 | w-backend-service | Add standard error response, validation, and request-ID filter | BE-001, CT-002 | DONE | `a9caea9`; contract-aligned error model and 3 request-ID tests. |
 | BE-004 | w-backend-service | Add structured logging, Actuator health, and baseline metrics | BE-001 | DONE | `a9caea9`; health is `200 UP`, JSON access event includes request ID. |
-| BE-005 | w-backend-service | Add JUnit, Mockito, MockMvc, Testcontainers foundation | BE-001, BE-002 | READY | Next: add reusable PostgreSQL Testcontainers base and a Flyway integration test. |
+| BE-005 | w-backend-service | Add JUnit, Mockito, MockMvc, Testcontainers foundation | BE-001, BE-002 | DONE | `7d8303a`; reusable PostgreSQL Testcontainers, Flyway and MockMvc health tests pass. |
 
 ## Phase 4: Internal gateway / edge layer
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| ED-001 | w-backend-service | Separate public, auth, admin, and health route policies | BE-001 | NOT_STARTED | ADR-002; no business logic here. |
+| ED-001 | w-backend-service | Separate public, auth, admin, and health route policies | BE-001 | IN_PROGRESS | ADR-002; configure prefix-aware policy without business logic. |
 | ED-002 | w-backend-service | Add CORS allowlist, security headers, request-size and upload limits | ED-001, BE-003 | NOT_STARTED | Use local origins from infra template. |
 | ED-003 | w-backend-service | Add rate limits for login and lead submission | ED-001 | NOT_STARTED | Must return normalized 429 errors. |
 | ED-004 | w-backend-service | Add edge-policy integration tests | ED-002, ED-003, BE-005 | NOT_STARTED | CORS, request ID, headers, limits, rate limit. |
