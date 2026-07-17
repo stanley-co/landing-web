@@ -82,6 +82,5 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`ST-004` is the active next task: verify complete storage integration, including
-upload validation and the refusal to delete PDF media referenced by documents or
-certificates.
+`CA-001` is the active next task: implement the ordered product category hierarchy
+and category counts while preserving the landing's `globalCategory/category` grouping.

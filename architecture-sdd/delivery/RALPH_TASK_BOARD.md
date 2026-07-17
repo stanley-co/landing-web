@@ -71,13 +71,13 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | ST-001 | w-backend-service | Implement S3/MinIO abstraction, media metadata, checksum, MIME/size validation | BE-002, ED-002, IN-003 | DONE | `d449c52`; Flyway V5, S3-compatible adapter, media metadata, SDD key conventions and MIME/size/SHA-256 policy. |
 | ST-002 | w-backend-service | Add media upload, safe-delete, replacement, and usage detection API | ST-001, AU-003, CT-004 | DONE | `17455e9`; authorized multipart metadata flow, audit, MIME/size policy, safe-delete boundary, and local MinIO put/get/delete verification. |
 | ST-003 | w-backend-service | Implement document and certificate metadata over PDF media | ST-001, CT-003, CT-004 | DONE | `4c48e2c`; admin/public metadata endpoints, PDF-only validation, status/order and certificate dates; binaries stay in MinIO/S3. |
-| ST-004 | w-backend-service | Add MinIO integration tests | ST-002, ST-003, BE-005 | IN_PROGRESS | Upload, invalid MIME, oversize, replacement, used-file denial. |
+| ST-004 | w-backend-service | Add MinIO integration tests | ST-002, ST-003, BE-005 | DONE | `5597df8`; local MinIO put/get/delete, MIME/size/checksum policy, and real document-referenced PDF delete denial. |
 
 ## Phase 7: Catalog
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| CA-001 | w-backend-service | Model ordered global/category tree and category counts | BE-002, AU-003, CT-003 | NOT_STARTED | Preserve `globalCategory/category` behavior. |
+| CA-001 | w-backend-service | Model ordered global/category tree and category counts | BE-002, AU-003, CT-003 | IN_PROGRESS | Preserve `globalCategory/category` behavior. |
 | CA-002 | w-backend-service | Model products with immutable external IDs and core descriptions/status/order | CA-001, ST-001 | NOT_STARTED | No slug replacement. |
 | CA-003 | w-backend-service | Add ordered specs, advantages, gallery, main media, video, and related content | CA-002, ST-001 | NOT_STARTED | Must cover current product detail fields. |
 | CA-004 | w-backend-service | Implement public catalog list/detail/search/filter/category APIs | CA-003, CT-003, ED-001 | NOT_STARTED | Detail remains one response. |
