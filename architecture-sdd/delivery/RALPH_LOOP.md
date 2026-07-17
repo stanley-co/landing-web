@@ -82,6 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`AU-001` is the active next task: add the administrator, role, session and audit
-schema in `w-backend-service`, retaining exactly the three roles approved by ADR-004.
-It follows the completed edge-policy verification commit `5471d46`.
+`AU-002` is the active next task: implement login, refresh, logout, current user and
+local administrator bootstrap in `w-backend-service`, using the completed auth-schema
+commit `3d48268` and avoiding insecure frontend token storage.

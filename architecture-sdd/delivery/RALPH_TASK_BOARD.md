@@ -59,8 +59,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| AU-001 | w-backend-service | Add administrator, role, permission, session, and audit schema | BE-002 | IN_PROGRESS | Roles fixed by ADR-004 and contract; add Flyway schema only. |
-| AU-002 | w-backend-service | Implement login, refresh, logout, current user, and local bootstrap | AU-001, CT-004, ED-001 | NOT_STARTED | No insecure frontend token storage. |
+| AU-001 | w-backend-service | Add administrator, role, permission, session, and audit schema | BE-002 | DONE | `3d48268`; Flyway V2, exact role seed and clean PostgreSQL verification. |
+| AU-002 | w-backend-service | Implement login, refresh, logout, current user, and local bootstrap | AU-001, CT-004, ED-001 | IN_PROGRESS | Implement cookie-based access/refresh flow without frontend token storage. |
 | AU-003 | w-backend-service | Implement RBAC policies and login audit/failed-attempt tracking | AU-001, AU-002 | NOT_STARTED | Three approved roles only. |
 | AU-004 | w-backend-service | Add auth/RBAC integration tests | AU-002, AU-003, BE-005 | NOT_STARTED | Success, revoke, lockout, forbidden, audit. |
 
