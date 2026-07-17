@@ -82,6 +82,7 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`AU-002` is the active next task: implement login, refresh, logout, current user and
-local administrator bootstrap in `w-backend-service`, using the completed auth-schema
-commit `3d48268` and avoiding insecure frontend token storage.
+`AU-003` is the active next task: implement RBAC policies, login failed-attempt
+tracking, account lockout, and authentication audit in `w-backend-service`. It builds
+on the completed session-flow task `AU-002` and must retain its opaque access-token
+and `HttpOnly` refresh-cookie boundary.
