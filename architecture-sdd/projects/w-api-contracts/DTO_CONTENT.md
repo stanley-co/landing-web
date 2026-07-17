@@ -18,7 +18,6 @@ Content types: `NEWS`, `ARTICLE`. Public detail endpoint uses ID.
 
 - all list fields;
 - ordered `blocks`;
-- optional derived SEO metadata.
 
 `ContentBlockDto` MVP types are limited to real frontend support:
 
@@ -34,3 +33,7 @@ no content-category tree or explicit content-to-content links: `RelatedNews`
 derives cards from the loaded list. Therefore neither a content-category DTO nor
 `relatedContentIds` belongs in the MVP write model. Product-to-content links are
 separate catalog data.
+
+The current landing derives document title, description, image, and canonical
+path from content fields and its existing ID. Do not add separate content SEO
+fields to the public DTO or the admin write DTO in this MVP.

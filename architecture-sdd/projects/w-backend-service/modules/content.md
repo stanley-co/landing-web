@@ -11,7 +11,8 @@ public API, or admin-editor field.
 
 Controllers: `/public/content`, `/public/news/{id}`, `/admin/content`.
 
-Validation: unique external ID, active item needs title/preview/type/date, block payload valid by type.
+Validation: unique external ID, active item needs title/preview/type/date/category/cover,
+block payload valid by type.
 
 Permissions: read all admin roles; write `ADMIN`/`FEATURE_OWNER`.
 
@@ -27,7 +28,7 @@ Evidence:
 
 Required target behavior:
 
-- Keep public detail endpoint ID-based: `GET /api/v1/public/news/{id}` finds both NEWS and ARTICLE. Slug remains nullable future metadata only.
+- Keep public detail endpoint ID-based: `GET /api/v1/public/news/{id}` finds both NEWS and ARTICLE. Slug is out of MVP scope.
 - Preserve structured `ContentBlock`; do not collapse content to a single `body` string.
 - Supported MVP block types are exactly the rendered types: `paragraph`, `image`, `quote`, `link`.
 - Public list DTO must include `id`, `title`, `date`, `category`, `image`, `preview`, and `type` so `/information` can reproduce current cards/tabs.
@@ -39,6 +40,9 @@ Required target behavior:
   does not read explicit material-to-material links. Do not introduce a
   `content_related_content` editor/table unless a future source schema supplies
   actual links. Product-to-content links remain owned by the catalog module.
+- `DocumentHead` derives title, description, OG image, and canonical path from
+  title/preview/cover/existing ID. No separate content SEO storage or editor is
+  part of this MVP.
 
 Acceptance:
 

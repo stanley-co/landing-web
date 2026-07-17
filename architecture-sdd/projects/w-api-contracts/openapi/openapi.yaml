@@ -839,7 +839,6 @@ components:
             blocks:
               type: array
               items: { $ref: '#/components/schemas/ContentBlockDto' }
-            seo: { $ref: '#/components/schemas/SeoDto' }
     ContentBlockDto:
       type: object
       required: [type, sortOrder]
@@ -912,7 +911,6 @@ components:
       properties:
         route: { type: string }
         title: { type: string }
-        seo: { $ref: '#/components/schemas/SeoDto' }
         sections:
           type: array
           items: { $ref: '#/components/schemas/PageSectionDto' }
