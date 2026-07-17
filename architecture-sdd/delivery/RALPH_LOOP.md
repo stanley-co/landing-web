@@ -82,6 +82,5 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`CA-003` is the active next task: add the ordered product detail fields that the
-landing renders: specs, advantages, main/gallery media, video, and related
-content.
+`CA-004` is the active next task: implement public catalog list/detail/search
+and filtering while returning the full product detail in one response.
