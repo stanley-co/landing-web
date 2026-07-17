@@ -82,6 +82,7 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`ED-003` is the active next task: add bounded rate limits for login and public lead
-submission in the internal edge layer in `w-backend-service`. It follows the
-completed CORS/headers/limits commit `5dc4e64`.
+`ED-004` is the active next task: complete edge-policy integration coverage for
+CORS, request IDs, security headers, limits and rate limiting in
+`w-backend-service`. It follows the completed sensitive-route limiter commit
+`84144bf`.

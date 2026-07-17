@@ -52,8 +52,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | --- | --- | --- | --- | --- | --- |
 | ED-001 | w-backend-service | Separate public, auth, admin, and health route policies | BE-001 | DONE | `90a1857`; public 404/admin 401 are normalized with request IDs. |
 | ED-002 | w-backend-service | Add CORS allowlist, security headers, request-size and upload limits | ED-001, BE-003 | DONE | `5dc4e64`; CORS allow/deny, headers, multipart 30 MB and normalized 413 verified. |
-| ED-003 | w-backend-service | Add rate limits for login and lead submission | ED-001 | IN_PROGRESS | Add bounded in-memory edge limiter with normalized 429 errors. |
-| ED-004 | w-backend-service | Add edge-policy integration tests | ED-002, ED-003, BE-005 | NOT_STARTED | CORS, request ID, headers, limits, rate limit. |
+| ED-003 | w-backend-service | Add rate limits for login and lead submission | ED-001 | DONE | `84144bf`; bounded local limiter returns normalized 429 and Retry-After. |
+| ED-004 | w-backend-service | Add edge-policy integration tests | ED-002, ED-003, BE-005 | IN_PROGRESS | Complete CORS, request ID, headers, limits, rate-limit integration coverage. |
 
 ## Phase 5: Authentication and RBAC
 
