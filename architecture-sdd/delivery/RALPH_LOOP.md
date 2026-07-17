@@ -82,7 +82,7 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`AU-003` is the active next task: implement RBAC policies, login failed-attempt
-tracking, account lockout, and authentication audit in `w-backend-service`. It builds
-on the completed session-flow task `AU-002` and must retain its opaque access-token
-and `HttpOnly` refresh-cookie boundary.
+`AU-004` is the active next task: consolidate auth/RBAC integration coverage for
+forbidden permission paths and audit records before dependent admin modules are
+implemented. It builds on `AU-003` and retains opaque access tokens, `HttpOnly`
+refresh cookies, and SPA CSRF double-submit protection.
