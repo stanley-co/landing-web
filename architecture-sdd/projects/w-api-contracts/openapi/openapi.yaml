@@ -283,6 +283,32 @@ paths:
             schema: { $ref: '#/components/schemas/ReorderRequest' }
       responses:
         '204': { description: Reordered }
+  /admin/product-categories/{id}:
+    put:
+      tags: [Admin]
+      operationId: updateProductCategory
+      summary: Update an editable product category without changing its stable ID
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PublicId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductCategoryUpdateRequest' }
+      responses:
+        '200': { $ref: '#/components/responses/AdminCategory' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/product-categories/{id}/archive:
+    post:
+      tags: [Admin]
+      operationId: archiveProductCategory
+      summary: Archive an unused product category without deleting its stable ID
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PublicId' }]
+      responses:
+        '204': { description: Archived }
+        '404': { $ref: '#/components/responses/NotFound' }
   /admin/content:
     get:
       tags: [Admin]
@@ -763,6 +789,13 @@ components:
         children:
           type: array
           items: { $ref: '#/components/schemas/ProductCategoryDto' }
+    AdminProductCategoryDto:
+      allOf:
+        - $ref: '#/components/schemas/ProductCategoryDto'
+        - type: object
+          required: [status]
+          properties:
+            status: { $ref: '#/components/schemas/Status' }
     ContentListItemDto:
       type: object
       required: [id, type, title, date, image, preview]
@@ -958,13 +991,22 @@ components:
             updatedAt: { type: string, format: date-time }
     ProductCategoryWriteRequest:
       type: object
-      required: [id, name, sortOrder]
+      required: [id, name, sortOrder, status]
       properties:
-        id: { type: string }
+        id: { type: string, minLength: 1, maxLength: 255, description: Immutable stable category ID. }
         parentId: { type: string }
         name: { type: string, minLength: 1, maxLength: 255 }
         anchor: { type: string }
         sortOrder: { type: integer, minimum: 0 }
+        status: { $ref: '#/components/schemas/Status' }
+    ProductCategoryUpdateRequest:
+      type: object
+      required: [name, sortOrder, status]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 255 }
+        anchor: { type: string }
+        sortOrder: { type: integer, minimum: 0 }
+        status: { $ref: '#/components/schemas/Status' }
     ContentWriteRequest:
       type: object
       required: [id, type, title, date, imageId, preview, blocks, status]
@@ -1156,8 +1198,8 @@ components:
     AdminUser: { description: Administrator user, content: { application/json: { schema: { $ref: '#/components/schemas/AdminUserDto' } } } }
     AdminProduct: { description: Product editor model, content: { application/json: { schema: { $ref: '#/components/schemas/ProductAdminDto' } } } }
     AdminProductPage: { description: Products, content: { application/json: { schema: { $ref: '#/components/schemas/AdminProductPageDto' } } } }
-    AdminCategory: { description: Category, content: { application/json: { schema: { $ref: '#/components/schemas/ProductCategoryDto' } } } }
-    AdminCategoryTree: { description: Category tree, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/ProductCategoryDto' } } } } }
+    AdminCategory: { description: Category, content: { application/json: { schema: { $ref: '#/components/schemas/AdminProductCategoryDto' } } } }
+    AdminCategoryTree: { description: Category tree, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/AdminProductCategoryDto' } } } } }
     AdminContent: { description: Content editor model, content: { application/json: { schema: { $ref: '#/components/schemas/ContentAdminDto' } } } }
     AdminContentPage: { description: Content, content: { application/json: { schema: { $ref: '#/components/schemas/AdminContentPageDto' } } } }
     AdminSlide: { description: Slide editor model, content: { application/json: { schema: { $ref: '#/components/schemas/SlideAdminDto' } } } }
