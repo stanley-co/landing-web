@@ -13,7 +13,7 @@ The admin panel is not a React page builder. It manages business content and ope
 | Related product articles | S3 `materialsAndNews.articles/atricles` | occasional | catalog/content owner | ADMIN_MANAGED | yes | Cross-links on product detail. |
 | Carousel slides | S3 `data/carousel/carousel.json` | regular | content owner | ADMIN_MANAGED | yes | Main dynamic banner. |
 | News | S3 `data/news/news.json` | regular | content owner | ADMIN_MANAGED | yes | Business content. |
-| Articles | S3 `data/articles/articles.json` | regular | content owner | ADMIN_MANAGED | yes | Structured blocks, related content. |
+| Articles | S3 `data/articles/articles.json` | regular | content owner | ADMIN_MANAGED | yes | Structured blocks; product references are managed from catalog. |
 | Article block links | S3 content blocks | occasional | content owner | ADMIN_MANAGED | yes | Business external links inside articles only. |
 | Leads | Browser forms | regular | sales/admin | ADMIN_MANAGED | yes | Must persist in PostgreSQL and notify by email. |
 | Certificates/PDF | Currently JSX placeholders; requirement says S3 binaries + metadata | occasional | site owner | ADMIN_MANAGED | yes | Required by approved decision for PDF/certificates. |

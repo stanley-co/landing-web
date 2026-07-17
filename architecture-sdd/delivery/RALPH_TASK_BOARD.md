@@ -88,7 +88,7 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| CO-001 | w-backend-service | Model NEWS and ARTICLE with immutable external IDs and structured blocks | BE-002, ST-001, CT-003 | READY | Block types only paragraph/image/quote/link. |
+| CO-001 | w-backend-service | Model NEWS and ARTICLE with immutable external IDs and structured blocks | BE-002, ST-001, CT-003 | IN_PROGRESS | Block types only paragraph/image/quote/link. |
 | CO-002 | w-backend-service | Add public content list/detail and related-content API | CO-001, ED-001 | NOT_STARTED | Preserve `/news/:id`. |
 | CO-003 | w-backend-service | Add admin content CRUD and ordered block editing API | CO-001, AU-003, CT-004 | NOT_STARTED | No raw-JSON primary editor. |
 | PA-001 | w-backend-service | Add only SDD-approved managed pages and settings | BE-002, AU-003, CT-003 | NOT_STARTED | No universal page builder. |

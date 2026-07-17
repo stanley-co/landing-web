@@ -2,9 +2,14 @@
 
 Routes: `/content/new`, `/content/:id`.
 
-Fields: ID, optional slug, type, title, preview, category, cover, content blocks, related products, status.
+Fields: ID, optional slug, type, title, preview, category display string, cover, content blocks, status.
 
 Blocks: paragraph, image, quote, link.
+
+The current landing does not have an explicit material-to-material or
+material-to-product editor. `RelatedNews` derives cards from the list and
+product references are managed from the product editor; do not add a raw
+relation picker to this screen.
 
 Acceptance: existing ID immutable; slug not required; preview supported.
 

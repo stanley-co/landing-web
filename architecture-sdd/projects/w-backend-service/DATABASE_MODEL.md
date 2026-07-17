@@ -5,7 +5,7 @@ Primary tables:
 - `admin_users`, `roles`, `permissions`, `admin_user_roles`, `role_permissions`;
 - `audit_logs`;
 - `product_categories`, `products`, `product_specs`, `product_advantages`, `product_media`, `product_videos`, `product_related_content`;
-- `content_categories`, `content_items`, `content_blocks`;
+- `content_items`, `content_blocks`;
 - `pages`, `page_sections`, `legacy_blocks`;
 - `menus`, `menu_items`, `slides`, `contacts`, `social_links`, `settings`;
 - `media_files`, `documents`, `certificates`;
@@ -31,7 +31,7 @@ Minimum columns/relations required by current landing:
 - `product_related_content`: `product_id`, `content_item_id`, `sort_order`, `relation_type`.
 - `product_categories`: self-referencing parent, exact display name, `sort_order`, status.
 - `slides`: `external_id`, `page_code`, `title`, `description`, `media_file_id`, `button_text`, `link`, `sort_order`, `status`.
-- `content_items`: `external_id`, `type`, `title`, `date`, `category`, `cover_media_file_id`, `preview`, nullable `slug`, `status`.
+- `content_items`: `external_id`, `type`, `title`, `date`, display/filter `category` string, `cover_media_file_id`, `preview`, nullable `slug`, `status`; no separate category table is justified by the current JSON.
 - `content_blocks`: `content_item_id`, `sort_order`, `type`, typed text/url/media fields or constrained JSON payload.
 - `leads`: source/form type, company, first/second/last name, phone, email, comment, consent flag/time, optional product reference/name, status.
 

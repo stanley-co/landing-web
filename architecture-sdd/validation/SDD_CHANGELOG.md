@@ -1,5 +1,15 @@
 # SDD Changelog
 
+## 2026-07-18 Content Boundary Correction
+
+- Verified `RelatedNews` derives its cards from the loaded news/article list;
+  the current JSON has no material-to-material relation fields.
+- Kept product-to-content links in `product_related_content`, but removed the
+  unsupported content self-relation and content-category CRUD/table from the
+  MVP SDD and OpenAPI write model.
+- Defined content `category` as a display/filter string and retained exactly the
+  four current block types: `paragraph`, `image`, `quote`, and `link`.
+
 ## 2026-07-17 Validation Update
 
 - Added code-based validation artifacts under `architecture-sdd/validation/`.

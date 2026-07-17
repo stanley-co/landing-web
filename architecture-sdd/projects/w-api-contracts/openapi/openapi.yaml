@@ -839,9 +839,6 @@ components:
             blocks:
               type: array
               items: { $ref: '#/components/schemas/ContentBlockDto' }
-            relatedContent:
-              type: array
-              items: { $ref: '#/components/schemas/ContentListItemDto' }
             seo: { $ref: '#/components/schemas/SeoDto' }
     ContentBlockDto:
       type: object
@@ -1051,7 +1048,6 @@ components:
         imageId: { type: string, format: uuid }
         preview: { type: string, minLength: 1 }
         blocks: { type: array, items: { $ref: '#/components/schemas/ContentBlockDto' } }
-        relatedContentIds: { type: array, items: { type: string } }
         status: { $ref: '#/components/schemas/Status' }
         seo: { $ref: '#/components/schemas/SeoDto' }
     ContentAdminDto:
