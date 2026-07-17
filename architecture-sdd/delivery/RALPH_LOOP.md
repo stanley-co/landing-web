@@ -82,6 +82,7 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`CO-003` is in progress: implement role-protected NEWS/ARTICLE CRUD, atomic
-ordered paragraph/image/quote/link block editing by media UUID, and stable-ID
-archive behavior. Its contract is `54c6318`; public content reads are `073808a`.
+`PA-001` is in progress: define only the SDD-approved managed pages and site
+settings for actual landing business content. Do not create a universal page
+builder or move frontend layout, route names, or technical configuration into
+the database.

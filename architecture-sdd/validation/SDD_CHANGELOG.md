@@ -12,6 +12,16 @@
 - Recorded public content implementation `073808a` and contract correction
   `54c6318` in the Ralph loop.
 
+## 2026-07-18 Content Admin API
+
+- Implemented protected content list/create/read/update/archive under the
+  preserved ID model in backend commit `ee69c39`.
+- The editor accepts and returns `imageId` for media blocks; public API retains
+  URLs. Ordered block replacement rejects duplicate order values and preserves
+  media usage protection.
+- `FEATURE_OWNER` has content write access, `CONTENT_READER` has read-only
+  access, and create/update/archive create audit events.
+
 ## 2026-07-18 Content Boundary Correction
 
 - Verified `RelatedNews` derives its cards from the loaded news/article list;
