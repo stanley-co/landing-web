@@ -127,8 +127,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| AD-001 | w-admin-web | Initialize Vite/React/TypeScript/Ant Design foundation with generated client | CT-005, AU-002 | IN_PROGRESS | Independent critical path to a usable admin; auth and content/catalog contracts are available. |
-| AD-002 | w-admin-web | Implement login, auth/session state, router, shell, error boundary, permission guards | AD-001, AU-003 | NOT_STARTED | Role-aware navigation. |
+| AD-001 | w-admin-web | Initialize Vite/React/TypeScript/Ant Design foundation with generated client | CT-005, AU-002 | DONE | `64baecf`; Vite/React/Ant Design/Query/RHF/Zod foundation, contract type generation, lint/typecheck/build/Vitest pass. |
+| AD-002 | w-admin-web | Implement login, auth/session state, router, shell, error boundary, permission guards | AD-001, AU-003 | IN_PROGRESS | Role-aware navigation using opaque backend access tokens and refresh cookie. |
 | AD-003 | w-admin-web | Implement category and product editors with media, specs, advantages, gallery, video, relations, archive/reorder | AD-002, CA-005, ST-002 | NOT_STARTED | No raw JSON editor. |
 | AD-004 | w-admin-web | Implement media, document, and certificate management | AD-002, ST-003 | NOT_STARTED | Upload progress and safe-delete feedback. |
 | AD-005 | w-admin-web | Implement content, page, contacts, menu, carousel, and legacy management | AD-002, CO-003, PA-002, SL-001, LE-002 | NOT_STARTED | Legacy shows Deprecated badge. |

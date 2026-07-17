@@ -82,7 +82,7 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`AD-001` is in progress as the independent delivery-critical path: initialize
-the admin application with ADR-007 dependencies, generated contract types and
-the authentication/client foundation. `PA-001` remains READY pending a narrow
-page ownership correction; do not create a universal page builder.
+`AD-002` is in progress: add opaque-token login, refresh-cookie session state,
+protected router, error boundary, application shell, and permission guards.
+`PA-001` remains READY pending a narrow page ownership correction; do not
+create a universal page builder.
