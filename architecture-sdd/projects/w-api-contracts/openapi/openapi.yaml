@@ -658,7 +658,7 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
+      bearerFormat: opaque
   parameters:
     PublicId: { name: id, in: path, required: true, schema: { type: string, minLength: 1 }, description: Existing public identifier; no required slug. }
     EntityId: { name: id, in: path, required: true, schema: { type: string, format: uuid } }

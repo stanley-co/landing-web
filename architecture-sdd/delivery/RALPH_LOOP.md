@@ -82,6 +82,7 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`CA-006` is the next ready task: add contract-consistency and integration
-coverage for catalog public/admin behavior. `CO-002` later enriches product
-related-content references with card summaries before landing integration.
+`CO-001` is the next ready task: introduce NEWS/ARTICLE aggregates with stable
+public IDs and only the four validated block types. `CO-002` then enriches
+product related-content references with card summaries before landing
+integration.

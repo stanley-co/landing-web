@@ -82,13 +82,13 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | CA-003 | w-backend-service | Add ordered specs, advantages, gallery, main media, video, and related content | CA-002, ST-001 | DONE | `72feba4`; V9 atomic relation replacement/read projection, safe media usage, Rutube and duplicate-gallery validation; Docker Maven verify passed with 31 tests. |
 | CA-004 | w-backend-service | Implement public catalog list/detail/search/filter/category APIs | CA-003, CT-003, ED-001 | DONE | `17e65e7`; active list/search/filter and one detail aggregate with strict query bounds; full Docker Maven verify passed 35 tests. Related summaries remain a `CO-002` enrichment. |
 | CA-005 | w-backend-service | Implement admin catalog CRUD, archive, and reordering APIs | CA-003, AU-003, CT-004 | DONE | `35db438`; feature owner lifecycle API, reader read-only RBAC, immutable IDs, media/spec/advantage/video/related-content relations, archive and reorder; full Docker Maven verify passed 36 tests. |
-| CA-006 | w-backend-service | Add catalog integration and contract tests | CA-004, CA-005, BE-005 | READY | Verify executable OpenAPI fields/routes against catalog HTTP behavior, IDs, ordering, archive, relations, and permissions. |
+| CA-006 | w-backend-service | Add catalog integration and contract tests | CA-004, CA-005, BE-005 | DONE | `1bf0099` verifies OpenAPI catalog routes, immutable IDs, ordered relations, lifecycle, and opaque bearer transport; `35db438` full Docker Maven verify passed 36 HTTP/integration tests. |
 
 ## Phase 8: Content, pages, carousel, contacts
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| CO-001 | w-backend-service | Model NEWS and ARTICLE with immutable external IDs and structured blocks | BE-002, ST-001, CT-003 | NOT_STARTED | Block types only paragraph/image/quote/link. |
+| CO-001 | w-backend-service | Model NEWS and ARTICLE with immutable external IDs and structured blocks | BE-002, ST-001, CT-003 | READY | Block types only paragraph/image/quote/link. |
 | CO-002 | w-backend-service | Add public content list/detail and related-content API | CO-001, ED-001 | NOT_STARTED | Preserve `/news/:id`. |
 | CO-003 | w-backend-service | Add admin content CRUD and ordered block editing API | CO-001, AU-003, CT-004 | NOT_STARTED | No raw-JSON primary editor. |
 | PA-001 | w-backend-service | Add only SDD-approved managed pages and settings | BE-002, AU-003, CT-003 | NOT_STARTED | No universal page builder. |
