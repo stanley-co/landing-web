@@ -82,6 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`ST-001` is the active next task: implement the S3/MinIO abstraction and media
-metadata, checksum, MIME and size validation in `w-backend-service`. Binaries must
-remain outside PostgreSQL and the implementation must honor the completed RBAC edge.
+`ST-002` is the active next task: add authorized multipart upload, media list/delete,
+and safe usage checks. It uses the completed S3/MinIO foundation `ST-001`; binaries
+must remain outside PostgreSQL and deletion must refuse referenced files.
