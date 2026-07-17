@@ -62,8 +62,9 @@ enrichment. `FE-003` depends on both `CA-004` and `CO-002` because the existing
 ## Admin product editor boundary
 
 `ProductWriteRequest` contains the immutable public `id` for create and must
-match the path ID for update. It contains typed related-content rows (`id` and
-`NEWS`/`ARTICLE` type), not untyped IDs, so future related news are not lost.
+match the path ID for update. It contains typed, ordered related-content rows
+(`id`, `NEWS`/`ARTICLE` type, and `sortOrder`), not untyped IDs, so future
+related news are not lost.
 Manual product sort changes use `PUT /admin/products/reorder`. The form stores
 `fullDescription`; an active product must also have a category, main image, and
 nonblank short description. Product SEO is derived by the landing and has no
