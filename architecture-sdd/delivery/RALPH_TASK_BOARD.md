@@ -78,8 +78,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
 | CA-001 | w-backend-service | Model ordered global/category tree, stable IDs, lifecycle and public/admin tree API | BE-002, AU-003, CT-003 | DONE | `1f843a4`; V7, active-only public tree, manual order, RBAC, audit, 29-test Docker Maven verify. |
-| CA-002 | w-backend-service | Model products with immutable external IDs and core descriptions/status/order; add active category counts and product-reference archive guard | CA-001, ST-001 | READY | No slug replacement; replace CA-001 zero count placeholder with PostgreSQL aggregate. |
-| CA-003 | w-backend-service | Add ordered specs, advantages, gallery, main media, video, and related content | CA-002, ST-001 | NOT_STARTED | Must cover current product detail fields. |
+| CA-002 | w-backend-service | Model products with immutable external IDs and core descriptions/status/order; add active category counts and product-reference archive guard | CA-001, ST-001 | DONE | V8 in pending backend commit; active counts use PostgreSQL and archive rejects any product reference. |
+| CA-003 | w-backend-service | Add ordered specs, advantages, gallery, main media, video, and related content | CA-002, ST-001 | READY | Must cover current product detail fields. |
 | CA-004 | w-backend-service | Implement public catalog list/detail/search/filter/category APIs | CA-003, CT-003, ED-001 | NOT_STARTED | Detail remains one response. |
 | CA-005 | w-backend-service | Implement admin catalog CRUD, archive, and reordering APIs | CA-003, AU-003, CT-004 | NOT_STARTED | Public ID immutable after creation. |
 | CA-006 | w-backend-service | Add catalog integration and contract tests | CA-004, CA-005, BE-005 | NOT_STARTED | IDs, ordering, archive, relations, permissions. |

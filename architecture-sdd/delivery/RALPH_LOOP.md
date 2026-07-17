@@ -82,6 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`CA-002` is the active next task: implement products with immutable external IDs,
-real category counts, and product-reference archive protection while preserving
-the landing's `globalCategory/category` grouping.
+`CA-003` is the active next task: add the ordered product detail fields that the
+landing renders: specs, advantages, main/gallery media, video, and related
+content.
