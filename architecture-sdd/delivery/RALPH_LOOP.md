@@ -82,7 +82,7 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`AD-002` is in progress: add opaque-token login, refresh-cookie session state,
-protected router, error boundary, application shell, and permission guards.
-`PA-001` remains READY pending a narrow page ownership correction; do not
-create a universal page builder.
+`AD-003` is in progress: implement real category and product editor workflows
+with typed repeatable specs/advantages/gallery/related-content fields and
+media selection. Do not use a raw JSON editor. `PA-001` remains READY pending a
+narrow page ownership correction; do not create a universal page builder.
