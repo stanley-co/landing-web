@@ -62,13 +62,13 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | AU-001 | w-backend-service | Add administrator, role, permission, session, and audit schema | BE-002 | DONE | `3d48268`; Flyway V2, exact role seed and clean PostgreSQL verification. |
 | AU-002 | w-backend-service | Implement login, refresh, logout, current user, and local bootstrap | AU-001, CT-004, ED-001 | DONE | `d897200`; `AuthIntegrationTest` proves bootstrap login, refresh rotation, `/me`, old-token invalidation, and logout revocation. Access tokens are opaque and held in admin memory only; refresh is `HttpOnly`/`SameSite=Strict`. |
 | AU-003 | w-backend-service | Implement RBAC policies and login audit/failed-attempt tracking | AU-001, AU-002 | DONE | `16bcc49`; Flyway V4 seeds module/action permissions for only the three approved roles. Lockout/audit events omit credentials and session tokens; cookie refresh/logout require SPA CSRF double submit. |
-| AU-004 | w-backend-service | Add auth/RBAC integration tests | AU-002, AU-003, BE-005 | IN_PROGRESS | Consolidate success, revoke, lockout, forbidden and audit coverage before admin modules. |
+| AU-004 | w-backend-service | Add auth/RBAC integration tests | AU-002, AU-003, BE-005 | DONE | `e997b16`; targeted tests prove role authority evaluation and actual method-security `200`/normalized `403`, alongside session/revoke/lockout/audit coverage. |
 
 ## Phase 6: Storage, media, documents, certificates
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| ST-001 | w-backend-service | Implement S3/MinIO abstraction, media metadata, checksum, MIME/size validation | BE-002, ED-002, IN-003 | NOT_STARTED | Binary files remain outside PostgreSQL. |
+| ST-001 | w-backend-service | Implement S3/MinIO abstraction, media metadata, checksum, MIME/size validation | BE-002, ED-002, IN-003 | IN_PROGRESS | Binary files remain outside PostgreSQL. |
 | ST-002 | w-backend-service | Add media upload, safe-delete, replacement, and usage detection API | ST-001, AU-003, CT-004 | NOT_STARTED | Used file deletion must be denied. |
 | ST-003 | w-backend-service | Implement document and certificate metadata over PDF media | ST-001, CT-003, CT-004 | NOT_STARTED | PDF files stored in MinIO only. |
 | ST-004 | w-backend-service | Add MinIO integration tests | ST-002, ST-003, BE-005 | NOT_STARTED | Upload, invalid MIME, oversize, replacement, used-file denial. |

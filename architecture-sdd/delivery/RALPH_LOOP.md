@@ -82,7 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`AU-004` is the active next task: consolidate auth/RBAC integration coverage for
-forbidden permission paths and audit records before dependent admin modules are
-implemented. It builds on `AU-003` and retains opaque access tokens, `HttpOnly`
-refresh cookies, and SPA CSRF double-submit protection.
+`ST-001` is the active next task: implement the S3/MinIO abstraction and media
+metadata, checksum, MIME and size validation in `w-backend-service`. Binaries must
+remain outside PostgreSQL and the implementation must honor the completed RBAC edge.
