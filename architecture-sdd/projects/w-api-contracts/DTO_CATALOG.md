@@ -25,7 +25,9 @@ Core DTOs:
 - ordered related-content references by existing content ID and type. `summary` is
   optional until `CO-002` resolves the reference against the content module; the
   public frontend must not migrate the related-material cards before that task;
-- `seo` derived from product fields where explicit SEO is absent.
+- SEO remains frontend-derived from product `name`, `description`, image, and
+  existing ID; product-specific SEO is not a separate admin field because the
+  current landing has no such source data.
 
 `ProductCardDto` must include `id`, `name`, `globalCategory`, `category`, `image`, `description`.
 
@@ -56,3 +58,13 @@ The catalog relation table is introduced before the NEWS/ARTICLE tables. Therefo
 optional and is populated by `CO-002`; this is an additive, backward-compatible
 enrichment. `FE-003` depends on both `CA-004` and `CO-002` because the existing
 `ProductRelatedArticles` component renders article-card metadata, not bare IDs.
+
+## Admin product editor boundary
+
+`ProductWriteRequest` contains the immutable public `id` for create and must
+match the path ID for update. It contains typed related-content rows (`id` and
+`NEWS`/`ARTICLE` type), not untyped IDs, so future related news are not lost.
+Manual product sort changes use `PUT /admin/products/reorder`. The form stores
+`fullDescription`; an active product must also have a category, main image, and
+nonblank short description. Product SEO is derived by the landing and has no
+separate database or admin field.

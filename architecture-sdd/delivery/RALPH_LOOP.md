@@ -82,6 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`CA-005` is the next ready task: implement protected catalog CRUD, archive, and
+`CA-005` is in progress: implement protected catalog CRUD, archive, and
 reordering while retaining immutable public IDs. `CO-002` later enriches product
 related-content references with card summaries before landing integration.

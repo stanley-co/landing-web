@@ -249,6 +249,19 @@ paths:
       responses:
         '204': { description: Archived }
         '404': { $ref: '#/components/responses/NotFound' }
+  /admin/products/reorder:
+    put:
+      tags: [Admin]
+      operationId: reorderProducts
+      summary: Persist manual product ordering without changing public IDs
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ReorderRequest' }
+      responses:
+        '204': { description: Reordered }
   /admin/product-categories:
     get:
       tags: [Admin]
@@ -765,7 +778,6 @@ components:
                 summary is populated after the content module is available; consumers that
                 render related-material cards must wait for that enrichment.
               items: { $ref: '#/components/schemas/ProductRelatedContentDto' }
-            seo: { $ref: '#/components/schemas/SeoDto' }
     ProductSpecDto:
       type: object
       required: [name, value, sortOrder]
@@ -973,7 +985,7 @@ components:
         status: { $ref: '#/components/schemas/Status' }
     ProductWriteRequest:
       type: object
-      required: [id, name, categoryId, imageId, description, status]
+      required: [id, name, categoryId, imageId, description, fullDescription, status]
       properties:
         id: { type: string, description: Stable existing/public ID; immutable after creation. }
         name: { type: string, minLength: 1, maxLength: 255 }
@@ -985,10 +997,17 @@ components:
         specs: { type: array, items: { $ref: '#/components/schemas/ProductSpecDto' } }
         advantages: { type: array, items: { $ref: '#/components/schemas/ProductAdvantageDto' } }
         videoUrl: { type: string, format: uri }
-        relatedContentIds: { type: array, items: { type: string } }
+        relatedContent:
+          type: array
+          items: { $ref: '#/components/schemas/ProductRelatedContentWriteDto' }
         sortOrder: { type: integer, minimum: 0 }
         status: { $ref: '#/components/schemas/Status' }
-        seo: { $ref: '#/components/schemas/SeoDto' }
+    ProductRelatedContentWriteDto:
+      type: object
+      required: [id, type]
+      properties:
+        id: { type: string, minLength: 1, maxLength: 255 }
+        type: { $ref: '#/components/schemas/ContentType' }
     ProductAdminDto:
       allOf:
         - $ref: '#/components/schemas/ProductDetailDto'
