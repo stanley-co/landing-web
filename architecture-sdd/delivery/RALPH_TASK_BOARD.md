@@ -69,8 +69,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
 | ST-001 | w-backend-service | Implement S3/MinIO abstraction, media metadata, checksum, MIME/size validation | BE-002, ED-002, IN-003 | DONE | `d449c52`; Flyway V5, S3-compatible adapter, media metadata, SDD key conventions and MIME/size/SHA-256 policy. |
-| ST-002 | w-backend-service | Add media upload, safe-delete, replacement, and usage detection API | ST-001, AU-003, CT-004 | IN_PROGRESS | Used file deletion must be denied. |
-| ST-003 | w-backend-service | Implement document and certificate metadata over PDF media | ST-001, CT-003, CT-004 | NOT_STARTED | PDF files stored in MinIO only. |
+| ST-002 | w-backend-service | Add media upload, safe-delete, replacement, and usage detection API | ST-001, AU-003, CT-004 | DONE | `17455e9`; authorized multipart metadata flow, audit, MIME/size policy, safe-delete boundary, and local MinIO put/get/delete verification. |
+| ST-003 | w-backend-service | Implement document and certificate metadata over PDF media | ST-001, CT-003, CT-004 | IN_PROGRESS | PDF files stored in MinIO only. |
 | ST-004 | w-backend-service | Add MinIO integration tests | ST-002, ST-003, BE-005 | NOT_STARTED | Upload, invalid MIME, oversize, replacement, used-file denial. |
 
 ## Phase 7: Catalog

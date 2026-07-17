@@ -82,6 +82,5 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`ST-002` is the active next task: add authorized multipart upload, media list/delete,
-and safe usage checks. It uses the completed S3/MinIO foundation `ST-001`; binaries
-must remain outside PostgreSQL and deletion must refuse referenced files.
+`ST-003` is the active next task: model document and certificate metadata over
+uploaded PDF media. PostgreSQL stores only metadata; the binary remains in MinIO/S3.
