@@ -53,13 +53,13 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | ED-001 | w-backend-service | Separate public, auth, admin, and health route policies | BE-001 | DONE | `90a1857`; public 404/admin 401 are normalized with request IDs. |
 | ED-002 | w-backend-service | Add CORS allowlist, security headers, request-size and upload limits | ED-001, BE-003 | DONE | `5dc4e64`; CORS allow/deny, headers, multipart 30 MB and normalized 413 verified. |
 | ED-003 | w-backend-service | Add rate limits for login and lead submission | ED-001 | DONE | `84144bf`; bounded local limiter returns normalized 429 and Retry-After. |
-| ED-004 | w-backend-service | Add edge-policy integration tests | ED-002, ED-003, BE-005 | IN_PROGRESS | Complete CORS, request ID, headers, limits, rate-limit integration coverage. |
+| ED-004 | w-backend-service | Add edge-policy integration tests | ED-002, ED-003, BE-005 | DONE | `5471d46`; MockMvc covers CORS, headers, request ID, 413 and lead 429 chain. |
 
 ## Phase 5: Authentication and RBAC
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| AU-001 | w-backend-service | Add administrator, role, permission, session, and audit schema | BE-002 | NOT_STARTED | Roles fixed by ADR-004 and contract. |
+| AU-001 | w-backend-service | Add administrator, role, permission, session, and audit schema | BE-002 | IN_PROGRESS | Roles fixed by ADR-004 and contract; add Flyway schema only. |
 | AU-002 | w-backend-service | Implement login, refresh, logout, current user, and local bootstrap | AU-001, CT-004, ED-001 | NOT_STARTED | No insecure frontend token storage. |
 | AU-003 | w-backend-service | Implement RBAC policies and login audit/failed-attempt tracking | AU-001, AU-002 | NOT_STARTED | Three approved roles only. |
 | AU-004 | w-backend-service | Add auth/RBAC integration tests | AU-002, AU-003, BE-005 | NOT_STARTED | Success, revoke, lockout, forbidden, audit. |

@@ -82,7 +82,6 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`ED-004` is the active next task: complete edge-policy integration coverage for
-CORS, request IDs, security headers, limits and rate limiting in
-`w-backend-service`. It follows the completed sensitive-route limiter commit
-`84144bf`.
+`AU-001` is the active next task: add the administrator, role, session and audit
+schema in `w-backend-service`, retaining exactly the three roles approved by ADR-004.
+It follows the completed edge-policy verification commit `5471d46`.
