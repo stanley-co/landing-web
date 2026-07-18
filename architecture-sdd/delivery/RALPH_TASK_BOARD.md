@@ -19,7 +19,7 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | --- | --- | --- | --- | --- | --- |
 | CT-001 | w-api-contracts | Create contract repository, working SDD, and compatibility rules | WS-004 | DONE | `419622b`; `CONTRACT_COMPATIBILITY.md`. |
 | CT-002 | w-api-contracts | Define common errors, pagination, filtering, sorting, status and role enums | CT-001 | DONE | `00c8739`; `ErrorResponse`, `PageMetadata`, approved enums. |
-| CT-003 | w-api-contracts | Define public site, menu, pages, catalog, content, slides, contacts, documents, certificates, and leads API | CT-002 | DONE | `00c8739`; preserves ID-based product/content APIs and `/news/:id`. |
+| CT-003 | w-api-contracts | Define MVP catalog, content, slides, documents, privacy, media and leads API | CT-002 | DONE | `2b52c8b`; fixed privacy policy, slide actions, lead delivery and media replacement; legacy/certificates/menu/contacts removed from MVP. |
 | CT-004 | w-api-contracts | Define auth and role-protected admin API models and operations | CT-002 | DONE | `00c8739`; roles limited to `ADMIN`, `FEATURE_OWNER`, `CONTENT_READER`. |
 | CT-005 | w-api-contracts | Add OpenAPI validation, required-route lint, bundle, and TypeScript generation | CT-003, CT-004 | DONE | `00c8739`, `18a78ed`; lint/validate/generation passed. |
 | CT-006 | w-api-contracts | Generate/verify Spring interfaces or models | CT-005, BE-001 | NOT_STARTED | Run with backend Java 21 Docker environment; `config/spring.json` is ready. |
@@ -69,8 +69,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
 | ST-001 | w-backend-service | Implement S3/MinIO abstraction, media metadata, checksum, MIME/size validation | BE-002, ED-002, IN-003 | DONE | `d449c52`; Flyway V5, S3-compatible adapter, media metadata, SDD key conventions and MIME/size/SHA-256 policy. |
-| ST-002 | w-backend-service | Add media upload, safe-delete, replacement, and usage detection API | ST-001, AU-003, CT-004 | DONE | `17455e9`; authorized multipart metadata flow, audit, MIME/size policy, safe-delete boundary, and local MinIO put/get/delete verification. |
-| ST-003 | w-backend-service | Implement document and certificate metadata over PDF media | ST-001, CT-003, CT-004 | DONE | `4c48e2c`; admin/public metadata endpoints, PDF-only validation, status/order and certificate dates; binaries stay in MinIO/S3. |
+| ST-002 | w-backend-service | Add media upload, safe-delete, metadata replacement, and usage detection API | ST-001, AU-003, CT-004 | DONE | `f908dea`; metadata PATCH, same-ID validated binary replacement, audit and V11 description migration. |
+| ST-003 | w-backend-service | Implement document metadata over PDF media | ST-001, CT-003, CT-004 | DONE | PDF-only metadata/status/order; certificates are future scope. |
 | ST-004 | w-backend-service | Add MinIO integration tests | ST-002, ST-003, BE-005 | DONE | `5597df8`; local MinIO put/get/delete, MIME/size/checksum policy, and real document-referenced PDF delete denial. |
 
 ## Phase 7: Catalog
@@ -93,15 +93,15 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | CO-003 | w-backend-service | Add admin content CRUD and ordered block editing API | CO-001, AU-003, CT-004 | DONE | `ee69c39`; protected list/create/read/update/archive, immutable IDs, typed `imageId` blocks, atomic ordered replacement, audit, and reader/write RBAC. Full Docker Maven verify passed. |
 | PA-001 | w-backend-service | Add only SDD-approved managed pages and settings | BE-002, AU-003, CT-003 | READY | Contract must first narrow actual About/Contacts/Privacy ownership; no universal page builder. |
 | PA-002 | w-backend-service | Add contacts and explicitly managed menu API | PA-001, CT-003 | NOT_STARTED | Do not migrate technical routes/config. |
-| SL-001 | w-backend-service | Add carousel slide model, public API, admin CRUD/reorder | ST-001, AU-003, CT-003, CT-004 | NOT_STARTED | Supports image, mobile image, action, order, active. |
+| SL-001 | w-backend-service | Add carousel slide model, public API, admin CRUD/reorder | ST-001, AU-003, CT-003, CT-004 | DONE | `2c02d40`; `EQUIPMENT_CATALOG`, desktop/mobile images, safe actions, ordering, archive and configured active limit. |
 | CO-004 | w-backend-service | Add content/page/slide integration and contract tests | CO-002, CO-003, PA-002, SL-001, BE-005 | NOT_STARTED | Verify ID compatibility and ordering. |
 
 ## Phase 9: Legacy home
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| LE-001 | w-backend-service | Add minimal deprecated legacy block model and compatibility API for `/home` | BE-002, CT-003 | NOT_STARTED | Never reuse for new pages. |
-| LE-002 | w-backend-service | Add admin metadata, deletion protection, and tests for legacy blocks | LE-001, AU-003, BE-005 | NOT_STARTED | Must expose deprecated warning. |
+| LE-001 | w-backend-service | Legacy `/home` compatibility model | n/a | REMOVED | Removed from approved MVP scope. |
+| LE-002 | w-backend-service | Legacy admin management | n/a | REMOVED | Removed from approved MVP scope. |
 
 ## Phase 10: Leads and notifications
 
@@ -117,7 +117,7 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| MI-001 | w-data-migrator | Initialize Java command-line runner and read-only S3 configuration | BE-001, IN-005 | NOT_STARTED | ADR-006; no production writes. |
+| MI-001 | w-data-migrator | Initialize Java command-line runner and read-only S3 configuration | BE-001, IN-005 | DEFERRED | No production scan/import in this phase. |
 | MI-002 | w-data-migrator | Implement source scan, JSON discovery, schema validation, and dry-run report | MI-001 | NOT_STARTED | Current S3 is source; local JSON is comparison only. |
 | MI-003 | w-data-migrator | Map/import categories and products with stable IDs/order/media refs | MI-002, CA-003 | NOT_STARTED | Handle `atricles` legacy typo as input only. |
 | MI-004 | w-data-migrator | Map/import carousel, news, articles, pages, files, and relations | MI-002, CO-001, PA-001, SL-001, ST-003 | NOT_STARTED | Report broken refs and missing files. |
@@ -130,8 +130,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | AD-001 | w-admin-web | Initialize Vite/React/TypeScript/Ant Design foundation with generated client | CT-005, AU-002 | DONE | `64baecf`; Vite/React/Ant Design/Query/RHF/Zod foundation, contract type generation, lint/typecheck/build/Vitest pass. |
 | AD-002 | w-admin-web | Implement login, auth/session state, router, shell, error boundary, permission guards | AD-001, AU-003 | DONE | `25a2e97`; opaque token in memory, refresh-cookie restoration, protected routes, shell, error boundary and permission guards; lint/typecheck/build/Vitest pass. |
 | AD-003 | w-admin-web | Implement category and product editors with media, specs, advantages, gallery, video, relations, archive/reorder | AD-002, CA-005, ST-002 | DONE | `ec68b8a` lists; `35b0294` typed product fields/media; `b575cd7` content selection; `326c8f9` batch reorder; `b606a28` lifecycle-safe category edit; `22c4e36` component coverage. No raw JSON editor. |
-| AD-004 | w-admin-web | Implement media, document, and certificate management | AD-002, ST-003 | PARTIAL | `ca61d26`, `eba86d1`, `faa3015`, `6648451`: media list/upload/safe-delete; document/certificate create, replace-reference and archive. Media metadata update remains outside the contract. |
-| AD-005 | w-admin-web | Implement content, page, contacts, menu, carousel, and legacy management | AD-002, CO-003, PA-002, SL-001, LE-002 | IN_PROGRESS | `d83b683`: NEWS/ARTICLE list, typed-block editor and archive. Other screens wait for PA-002, SL-001 and LE-002; legacy shows Deprecated badge. |
+| AD-004 | w-admin-web | Implement media and document management | AD-002, ST-003 | DONE | `ee36c46`; media list/upload/safe-delete, metadata editor and same-ID binary replacement; documents lifecycle; certificates removed. |
+| AD-005 | w-admin-web | Implement content and carousel management | AD-002, CO-003, SL-001 | IN_PROGRESS | `d83b683` content editor; `85e8445` slide list/create/edit/archive. Privacy and leads remain. |
 | AD-006 | w-admin-web | Implement leads, users, audit, settings, component tests, and E2E critical paths | AD-002, LD-003 | NOT_STARTED | Include notification retry. |
 
 ## Phase 13: Landing integration
@@ -143,7 +143,7 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | FE-003 | landing-web | Move product detail/search to public API | FE-002, CA-004, CO-002 | NOT_STARTED | Preserve ID route and full detail rendering; related article cards require content summaries. |
 | FE-004 | landing-web | Move news/articles list and `/news/:id` detail to public API | FE-001, CO-002 | NOT_STARTED | Do not require slug. |
 | FE-005 | landing-web | Move pages, contacts, documents/certificates, and lead forms to public API | FE-001, PA-002, ST-003, LD-002 | NOT_STARTED | Remove direct Telegram/Bitrix path only here. |
-| FE-006 | landing-web | Integrate legacy `/home` compatibility API and test all critical routes | FE-005, LE-001 | NOT_STARTED | Legacy blocks remain visible. |
+| FE-006 | landing-web | Remove unused legacy `/home` route after dependency scan | FE-005 | NOT_STARTED | Separate refactor commit; do not remove reused components. |
 
 ## Phase 14: System verification and delivery
 
