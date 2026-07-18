@@ -107,18 +107,21 @@ const InformationPage = () => {
       switch (filter) {
         case 'today':
           return itemDate >= today;
-        case 'week':
+        case 'week': {
           const weekAgo = new Date(today);
           weekAgo.setDate(weekAgo.getDate() - 7);
           return itemDate >= weekAgo;
-        case 'month':
+        }
+        case 'month': {
           const monthAgo = new Date(today);
           monthAgo.setMonth(monthAgo.getMonth() - 1);
           return itemDate >= monthAgo;
-        case 'year':
+        }
+        case 'year': {
           const yearAgo = new Date(today);
           yearAgo.setFullYear(yearAgo.getFullYear() - 1);
           return itemDate >= yearAgo;
+        }
         default:
           return true;
       }

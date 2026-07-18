@@ -1,0 +1,86 @@
+name: landing CI and staging deploy
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: landing-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --omit=dev --audit-level=high
+      - run: docker build --build-arg VITE_PUBLIC_API_BASE_URL=/api/v1 -t landing-web:ci .
+
+  publish:
+    if: github.event_name == 'push'
+    needs: validate
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.image.outputs.value }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: image
+        run: echo "value=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/landing-web" >> "$GITHUB_OUTPUT"
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          build-args: VITE_PUBLIC_API_BASE_URL=/api/v1
+          tags: |
+            ${{ steps.image.outputs.value }}:sha-${{ github.sha }}
+            ${{ steps.image.outputs.value }}:staging
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: publish
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      STAGING_HOST: ${{ secrets.STAGING_HOST }}
+      STAGING_USER: ${{ secrets.STAGING_USER }}
+      STAGING_PORT: ${{ secrets.STAGING_PORT }}
+      STAGING_KNOWN_HOSTS: ${{ secrets.STAGING_KNOWN_HOSTS }}
+      STAGING_SSH_PRIVATE_KEY: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
+      GHCR_PULL_USERNAME: ${{ secrets.GHCR_PULL_USERNAME }}
+      GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+    steps:
+      - name: Deploy immutable image over pinned SSH
+        env:
+          IMAGE: ${{ needs.publish.outputs.image }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$STAGING_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          printf '%s\n' "$STAGING_SSH_PRIVATE_KEY" > ~/.ssh/staging
+          chmod 600 ~/.ssh/known_hosts ~/.ssh/staging
+          port=${STAGING_PORT:-22}
+          {
+            printf '%s\n' "$GHCR_PULL_USERNAME"
+            printf '%s\n' "$GHCR_PULL_TOKEN"
+          } | ssh -p "$port" -i ~/.ssh/staging -o StrictHostKeyChecking=yes "$STAGING_USER@$STAGING_HOST" \
+            "IFS= read -r GHCR_PULL_USERNAME; IFS= read -r GHCR_PULL_TOKEN; export GHCR_PULL_USERNAME GHCR_PULL_TOKEN; /opt/kitexp-staging/bin/deploy-service landing-web '$IMAGE' 'sha-${GITHUB_SHA}'"
