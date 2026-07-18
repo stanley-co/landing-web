@@ -11,20 +11,22 @@ Phase 0 baseline recorded. Public frontend integration is intentionally deferred
 | CA-004 | Public catalog API baseline available | `w-backend-service` `17e65e7` | Docker Maven `verify`: 35 tests | COMPLETE |
 | CA-006 | Catalog integration and OpenAPI compatibility coverage | `w-api-contracts` `1bf0099`, `w-backend-service` `35db438` | contract lint/validation/generation; Docker Maven `verify`: 36 tests | COMPLETE |
 | CO-001 | Structured NEWS/ARTICLE data model | `w-backend-service` `985c7c1` | Flyway V10 and Docker Maven `verify`: 38 tests | COMPLETE |
+| FE-001 | Generated typed public API client and environment-based base URL, without route/UI migration | Pending current commit | `npm run generate:api`, `npm run build` | COMPLETE |
 
 ## Current task
 
-No production frontend code changes. Keep the baseline compatible with `/home` and `/news/:id` while backend endpoints are implemented.
+`FE-002`: move catalog list/categories/slides to public API only after slide and
+managed-page endpoints are available. Existing routes and S3 fallback flows are
+unchanged by `FE-001`.
 
 ## Next tasks
 
-- Integrate generated public API client after contract and backend readiness.
 - Migrate one data flow at a time: carousel, catalog, content, pages, contacts, leads, then legacy compatibility.
 
 ## Blockers
 
 - Carousel, content, managed-page, and lead endpoints are not implemented.
-- The existing TypeScript build failure from unused `getS3FileUrl` imports is recorded in the validation audit and is outside Phase 0.
+- Carousel, content, managed-page, and lead endpoints are not implemented.
 
 ## Deviations from SDD
 
@@ -43,3 +45,6 @@ No production frontend code changes. Keep the baseline compatible with `/home` a
 - Product related-material cards remain on current S3 data until `CO-002` can
   enrich the public product response with related-content summaries.
 - Existing untracked `src/agentPromt.md` and `docs/BACKEND_AND_ADMIN_IMPLEMENTATION_PLAN.md` are preserved outside implementation commits.
+- `VITE_PUBLIC_API_BASE_URL` configures the generated public client; it defaults
+  to `http://localhost:8080/api/v1`. The existing user-modified `.env.example`
+  remains untouched.
