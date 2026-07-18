@@ -18,6 +18,9 @@ export interface NewsContent {
 // Основной интерфейс новости
 export interface News {
   id: string;
+  externalId?: string | null;
+  code?: string;
+  type?: 'NEWS' | 'ARTICLE';
   title: string;
   date: string;
   category: string;
@@ -25,4 +28,3 @@ export interface News {
   preview: string;
   content: NewsContent[];
 }
-

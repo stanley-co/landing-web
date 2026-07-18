@@ -1,10 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IonInput, IonItem, IonIcon, IonSpinner } from '@ionic/react';
 import { searchOutline, closeOutline } from 'ionicons/icons';
 import Modal from '../Modal/Modal';
-import { fetchStaticData, S3_URLS, getImageUrl } from '../../utils/fetchStaticData';
-import type { Product } from '../../types/product';
+import { landingApi, type ProductCardDto } from '../../api/public';
 import styles from './SearchModal.module.css';
 
 type SearchModalProps = {
@@ -15,17 +14,17 @@ type SearchModalProps = {
 const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductCardDto[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Загружаем продукты при открытии модального окна
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && searchQuery.trim().length >= 2) {
+      const timer = window.setTimeout(() => {
       const loadProducts = async () => {
         try {
           setLoading(true);
-          const data = await fetchStaticData<Product[]>(S3_URLS.PRODUCTS);
-          setProducts(data);
+          const data = await landingApi.products(searchQuery.trim());
+          setProducts(data.items);
         } catch (err) {
           console.error('[SearchModal] Ошибка при загрузке продуктов:', err);
         } finally {
@@ -33,8 +32,11 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
         }
       };
       loadProducts();
+      }, 300);
+      return () => window.clearTimeout(timer);
     }
-  }, [isOpen]);
+    setProducts([]);
+  }, [isOpen, searchQuery]);
 
   // Сбрасываем поисковый запрос при закрытии
   useEffect(() => {
@@ -43,22 +45,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
     }
   }, [isOpen]);
 
-  // Фильтруем продукты по поисковому запросу
-  const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return [];
-    }
-
-    const query = searchQuery.toLowerCase().trim();
-    return products.filter(product => {
-      const nameMatch = product.name.toLowerCase().includes(query);
-      const categoryMatch = product.category.toLowerCase().includes(query);
-      const descriptionMatch = product.description?.toLowerCase().includes(query);
-      const globalCategoryMatch = product.globalCategory?.toLowerCase().includes(query);
-      
-      return nameMatch || categoryMatch || descriptionMatch || globalCategoryMatch;
-    });
-  }, [products, searchQuery]);
+  const filteredProducts = products;
 
   const handleProductClick = (productId: string) => {
     navigate(`/equipment/${productId}`);
@@ -117,7 +104,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                     >
                       <div className={styles.resultImage}>
                         <img 
-                          src={getImageUrl(product.image)} 
+                          src={product.image}
                           alt={product.name}
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23f0f0f0"/></svg>';
@@ -163,4 +150,3 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
 };
 
 export default SearchModal;
-

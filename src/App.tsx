@@ -14,7 +14,7 @@ import NotFoundPage from './routes/NotFoundPage';
 import PrivacyPolicyPage from './routes/PrivacyPolicyPage';
 
 const AppContent = () => {
-  const { isOpen, productName, closeModal } = useContactFormModal();
+  const { isOpen, productName, productId, closeModal } = useContactFormModal();
 
   return (
     <>
@@ -42,7 +42,7 @@ const AppContent = () => {
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <ContactFormModal isOpen={isOpen} onClose={closeModal} productName={productName} />
+      <ContactFormModal isOpen={isOpen} onClose={closeModal} productName={productName} productId={productId} />
     </>
   );
 };

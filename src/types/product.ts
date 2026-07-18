@@ -24,6 +24,8 @@ export interface ProductMaterialsAndNews {
 // Основной интерфейс продукта
 export interface Product {
   id: string;
+  externalId?: string | null;
+  code?: string;
   name: string;
   globalCategory?: string; // Общая категория для распределения по разделам (Оборудование для приготовления и хранения, Фасовочное оборудование и т.д.)
   category: string; // Подкатегория (Вакуумные эмульгаторы, Планетарные миксеры и т.д.)
@@ -35,4 +37,3 @@ export interface Product {
   advantages?: ProductAdvantage[]; // Опциональное поле для преимуществ
   materialsAndNews?: ProductMaterialsAndNews; // Опциональное поле для видео и других материалов
 }
-

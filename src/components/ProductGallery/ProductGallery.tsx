@@ -7,9 +7,10 @@ import styles from "./ProductGallery.module.css";
 type ProductGalleryProps = {
   images: string[];
   productName: string;
+  productId: string;
 };
 
-const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
+const ProductGallery = ({ images, productName, productId }: ProductGalleryProps) => {
   const { openModal } = useContactFormModal();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -124,7 +125,7 @@ const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
               className={styles.ctaButton}
               onClick={(e) => {
                 e.stopPropagation();
-                openModal(productName);
+                openModal(productName, productId);
               }}
             >
               <IonIcon icon={documentTextOutline} slot="start" />
@@ -152,4 +153,3 @@ const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
 };
 
 export default ProductGallery;
-

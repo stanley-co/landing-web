@@ -7,7 +7,7 @@ import DocumentHead from '../components/DocumentHead/DocumentHead';
 import PageHero from '../components/PageHero/PageHero';
 import NewsGrid from '../components/NewsGrid/NewsGrid';
 import Footer from '../components/Footer/Footer';
-import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
+import { landingApi } from '../api/public';
 import type { News } from '../types/news';
 import styles from './InformationPage.module.css';
 
@@ -34,13 +34,10 @@ const InformationPage = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        // Загружаем новости и статьи параллельно
-        const [news, articles] = await Promise.all([
-          fetchStaticData<News[]>(S3_URLS.NEWS).catch(() => []),
-          fetchStaticData<News[]>(S3_URLS.ARTICLES).catch(() => [])
-        ]);
-        setNewsData(news);
-        setArticlesData(articles);
+        const page = await landingApi.content();
+        const items: News[] = page.items.map((item) => ({ ...item, content: [] }));
+        setNewsData(items.filter((item) => item.type === 'NEWS'));
+        setArticlesData(items.filter((item) => item.type === 'ARTICLE'));
       } catch (err) {
         console.error('[InformationPage] Ошибка при загрузке данных:', err);
         setError('Ошибка при загрузке данных');
@@ -85,7 +82,7 @@ const InformationPage = () => {
   const news: NewsItem[] = useMemo(() => {
     return newsData.map(item => ({
       ...item,
-      image: getImageUrl(item.image), // Используем реальные изображения из S3
+      image: item.image,
     }));
   }, [newsData]);
 
@@ -93,7 +90,7 @@ const InformationPage = () => {
   const articles: NewsItem[] = useMemo(() => {
     return articlesData.map(item => ({
       ...item,
-      image: getImageUrl(item.image), // Используем реальные изображения из S3
+      image: item.image,
     }));
   }, [articlesData]);
 

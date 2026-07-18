@@ -10,7 +10,7 @@ import ProductVideo from '../components/ProductVideo/ProductVideo';
 import ProductRelatedArticles from '../components/ProductRelatedArticles/ProductRelatedArticles';
 import Footer from '../components/Footer/Footer';
 import DocumentHead from '../components/DocumentHead/DocumentHead';
-import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
+import { landingApi } from '../api/public';
 import type { Product } from '../types/product';
 import type { News } from '../types/news';
 
@@ -25,26 +25,32 @@ const ProductDetailPage = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        // Загружаем продукты и статьи параллельно
-        const [products, articles] = await Promise.all([
-          fetchStaticData<Product[]>(S3_URLS.PRODUCTS).catch(() => []),
-          fetchStaticData<News[]>(S3_URLS.ARTICLES).catch(() => [])
-        ]);
-        
-        const foundProduct = products.find(p => p.id === id);
-        
-        if (foundProduct) {
-          console.log('[ProductDetailPage] Found product:', foundProduct.id);
-          console.log('[ProductDetailPage] Product has galleryImages:', !!foundProduct.galleryImages);
-          console.log('[ProductDetailPage] galleryImages count:', foundProduct.galleryImages?.length || 0);
-          console.log('[ProductDetailPage] galleryImages data:', foundProduct.galleryImages);
-          setProduct(foundProduct);
-        } else {
-          console.error('[ProductDetailPage] Product not found with id:', id);
-          console.log('[ProductDetailPage] Available products:', products.map(p => p.id));
-          setError('Продукт не найден');
-        }
-        
+        if (!id) throw new Error('Не указан идентификатор товара');
+        const detail = await landingApi.product(id);
+        const articles: News[] = (detail.relatedContent ?? []).flatMap((relation) => relation.summary ? [{
+          ...relation.summary,
+          category: relation.summary.category ?? '',
+          content: []
+        }] : []);
+        const foundProduct: Product = {
+          id: detail.id,
+          externalId: detail.externalId,
+          code: detail.code,
+          name: detail.name,
+          globalCategory: detail.globalCategory,
+          category: detail.category,
+          image: detail.image,
+          galleryImages: detail.galleryImages ?? [],
+          description: detail.description,
+          fullDescription: detail.fullDescription ?? detail.description,
+          specs: Object.fromEntries((detail.specs ?? []).sort((a, b) => a.sortOrder - b.sortOrder).map((spec) => [spec.name, spec.value])),
+          advantages: (detail.advantages ?? []).sort((a, b) => a.sortOrder - b.sortOrder),
+          materialsAndNews: {
+            video: detail.videoUrl,
+            articles: articles.map((article) => article.id)
+          }
+        };
+        setProduct(foundProduct);
         setArticlesData(articles);
       } catch (err) {
         console.error('[ProductDetailPage] Ошибка при загрузке данных:', err);
@@ -73,10 +79,7 @@ const ProductDetailPage = () => {
     // Фильтруем статьи по ID из массива
     const filtered = articlesData
       .filter(article => articleIds.includes(article.id))
-      .map(item => ({
-        ...item,
-        image: getImageUrl(item.image)
-      }));
+      .map(item => ({ ...item }));
 
     return filtered;
   }, [articlesData, product]);
@@ -94,19 +97,11 @@ const ProductDetailPage = () => {
     
     // Если есть galleryImages, используем их
     if (product.galleryImages && product.galleryImages.length > 0) {
-      const galleryUrls = product.galleryImages.map(img => {
-        const url = getImageUrl(img);
-        console.log('[ProductDetailPage] Converting gallery image:', img, '->', url);
-        return url;
-      });
-      console.log('[ProductDetailPage] Final gallery URLs:', galleryUrls);
-      return galleryUrls;
+      return product.galleryImages;
     }
     
     // Иначе используем главное изображение
-    const mainImage = getImageUrl(product.image);
-    console.log('[ProductDetailPage] No galleryImages, using main image:', mainImage);
-    return [mainImage];
+    return [product.image];
   }, [product]);
 
   // Показываем индикатор загрузки
@@ -154,7 +149,7 @@ const ProductDetailPage = () => {
       <DocumentHead
         title={`${product.name} — ФКИТ`}
         description={product.description}
-        ogImage={product.galleryImages?.[0] ? getImageUrl(product.galleryImages[0]) : getImageUrl(product.image)}
+        ogImage={product.galleryImages?.[0] ?? product.image}
         canonicalPath={`/equipment/${product.id}`}
       />
       <PageWrapper>
@@ -164,7 +159,7 @@ const ProductDetailPage = () => {
             category={product.category}
             description={product.description}
           />
-          <ProductGallery images={images} productName={product.name} />
+          <ProductGallery images={images} productName={product.name} productId={product.id} />
           <ProductDescription
             name={product.name}
             description={product.description}
@@ -189,5 +184,3 @@ const ProductDetailPage = () => {
 };
 
 export default ProductDetailPage;
-
-

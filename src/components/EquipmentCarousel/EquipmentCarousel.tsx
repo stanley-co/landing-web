@@ -1,120 +1,48 @@
-import { IonImg, IonSpinner, IonButton, IonIcon } from '@ionic/react';
+import { IonSpinner, IonButton, IonIcon } from '@ionic/react';
 import { arrowForwardOutline } from 'ionicons/icons';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './EquipmentCarousel.module.css';
-import { fetchStaticData, S3_URLS, getImageUrl } from '../../utils/fetchStaticData';
+import { landingApi, type SlideDto } from '../../api/public';
 import { useContactFormModal } from '../../contexts/ContactFormModalContext';
-
-type CarouselSlide = {
-  id: number;
-  image: string;
-  title: string;
-  description: string;
-  link?: string;
-  buttonText?: string;
-};
 
 const EquipmentCarousel = () => {
   const navigate = useNavigate();
   const { openModal: openContactForm } = useContactFormModal();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [slides, setSlides] = useState<CarouselSlide[]>([]);
+  const [slides, setSlides] = useState<SlideDto[]>([]);
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Обработка клика по ссылке
-  const handleLinkClick = (link: string) => {
-    // Специальная ссылка — открыть форму обратной связи в модальном окне
-    if (link === '#contact-form') {
+  const handleAction = (slide: SlideDto) => {
+    const value = slide.actionValue?.trim();
+    if (!slide.actionType || !value) return;
+    if (slide.actionType === 'OPEN_FORM') {
       openContactForm();
       return;
     }
-
-    // Проверяем, является ли ссылка внешней (начинается с http:// или https://)
-    if (link.startsWith('http://') || link.startsWith('https://')) {
-      window.open(link, '_blank', 'noopener,noreferrer');
+    if (slide.actionType === 'EXTERNAL_LINK') {
+      window.open(value, '_blank', 'noopener,noreferrer');
       return;
     }
-
-    // Проверяем, содержит ли ссылка якорь (начинается с # или содержит #)
-    if (link.includes('#')) {
-      const [path, anchor] = link.split('#');
-      const elementId = anchor || (link.startsWith('#') ? link.substring(1) : null);
-      
-      // Если ссылка начинается с #, это якорь без пути
-      if (link.startsWith('#')) {
-        // Пытаемся найти элемент на текущей странице
-        const element = document.getElementById(elementId!);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          return;
-        }
-        
-        // Если элемент не найден, переходим на /home с якорем
-        navigate(`/home#${elementId}`);
-        
-        // Прокручиваем к элементу после загрузки страницы
-        // Используем несколько попыток с увеличивающейся задержкой
-        const scrollToElement = (attempts = 0) => {
-          if (attempts > 10) return; // Максимум 10 попыток (5 секунд)
-          
-          setTimeout(() => {
-            const targetElement = document.getElementById(elementId!);
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-              scrollToElement(attempts + 1);
-            }
-          }, 500 * (attempts + 1));
-        };
-        
-        scrollToElement();
-        return;
+    if (slide.actionType === 'ANCHOR') {
+      const [path, anchor = ''] = value.split('#');
+      if (!path || path === window.location.pathname) {
+        document.getElementById(anchor || value.replace(/^#/, ''))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        navigate(`${path}#${anchor}`);
       }
-      
-      // Если есть путь с якорем (например, /home#about)
-      if (path && elementId) {
-        const targetPath = path || window.location.pathname;
-        
-        // Переходим на страницу
-        navigate(targetPath);
-        
-        // Прокручиваем к элементу после загрузки страницы
-        // Используем несколько попыток с увеличивающейся задержкой
-        const scrollToElement = (attempts = 0) => {
-          if (attempts > 10) return; // Максимум 10 попыток (5 секунд)
-          
-          setTimeout(() => {
-            const targetElement = document.getElementById(elementId);
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-              scrollToElement(attempts + 1);
-            }
-          }, 500 * (attempts + 1));
-        };
-        
-        scrollToElement();
-        return;
-      }
+      return;
     }
-
-    // Внутренний маршрут без якоря - используем navigate
-    navigate(link);
+    navigate(value);
   };
 
   useEffect(() => {
     const loadCarouselData = async () => {
       try {
         setLoading(true);
-        const data = await fetchStaticData<CarouselSlide[]>(S3_URLS.CAROUSEL);
-        // Преобразуем пути изображений в полные URL S3
-        const slidesWithUrls = data.map(slide => ({
-          ...slide,
-          image: getImageUrl(slide.image)
-        }));
-        setSlides(slidesWithUrls);
+        setSlides((await landingApi.slides()).filter((slide) => slide.active).sort((a, b) => a.sortOrder - b.sortOrder));
       } catch (err) {
         console.error('[EquipmentCarousel] Ошибка при загрузке данных карусели:', err);
         // В случае ошибки используем пустой массив
@@ -177,19 +105,19 @@ const EquipmentCarousel = () => {
             } ${index > currentSlide ? styles.next : ''}`}
           >
             <div className={styles.imageWrapper}>
-              <IonImg src={slide.image} alt={slide.title} className={styles.image} />
+              <picture><source media="(max-width: 767px)" srcSet={slide.mobileImage} /><img src={slide.desktopImage} alt={slide.title ?? ''} className={styles.image} /></picture>
               <div className={styles.overlay} />
             </div>
             <div className={styles.content}>
-              <h1 className={styles.title}>{slide.title}</h1>
-              <p className={styles.subtitle}>{slide.description}</p>
-              {slide.link && (
+              {slide.title && <h1 className={styles.title}>{slide.title}</h1>}
+              {slide.description && <p className={styles.subtitle}>{slide.description}</p>}
+              {slide.actionType && slide.actionValue && (
                 <div className={styles.actionButtonWrapper}>
                   <IonButton
                     color="primary"
                     size="large"
                     className={styles.actionButton}
-                    onClick={() => handleLinkClick(slide.link!)}
+                    onClick={() => handleAction(slide)}
                   >
                     {slide.buttonText || 'Узнать больше'}
                     <IonIcon icon={arrowForwardOutline} slot="end" />
