@@ -82,7 +82,8 @@ Every completed task row must point to:
 
 ## Current loop head
 
-`AD-003` is in progress: implement real category and product editor workflows
-with typed repeatable specs/advantages/gallery/related-content fields and
-media selection. Do not use a raw JSON editor. `PA-001` remains READY pending a
-narrow page ownership correction; do not create a universal page builder.
+`AD-004` is in progress: implement media, document, and certificate management
+over the existing protected backend APIs. The UI must provide upload progress
+and safe-delete feedback; PDFs remain binary S3/MinIO objects with metadata in
+PostgreSQL. `PA-001` remains READY pending a narrow page ownership correction;
+do not create a universal page builder.

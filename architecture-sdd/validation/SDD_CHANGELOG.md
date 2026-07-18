@@ -1,5 +1,15 @@
 # SDD Changelog
 
+## 2026-07-18 Catalog Admin Editor Completion
+
+- Completed the admin category/product workflow without a raw JSON editor:
+  immutable IDs, recursive category lifecycle state, media selection,
+  specifications, advantages, gallery, video URL, related materials, archive,
+  and explicit ordering are represented as typed form controls.
+- Added component coverage for category lifecycle edit initialization and all
+  structured product editor groups. Admin commits: `b606a28`, `22c4e36`.
+- Ralph loop advanced from `AD-003` to `AD-004`.
+
 ## 2026-07-18 Recursive Admin Category Status
 
 - Corrected `AdminProductCategoryDto`: child nodes are now recursive admin

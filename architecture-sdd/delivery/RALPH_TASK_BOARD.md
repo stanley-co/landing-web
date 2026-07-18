@@ -129,8 +129,8 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | --- | --- | --- | --- | --- | --- |
 | AD-001 | w-admin-web | Initialize Vite/React/TypeScript/Ant Design foundation with generated client | CT-005, AU-002 | DONE | `64baecf`; Vite/React/Ant Design/Query/RHF/Zod foundation, contract type generation, lint/typecheck/build/Vitest pass. |
 | AD-002 | w-admin-web | Implement login, auth/session state, router, shell, error boundary, permission guards | AD-001, AU-003 | DONE | `25a2e97`; opaque token in memory, refresh-cookie restoration, protected routes, shell, error boundary and permission guards; lint/typecheck/build/Vitest pass. |
-| AD-003 | w-admin-web | Implement category and product editors with media, specs, advantages, gallery, video, relations, archive/reorder | AD-002, CA-005, ST-002 | IN_PROGRESS | `ec68b8a` lists; `35b0294` typed product fields/media; `b575cd7` content selection; `326c8f9` explicit batch reorder. Category edit and UI coverage remain. No raw JSON editor. |
-| AD-004 | w-admin-web | Implement media, document, and certificate management | AD-002, ST-003 | NOT_STARTED | Upload progress and safe-delete feedback. |
+| AD-003 | w-admin-web | Implement category and product editors with media, specs, advantages, gallery, video, relations, archive/reorder | AD-002, CA-005, ST-002 | DONE | `ec68b8a` lists; `35b0294` typed product fields/media; `b575cd7` content selection; `326c8f9` batch reorder; `b606a28` lifecycle-safe category edit; `22c4e36` component coverage. No raw JSON editor. |
+| AD-004 | w-admin-web | Implement media, document, and certificate management | AD-002, ST-003 | IN_PROGRESS | Start media list/upload/safe-delete feedback, then document and certificate metadata editors. |
 | AD-005 | w-admin-web | Implement content, page, contacts, menu, carousel, and legacy management | AD-002, CO-003, PA-002, SL-001, LE-002 | NOT_STARTED | Legacy shows Deprecated badge. |
 | AD-006 | w-admin-web | Implement leads, users, audit, settings, component tests, and E2E critical paths | AD-002, LD-003 | NOT_STARTED | Include notification retry. |
 
