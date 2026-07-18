@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
       config.plugins = (config.plugins || []).concat([
         vitePrerender({
           staticDir,
-          routes: ['/', '/equipment', '/information', '/about', '/contacts', '/home'],
+          routes: ['/', '/equipment', '/information', '/about', '/contacts', '/privacy-policy'],
           renderer: new (vitePrerender.PuppeteerRenderer || require('@prerenderer/renderer-puppeteer'))({
             renderAfterTime: 2500,
             headless: true,
