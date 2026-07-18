@@ -4,6 +4,16 @@ Execution is managed by [RALPH_LOOP.md](RALPH_LOOP.md) and the current
 [RALPH_TASK_BOARD.md](RALPH_TASK_BOARD.md). The task board is the live status
 ledger; this roadmap remains the higher-level phase description.
 
+## Approved reprioritization — 2026-07-18
+
+1. Contract and SDD synchronization.
+2. Media metadata and same-ID file replacement; PDF documents.
+3. Equipment carousel, catalog and content.
+4. Fixed privacy policy, public lead ingestion and email delivery.
+5. Matching admin screens, then public frontend integration.
+
+`w-data-migrator`, full public acceptance and production deployment are deferred. Legacy `/home`, certificates, contacts/menu management, a page builder, Telegram/Bitrix and lead retry are removed from MVP.
+
 Task format:
 
 ```text

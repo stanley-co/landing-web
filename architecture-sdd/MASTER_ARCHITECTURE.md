@@ -1,5 +1,7 @@
 # Master Architecture
 
+> **MVP scope update (2026-07-18).** The approved fixed-model scope is defined in [MVP_SCOPE_DECISIONS_2026-07-18.md](MVP_SCOPE_DECISIONS_2026-07-18.md). It replaces legacy `/home`, certificates, managed contacts/menu and universal page-builder assumptions. The managed legal surface is only the fixed Markdown privacy policy; lead delivery is email only.
+
 ## Назначение
 
 Документ фиксирует целевую архитектуру системы, основанную на повторном аудите `landing-web` и утвержденных бизнес/технических решениях.
@@ -148,4 +150,3 @@ Spring Security, cookie-based admin session or access/refresh token with httpOnl
 ## MVP criteria
 
 MVP is ready when public frontend reads from API, admin can manage MVP content, leads are stored and emailed, S3 files are managed safely, data migration is verified, and contract/backend/frontend/admin smoke tests pass.
-

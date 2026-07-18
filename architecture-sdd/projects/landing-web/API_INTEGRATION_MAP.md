@@ -2,16 +2,16 @@
 
 | Component | Current source | New endpoint | DTO | Loading | Error | Empty | Cache |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Header | TS arrays | `/public/menu/header` | MenuDto | keep header, skeleton optional | fallback static minimal | minimal menu | stale 10m |
-| EquipmentCarousel | S3 carousel | `/public/slides?pageCode=equipment` | SlideDto[] | current spinner | hide carousel | null | stale 5m |
+| Header | TS arrays | none in MVP | static code | n/a | n/a | n/a | n/a |
+| EquipmentCarousel | S3 carousel | `/public/slides?placement=EQUIPMENT_CATALOG` | SlideDto[] | current spinner | hide carousel | null | stale 5m |
 | EquipmentPage | S3 products | `/public/product-categories`, `/public/products` | CategoryDto/ProductCardDto | existing spinner/skeleton | error panel | no products | query cache |
 | SearchModal | S3 products | `/public/products?search=` | ProductSearchDto[] | spinner | inline error | nothing found | debounce |
 | ProductDetailPage | S3 products/articles | `/public/products/{id}` | ProductDetailDto | full-page spinner/skeleton | 404/error | not found | stale 5m |
 | InformationPage | S3 news/articles | `/public/content` | ContentListDto | spinner | error panel | no results | query cache |
 | NewsArticlePage | S3 news/articles | `/public/news/{id}` | ContentDetailDto | spinner/skeleton | 404 | not found | stale 5m |
-| AboutPage | JSX | `/public/pages/about` | PageDto | section skeleton | fallback/error | hidden empty sections | stale 10m |
-| ContactsPage | JSX/form | `/public/contacts`, `/public/leads` | ContactDto/LeadRequest | form pending | validation errors | no contacts | stale 10m |
-| PrivacyPolicyPage | JSX | `/public/pages/privacy-policy` | PageDto | skeleton | error | unavailable | stale 1h |
+| AboutPage | JSX | none in MVP | static code | n/a | n/a | n/a | n/a |
+| ContactsPage | JSX/form | `/public/leads` | LeadRequest | form pending | validation errors | n/a | n/a |
+| PrivacyPolicyPage | JSX | `/public/legal/privacy-policy` | PrivacyPolicyDto | skeleton | error | unavailable | stale 1h |
 | HomePage | mixed legacy | `/public/pages/home`, `/public/legacy` | PageDto/LegacyBlockDto | skeleton | error | show nothing | stale 10m |
 
 ## Code Validation Addendum 2026-07-17

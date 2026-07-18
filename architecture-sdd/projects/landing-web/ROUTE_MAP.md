@@ -8,10 +8,10 @@
 | `/information` | yes | `InformationPage` | `GET /api/v1/public/content` |
 | `/news` | yes, redirect | `Navigate` to `/information#news` | no API required |
 | `/news/:id` | yes | `NewsArticlePage` | `GET /api/v1/public/news/{id}` |
-| `/about` | yes | `AboutPage` | `GET /api/v1/public/pages/about` |
-| `/contacts` | yes | `ContactsPage` | contacts/leads |
-| `/privacy-policy` | yes | `PrivacyPolicyPage` | page/legal endpoint |
-| `/home` | yes, legacy | `HomePage` | page/legacy endpoint |
+| `/about` | yes, static | `AboutPage` | none in MVP |
+| `/contacts` | yes, static | `ContactsPage` | leads only |
+| `/privacy-policy` | yes, managed | `PrivacyPolicyPage` | `GET /api/v1/public/legal/privacy-policy` |
+| `/home` | no, removed MVP scope | — | — |
 | `*` | yes | `NotFoundPage` | no API required |
 
 Do not migrate to slug routes in MVP.

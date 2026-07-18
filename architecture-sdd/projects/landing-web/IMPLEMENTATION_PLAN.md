@@ -10,5 +10,5 @@ Task IDs:
 - `FRONT-CONTENT-001`: content list and `/news/:id`.
 - `FRONT-PAGES-001`: page sections.
 - `FRONT-LEADS-001`: lead form API.
-- `FRONT-LEGACY-001`: legacy `/home`.
-
+- `FRONT-LEGAL-001`: fixed public privacy-policy API.
+- `FRONT-LEGACY-REMOVE-001`: verify and remove unused `/home` route and components in a separate refactor commit.
