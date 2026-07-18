@@ -20,3 +20,6 @@
 | REQ-MIGRATION-002 | Preserve IDs and order | user | migrator/backend | all imported | ID_STRATEGY | n/a | migration verification |
 | REQ-INFRA-001 | Docker Compose local stack | user | w-platform-infra | compose | DOCKER_COMPOSE | n/a | compose smoke |
 | REQ-CONTRACT-001 | OpenAPI contracts source | user | w-api-contracts | openapi | openapi/openapi.yaml | all API | contract tests |
+| REQ-ID-001 | UUID primary keys are backend generated; externalId is nullable import-only and code is generated | approved UUID scope | backend/contracts/admin | all aggregates | ADR-017 | create/read DTOs | migration + API tests |
+| REQ-MEDIA-001 | Common picker supports library selection and inline upload without leaving an editor | approved media scope | backend/admin | media | ADR-018 | media/upload-sessions | UI + API tests |
+| REQ-MEDIA-002 | Temporary uploads expire after 24h; actual typed FK relations define usages | approved media scope | backend | media/catalog/content/slide/document | ADR-018 | media usages | cleanup + usage tests |

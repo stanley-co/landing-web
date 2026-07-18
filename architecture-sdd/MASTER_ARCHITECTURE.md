@@ -1,6 +1,8 @@
 # Master Architecture
 
 > **MVP scope update (2026-07-18).** The approved fixed-model scope is defined in [MVP_SCOPE_DECISIONS_2026-07-18.md](MVP_SCOPE_DECISIONS_2026-07-18.md). It replaces legacy `/home`, certificates, managed contacts/menu and universal page-builder assumptions. The managed legal surface is only the fixed Markdown privacy policy; lead delivery is email only.
+>
+> **Identifier and attachment update (2026-07-18).** UUID is the backend-generated primary key of every aggregate. `externalId` is nullable, import-only and unique when present; `code` is a generated, immutable administrative identifier. Attachments are selected or uploaded in the owning editor through a shared Media Picker. New-editor uploads use a 24-hour upload session and become `ACTIVE` only when the owner is saved.
 
 ## Назначение
 
@@ -13,14 +15,14 @@
 | Route | Page | Notes |
 | --- | --- | --- |
 | `/`, `/equipment` | `EquipmentPage` | каталог, стартовая страница |
-| `/equipment/:id` | `ProductDetailPage` | карточка оборудования по existing ID |
+| `/equipment/:id` | `ProductDetailPage` | карточка оборудования by UUID or imported `externalId` |
 | `/information` | `InformationPage` | новости/статьи с табами и hash anchors |
 | `/news` | redirect to `/information#news` | compatibility route |
-| `/news/:id` | `NewsArticlePage` | детальная новость/статья по existing ID |
+| `/news/:id` | `NewsArticlePage` | детальная новость/статья by UUID or imported `externalId` |
 | `/about` | `AboutPage` | о компании |
 | `/contacts` | `ContactsPage` | контакты и форма |
 | `/privacy-policy` | `PrivacyPolicyPage` | статический legal text |
-| `/home` | `HomePage` | legacy page, сохранить |
+| `/home` | removed | вне MVP; legacy route is removed after dependency scan |
 | `*` | `NotFoundPage` | 404 |
 
 Фактический frontend-стек:
@@ -59,8 +61,8 @@
 - Architecture: modular monolith, не микросервисы.
 - Gateway: MVP internal edge layer inside `w-backend-service`; отдельный `w-api-gateway` не деплоится.
 - Data: S3 current source for migration; PostgreSQL structured source after migration; S3 remains binaries source.
-- IDs: сохранить existing IDs; добавить nullable `slug` только future extension.
-- Routes: сохранить `/home` и `/news/:id`.
+- IDs: backend generates UUID v4; imported `externalId` is nullable and immutable; generated `code` is the administrative identifier. A public lookup resolves UUID first, then `externalId`.
+- Routes: preserve `/news/:id`; `/home` is removed/out of scope.
 - i18n: не входит в MVP.
 - Roles: `ADMIN`, `FEATURE_OWNER`, `CONTENT_READER`.
 - Status: `DRAFT`, `ACTIVE`, `ARCHIVED`; для простых справочников допустим `active`.
@@ -79,11 +81,11 @@ w-platform-infra  -> local Docker Compose and future VPS baseline
 
 ## Backend modules
 
-`auth`, `user`, `rbac`, `catalog`, `content`, `page`, `legacy`, `menu`, `slide`, `contact`, `media`, `document`, `certificate`, `lead`, `notification`, `setting`, `audit`, `migration`, `storage`, `common`.
+`auth`, `user`, `rbac`, `catalog`, `content`, `privacy`, `slide`, `media`, `document`, `lead`, `notification`, `setting`, `audit`, `migration`, `storage`, `common`. `legacy`, `menu`, `contact` and `certificate` are not MVP modules.
 
 ## Data model summary
 
-Core entities: admin users, roles, permissions, audit logs, products, product categories, specs, advantages, media, videos, related content, content items, content blocks, pages, page sections, legacy blocks, menus, slides, contacts, documents, certificates, leads, notifications, settings.
+Core entities: admin users, roles, permissions, audit logs, products, product categories, specs, advantages, media, upload sessions, videos, related content, content items, content blocks, slides, documents, privacy policies, leads, notifications and settings. Aggregate rows use `uuid` primary keys, nullable import-only `external_id`, and generated codes where administrators need a readable reference.
 
 ```mermaid
 erDiagram
@@ -94,10 +96,7 @@ erDiagram
   MEDIA_FILE ||--o{ PRODUCT_MEDIA : used_by
   CONTENT_ITEM ||--o{ CONTENT_BLOCK : contains
   PRODUCT }o--o{ CONTENT_ITEM : related
-  PAGE ||--o{ PAGE_SECTION : contains
-  PAGE ||--o{ LEGACY_BLOCK : owns
   MEDIA_FILE ||--o{ DOCUMENT : file
-  DOCUMENT ||--o{ CERTIFICATE : may_be
   PRODUCT ||--o{ LEAD : requested
   LEAD ||--o{ NOTIFICATION_EVENT : notifies
   ADMIN_USER }o--o{ ROLE : has
@@ -125,19 +124,19 @@ Public API prefixes:
 
 Auth API: `/api/v1/auth/login`, `/refresh`, `/logout`, `/me`.
 
-Admin API: CRUD endpoints under `/api/v1/admin/**`.
+Admin API: CRUD endpoints under `/api/v1/admin/**`. `/admin/media/upload-sessions`, `/admin/media/{id}/usages` and `/admin/references` support inline attachment work without creating an empty business entity.
 
 ## Admin panel
 
-`w-admin-web` manages dashboard, catalog, categories, content, pages, legacy blocks, slides, media, documents, certificates, leads, users, audit, settings. UI stack: React, TypeScript, Vite, React Router, TanStack Query, React Hook Form, Zod, OpenAPI-generated client, Ant Design.
+`w-admin-web` manages dashboard, catalog, categories, content, slides, media, documents, fixed privacy policy, leads, users, audit and settings. A reusable `MediaPicker` provides library search/filtering and upload tabs inside applicable editors. UI stack: React, TypeScript, Vite, React Router, TanStack Query, React Hook Form, Zod, OpenAPI-generated client, Ant Design.
 
 ## S3, PDF, files
 
-S3 stores binaries only after migration. PostgreSQL stores metadata and links. PDF supported through document/certificate modules: upload, preview, download, replace, archive, safe delete.
+S3 stores binaries only after migration. PostgreSQL stores metadata and typed links (`product_media`, content cover/block references, slide images, document file and privacy OG image). PDF is supported through documents: upload, preview, download, same-ID replacement, archive and safe delete. Upload sessions clean unclaimed `TEMPORARY` objects after 24 hours.
 
 ## Lead flow
 
-User submits form -> public API -> validation + consent + anti-spam -> PostgreSQL lead -> notification event -> email sender -> delivery status -> admin view/retry.
+User submits form -> public API -> validation + consent + anti-spam -> PostgreSQL lead -> notification event -> email sender -> delivery status -> admin view. Manual retry is not MVP.
 
 ## Security
 

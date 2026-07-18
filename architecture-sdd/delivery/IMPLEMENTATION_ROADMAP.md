@@ -11,6 +11,7 @@ ledger; this roadmap remains the higher-level phase description.
 3. Equipment carousel, catalog and content.
 4. Fixed privacy policy, public lead ingestion and email delivery.
 5. Matching admin screens, then public frontend integration.
+6. UUID/code migration, upload sessions, usage/search API, shared Media Picker and inline editor integration.
 
 `w-data-migrator`, full public acceptance and production deployment are deferred. Legacy `/home`, certificates, contacts/menu management, a page builder, Telegram/Bitrix and lead retry are removed from MVP.
 
@@ -61,6 +62,7 @@ Result
 ## Phase 5 Storage
 
 - `BACKEND-STORAGE-001`: S3/MinIO, media metadata.
+- `BACKEND-MEDIA-002`: UUID `MED-*` codes, upload sessions, temporary cleanup, typed usage projection and entity filters.
 
 ## Phase 6 Catalog
 
@@ -82,6 +84,7 @@ Result
 ## Phase 10 Admin Frontend
 
 - `ADMIN-FOUNDATION-001`, `ADMIN-CATALOG-001`, `ADMIN-CONTENT-001`, `ADMIN-MEDIA-001`, `ADMIN-LEADS-001`.
+- `ADMIN-MEDIA-002`: reusable Media Picker, inline product/content/slide/document/privacy attachments, server-side search/filtering and safe usage navigation.
 
 ## Phase 11 Public Frontend
 
