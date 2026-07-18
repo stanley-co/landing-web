@@ -130,15 +130,15 @@ Last synchronized: 2026-07-18. Status and commits are local only.
 | AD-001 | w-admin-web | Initialize Vite/React/TypeScript/Ant Design foundation with generated client | CT-005, AU-002 | DONE | `64baecf`; Vite/React/Ant Design/Query/RHF/Zod foundation, contract type generation, lint/typecheck/build/Vitest pass. |
 | AD-002 | w-admin-web | Implement login, auth/session state, router, shell, error boundary, permission guards | AD-001, AU-003 | DONE | `25a2e97`; opaque token in memory, refresh-cookie restoration, protected routes, shell, error boundary and permission guards; lint/typecheck/build/Vitest pass. |
 | AD-003 | w-admin-web | Implement category and product editors with media, specs, advantages, gallery, video, relations, archive/reorder | AD-002, CA-005, ST-002 | DONE | `ec68b8a` lists; `35b0294` typed product fields/media; `b575cd7` content selection; `326c8f9` batch reorder; `b606a28` lifecycle-safe category edit; `22c4e36` component coverage. No raw JSON editor. |
-| AD-004 | w-admin-web | Implement media, document, and certificate management | AD-002, ST-003 | IN_PROGRESS | Start media list/upload/safe-delete feedback, then document and certificate metadata editors. |
-| AD-005 | w-admin-web | Implement content, page, contacts, menu, carousel, and legacy management | AD-002, CO-003, PA-002, SL-001, LE-002 | NOT_STARTED | Legacy shows Deprecated badge. |
+| AD-004 | w-admin-web | Implement media, document, and certificate management | AD-002, ST-003 | PARTIAL | `ca61d26`: media list/upload/safe-delete, PDF selection and document/certificate create/list. Replace/archive needs missing contract operations. |
+| AD-005 | w-admin-web | Implement content, page, contacts, menu, carousel, and legacy management | AD-002, CO-003, PA-002, SL-001, LE-002 | IN_PROGRESS | `d83b683`: NEWS/ARTICLE list, typed-block editor and archive. Other screens wait for PA-002, SL-001 and LE-002; legacy shows Deprecated badge. |
 | AD-006 | w-admin-web | Implement leads, users, audit, settings, component tests, and E2E critical paths | AD-002, LD-003 | NOT_STARTED | Include notification retry. |
 
 ## Phase 13: Landing integration
 
 | ID | Project | Task | Dependencies | Status | Evidence / next action |
 | --- | --- | --- | --- | --- | --- |
-| FE-001 | landing-web | Add generated client and API configuration without changing routes/UI | CT-005, ED-002 | NOT_STARTED | Preserve existing fallback/loading/error states. |
+| FE-001 | landing-web | Add generated client and API configuration without changing routes/UI | CT-005, ED-002 | DONE | `a863d70`: generated public schema, `openapi-fetch` client and `VITE_PUBLIC_API_BASE_URL`; routes/UI and S3 flows unchanged. |
 | FE-002 | landing-web | Move site settings, menu, carousel, categories, and catalog list to public API | FE-001, CA-004, SL-001, PA-002 | NOT_STARTED | Remove only replaced direct S3 JSON fetches. |
 | FE-003 | landing-web | Move product detail/search to public API | FE-002, CA-004, CO-002 | NOT_STARTED | Preserve ID route and full detail rendering; related article cards require content summaries. |
 | FE-004 | landing-web | Move news/articles list and `/news/:id` detail to public API | FE-001, CO-002 | NOT_STARTED | Do not require slug. |
