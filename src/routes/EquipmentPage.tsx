@@ -377,7 +377,6 @@ const EquipmentPage = () => {
               <IonSpinner name="crescent" style={{ width: '48px', height: '48px' }} />
               <p>Загрузка каталога оборудования...</p>
             </div>
-            <CooperationFormSection />
             <Footer />
           </IonContent>
         </PageWrapper>
