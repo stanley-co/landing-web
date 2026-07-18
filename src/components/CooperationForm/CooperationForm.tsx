@@ -3,6 +3,7 @@ import { checkmarkCircleOutline, sendOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { landingApi } from '../../api/public';
 import styles from './CooperationForm.module.css';
+import { isValidPhone } from './validation';
 
 type FormData = { company: string; firstName: string; phone: string; email: string; comment: string };
 type CooperationFormProps = { onSuccess?: () => void; showHeader?: boolean; initialProductId?: string | null; initialProductName?: string | null };
@@ -20,6 +21,7 @@ const CooperationForm = ({ onSuccess, showHeader = true, initialProductId = null
     event.preventDefault();
     setError(undefined);
     if (!isConsentGiven) { setError('Необходимо согласие на обработку персональных данных.'); return; }
+    if (!isValidPhone(formData.phone)) { setError('Введите корректный номер телефона.'); return; }
     setIsSubmitting(true);
     try {
       await landingApi.createLead({
@@ -50,7 +52,7 @@ const CooperationForm = ({ onSuccess, showHeader = true, initialProductId = null
       {initialProductName && <p className={styles.contactHint}>Запрос по товару: <strong>{initialProductName}</strong></p>}
       <IonItem className={styles.formItem}><IonLabel position="stacked">Название компании *</IonLabel><IonInput type="text" value={formData.company} onIonInput={(event) => handleInputChange('company', event.detail.value ?? '')} required /></IonItem>
       <IonItem className={styles.formItem}><IonLabel position="stacked">Имя *</IonLabel><IonInput type="text" value={formData.firstName} onIonInput={(event) => handleInputChange('firstName', event.detail.value ?? '')} required /></IonItem>
-      <IonItem className={styles.formItem}><IonLabel position="stacked">Телефон *</IonLabel><IonInput type="tel" value={formData.phone} onIonInput={(event) => handleInputChange('phone', event.detail.value ?? '')} required placeholder="+7 (999) 555-88-88" /></IonItem>
+      <IonItem className={styles.formItem}><IonLabel position="stacked">Телефон *</IonLabel><IonInput type="tel" inputMode="tel" value={formData.phone} onIonInput={(event) => handleInputChange('phone', event.detail.value ?? '')} required placeholder="+7 (999) 555-88-88" /></IonItem>
       <IonItem className={styles.formItem}><IonLabel position="stacked">Email *</IonLabel><IonInput type="email" value={formData.email} onIonInput={(event) => handleInputChange('email', event.detail.value ?? '')} required placeholder="name@example.com" /></IonItem>
       <IonItem className={styles.formItem}><IonLabel position="stacked">Комментарий / Сообщение</IonLabel><IonTextarea value={formData.comment} onIonInput={(event) => handleInputChange('comment', event.detail.value ?? '')} rows={4} /></IonItem>
       <div className={styles.consent}><label className={styles.consentLabel}><input type="checkbox" checked={isConsentGiven} onChange={(event) => setIsConsentGiven(event.target.checked)} className={styles.consentCheckbox} /><span>Я соглашаюсь с <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">обработкой моих персональных данных</a></span></label></div>
