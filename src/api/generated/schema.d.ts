@@ -724,6 +724,24 @@ export interface paths {
         /** List administrator users */
         get: operations["listAdminUsers"];
         put?: never;
+        /** Create an administrator user with approved roles */
+        post: operations["createAdminUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update an administrator profile, password, active state and approved roles */
+        put: operations["updateAdminUser"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1054,6 +1072,21 @@ export interface components {
             permissions: string[];
             status: components["schemas"]["Status"];
         };
+        AdminUserCreateRequest: {
+            /** Format: email */
+            login: string;
+            displayName: string;
+            /** Format: password */
+            password: string;
+            roles: components["schemas"]["UserRole"][];
+        };
+        AdminUserUpdateRequest: {
+            displayName: string;
+            /** Format: password */
+            password?: string;
+            roles: components["schemas"]["UserRole"][];
+            active: boolean;
+        };
         ProductWriteRequest: {
             name: string;
             /** Format: uuid */
@@ -1286,9 +1319,17 @@ export interface components {
             id: string;
             action: string;
             /** Format: uuid */
-            actorId: string;
+            actorId?: string;
+            actorLogin?: string;
             entityType?: string;
+            /** Format: uuid */
             entityId?: string;
+            requestId?: string;
+            ipAddress?: string;
+            userAgent?: string;
+            payload: {
+                [key: string]: unknown;
+            };
             /** Format: date-time */
             occurredAt: string;
         };
@@ -2702,6 +2743,45 @@ export interface operations {
         requestBody?: never;
         responses: {
             200: components["responses"]["AdminUserList"];
+        };
+    };
+    createAdminUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminUserCreateRequest"];
+            };
+        };
+        responses: {
+            201: components["responses"]["AdminUser"];
+            400: components["responses"]["ValidationError"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    updateAdminUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["EntityId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminUserUpdateRequest"];
+            };
+        };
+        responses: {
+            200: components["responses"]["AdminUser"];
+            400: components["responses"]["ValidationError"];
+            403: components["responses"]["Forbidden"];
+            404: components["responses"]["NotFound"];
         };
     };
     listAuditEvents: {
