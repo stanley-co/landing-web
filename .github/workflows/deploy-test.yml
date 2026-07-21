@@ -1,0 +1,116 @@
+name: Deploy test
+
+on:
+  workflow_run:
+    workflows: [Build image]
+    types: [completed]
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Existing immutable tag (sha-<40 hex commit>)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: test-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'develop') ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.ref == 'refs/heads/develop')
+    runs-on: ubuntu-latest
+    environment: test
+    env:
+      TEST_SERVER_HOST: ${{ secrets.TEST_SERVER_HOST }}
+      TEST_SERVER_PORT: ${{ secrets.TEST_SERVER_PORT }}
+      TEST_SERVER_USER: ${{ secrets.TEST_SERVER_USER }}
+      TEST_SERVER_SSH_KEY: ${{ secrets.TEST_SERVER_SSH_KEY }}
+      TEST_SERVER_SSH_KNOWN_HOSTS: ${{ secrets.TEST_SERVER_SSH_KNOWN_HOSTS }}
+      GHCR_PULL_USERNAME: ${{ secrets.GHCR_PULL_USERNAME }}
+      GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+    steps:
+      - id: release
+        name: Resolve and validate immutable release
+        shell: bash
+        env:
+          AUTOMATIC_SHA: ${{ github.event.workflow_run.head_sha }}
+          MANUAL_TAG: ${{ inputs.image_tag }}
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/landing-web"
+          if [[ "$GITHUB_EVENT_NAME" == workflow_run ]]; then
+            tag="sha-$AUTOMATIC_SHA"
+            commit="$AUTOMATIC_SHA"
+          else
+            tag="$MANUAL_TAG"
+            commit="${MANUAL_TAG#sha-}"
+          fi
+          [[ "$tag" =~ ^sha-[0-9a-f]{40}$ ]] || { echo "Only sha-<40 hex> tags are deployable" >&2; exit 64; }
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: digest
+        name: Resolve registry digest
+        env:
+          IMAGE: ${{ steps.release.outputs.image }}
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          digest=$(docker buildx imagetools inspect "$IMAGE:$TAG" | awk '$1 == "Digest:" {print $2; exit}')
+          [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "Registry did not return a valid digest" >&2; exit 1; }
+          echo "value=$digest" >> "$GITHUB_OUTPUT"
+      - name: Configure pinned SSH host
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$TEST_SERVER_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          printf '%s\n' "$TEST_SERVER_SSH_KEY" > ~/.ssh/test
+          chmod 600 ~/.ssh/known_hosts ~/.ssh/test
+      - name: Preflight test server
+        run: |
+          port=${TEST_SERVER_PORT:-22}
+          ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" \
+            'docker info >/dev/null && docker compose version && test "$(df -Pk /opt/kitexp-staging | awk '\''NR==2 {print $4}'\'')" -gt 2097152'
+      - name: Deploy immutable image
+        env:
+          IMAGE: ${{ steps.release.outputs.image }}
+          TAG: ${{ steps.release.outputs.tag }}
+          COMMIT_SHA: ${{ steps.release.outputs.commit }}
+          IMAGE_DIGEST: ${{ steps.digest.outputs.value }}
+        run: |
+          port=${TEST_SERVER_PORT:-22}
+          {
+            printf '%s\n' "$GHCR_PULL_USERNAME"
+            printf '%s\n' "$GHCR_PULL_TOKEN"
+            printf '%s\n' "$GITHUB_REPOSITORY"
+            printf '%s\n' "develop"
+            printf '%s\n' "$COMMIT_SHA"
+            printf '%s\n' "$GITHUB_RUN_ID"
+            printf '%s\n' "$IMAGE_DIGEST"
+          } | ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" \
+            "IFS= read -r GHCR_PULL_USERNAME; IFS= read -r GHCR_PULL_TOKEN; IFS= read -r DEPLOY_REPOSITORY; IFS= read -r DEPLOY_BRANCH; IFS= read -r DEPLOY_COMMIT; IFS= read -r DEPLOY_RUN_ID; IFS= read -r EXPECTED_IMAGE_DIGEST; export GHCR_PULL_USERNAME GHCR_PULL_TOKEN DEPLOY_REPOSITORY DEPLOY_BRANCH DEPLOY_COMMIT DEPLOY_RUN_ID EXPECTED_IMAGE_DIGEST; /opt/kitexp-staging/bin/deploy-service landing-web '$IMAGE' '$TAG'"
+      - name: Verify public test endpoints
+        run: |
+          curl --fail --silent --show-error --insecure --max-time 20 "https://$TEST_SERVER_HOST/healthz" | grep -q ok
+          curl --fail --silent --show-error --insecure --max-time 20 "https://$TEST_SERVER_HOST/actuator/health" | grep -q '"status":"UP"'
+      - name: Record deployment
+        run: |
+          {
+            echo "### Test deployment"
+            echo "- Image: \`${{ steps.release.outputs.image }}:${{ steps.release.outputs.tag }}\`"
+            echo "- Digest: \`${{ steps.digest.outputs.value }}\`"
+            echo "- Commit: \`${{ steps.release.outputs.commit }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
