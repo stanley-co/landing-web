@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ContactFormModalProvider } from './contexts/ContactFormModalContext';
 import ContactFormModal from './components/ContactFormModal/ContactFormModal';
 import { useContactFormModal } from './contexts/ContactFormModalContext';
-import HomePage from './routes/HomePage';
 import EquipmentPage from './routes/EquipmentPage';
 import ProductDetailPage from './routes/ProductDetailPage';
 import InformationPage from './routes/InformationPage';
@@ -14,7 +13,7 @@ import NotFoundPage from './routes/NotFoundPage';
 import PrivacyPolicyPage from './routes/PrivacyPolicyPage';
 
 const AppContent = () => {
-  const { isOpen, productName, closeModal } = useContactFormModal();
+  const { isOpen, productName, productId, closeModal } = useContactFormModal();
 
   return (
     <>
@@ -36,13 +35,10 @@ const AppContent = () => {
         <Route path="/news" element={<Navigate to="/information#news" replace />} />
         <Route path="/news/:id" element={<NewsArticlePage />} />
         
-        {/* Главная страница (старая) - перенаправляем на оборудование */}
-        <Route path="/home" element={<HomePage />} />
-        
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <ContactFormModal isOpen={isOpen} onClose={closeModal} productName={productName} />
+      <ContactFormModal isOpen={isOpen} onClose={closeModal} productName={productName} productId={productId} />
     </>
   );
 };

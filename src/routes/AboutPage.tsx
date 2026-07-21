@@ -2,7 +2,6 @@ import { IonContent, IonPage } from '@ionic/react';
 import PageWrapper from '../components/layout/PageWrapper';
 import DocumentHead from '../components/DocumentHead/DocumentHead';
 import CompanyIntro from '../components/CompanyIntro/CompanyIntro';
-import Certificates from '../components/Certificates/Certificates';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
 import styles from './AboutPage.module.css';
@@ -86,56 +85,6 @@ const AboutPage = () => {
               </div>
             </div>
           </section>
-
-          {/* Секция "Сертификаты" — пока отключено */}
-          {false && (
-          <section id="certificates" className={styles.section}>
-            <div className={styles.container}>
-              <Certificates />
-            </div>
-          </section>
-          )}
-
-          {/* Секция "Наши клиенты" — пока отключено */}
-          {false && (
-          <section id="clients" className={styles.section}>
-            <div className={styles.container}>
-              <div className={styles.sectionHeader}>
-                <h2 className={styles.sectionTitle}>Наши клиенты</h2>
-                <div className={styles.sectionDivider} />
-                <p className={styles.sectionDescription}>
-                  Мы гордимся сотрудничеством с ведущими компаниями в различных отраслях промышленности
-                </p>
-              </div>
-              <div className={styles.clientsGrid}>
-                <div className={styles.clientCard}>
-                  <div className={styles.clientLogo}>Клиент 1</div>
-                  <p className={styles.clientName}>Фармацевтическая компания</p>
-                </div>
-                <div className={styles.clientCard}>
-                  <div className={styles.clientLogo}>Клиент 2</div>
-                  <p className={styles.clientName}>Косметическое производство</p>
-                </div>
-                <div className={styles.clientCard}>
-                  <div className={styles.clientLogo}>Клиент 3</div>
-                  <p className={styles.clientName}>Пищевая промышленность</p>
-                </div>
-                <div className={styles.clientCard}>
-                  <div className={styles.clientLogo}>Клиент 4</div>
-                  <p className={styles.clientName}>Химическое производство</p>
-                </div>
-                <div className={styles.clientCard}>
-                  <div className={styles.clientLogo}>Клиент 5</div>
-                  <p className={styles.clientName}>Производство клеев</p>
-                </div>
-                <div className={styles.clientCard}>
-                  <div className={styles.clientLogo}>Клиент 6</div>
-                  <p className={styles.clientName}>Лабораторное оборудование</p>
-                </div>
-              </div>
-            </div>
-          </section>
-          )}
 
           {/* Секция "Форма сотрудничества" */}
           <CooperationFormSection

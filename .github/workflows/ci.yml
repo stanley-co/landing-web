@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+      - "feature/**"
+      - "release/**"
+      - "hotfix/**"
+      - "bugfix/**"
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check source hygiene
+        run: git diff --check
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+        env:
+          VITE_PUBLIC_API_BASE_URL: /api/v1
+          VITE_S3_HOST: /
+          VITE_S3_BUCKET: media
+      - name: Audit runtime dependencies
+        run: npm audit --omit=dev --audit-level=high
+      - name: Verify production image build without publishing
+        run: docker build --build-arg VITE_PUBLIC_API_BASE_URL=/api/v1 --build-arg VITE_S3_HOST=/ --build-arg VITE_S3_BUCKET=media -t landing-web:ci .

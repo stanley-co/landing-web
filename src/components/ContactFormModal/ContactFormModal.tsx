@@ -7,9 +7,10 @@ type ContactFormModalProps = {
   onClose: () => void;
   /** Название продукта, с карточки которого открыта форма */
   productName?: string | null;
+  productId?: string | null;
 };
 
-const ContactFormModal = ({ isOpen, onClose, productName = null }: ContactFormModalProps) => {
+const ContactFormModal = ({ isOpen, onClose, productName = null, productId = null }: ContactFormModalProps) => {
   const handleSuccess = () => {
     // Автоматически закрываем modal через 2 секунды после успешной отправки
     setTimeout(() => {
@@ -26,11 +27,10 @@ const ContactFormModal = ({ isOpen, onClose, productName = null }: ContactFormMo
       closeOnBackdrop={true}
     >
       <div className={styles.modalFormContainer}>
-        <CooperationForm onSuccess={handleSuccess} showHeader={false} initialProductName={productName} />
+        <CooperationForm onSuccess={handleSuccess} showHeader={false} initialProductName={productName} initialProductId={productId} />
       </div>
     </Modal>
   );
 };
 
 export default ContactFormModal;
-

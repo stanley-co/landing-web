@@ -1,6 +1,6 @@
 import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import { useParams } from 'react-router-dom';
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
 import ArticleHero from '../components/ArticleHero/ArticleHero';
 import ArticleBody from '../components/ArticleBody/ArticleBody';
@@ -8,8 +8,7 @@ import ArticleShare from '../components/ArticleShare/ArticleShare';
 import RelatedNews from '../components/RelatedNews/RelatedNews';
 import Footer from '../components/Footer/Footer';
 import DocumentHead from '../components/DocumentHead/DocumentHead';
-import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
-import type { News } from '../types/news';
+import { landingApi } from '../api/public';
 
 type ContentBlock = {
   type: 'paragraph' | 'image' | 'quote' | 'link';
@@ -32,8 +31,8 @@ type NewsArticle = {
 
 const NewsArticlePage = () => {
   const { id } = useParams();
-  const [newsData, setNewsData] = useState<News[]>([]);
-  const [articlesData, setArticlesData] = useState<News[]>([]);
+  const [article, setArticle] = useState<NewsArticle | null>(null);
+  const [allNews, setAllNews] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,13 +40,10 @@ const NewsArticlePage = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        // Загружаем новости и статьи параллельно
-        const [news, articles] = await Promise.all([
-          fetchStaticData<News[]>(S3_URLS.NEWS).catch(() => []),
-          fetchStaticData<News[]>(S3_URLS.ARTICLES).catch(() => [])
-        ]);
-        setNewsData(news);
-        setArticlesData(articles);
+        if (!id) throw new Error('Не указан идентификатор материала');
+        const [detail, page] = await Promise.all([landingApi.contentItem(id), landingApi.content()]);
+        setArticle({ ...detail, category: detail.category ?? '', content: detail.blocks ?? [] });
+        setAllNews(page.items.map((item) => ({ ...item, category: item.category ?? '', content: [] })));
       } catch (err) {
         console.error('[NewsArticlePage] Ошибка при загрузке данных:', err);
         setError('Ошибка при загрузке статьи');
@@ -57,35 +53,7 @@ const NewsArticlePage = () => {
     };
 
     loadData();
-  }, []);
-
-  // Объединяем новости и статьи для поиска
-  const allData = useMemo(() => {
-    return [...newsData, ...articlesData];
-  }, [newsData, articlesData]);
-
-  // Находим статью по ID (ищем в новостях и статьях)
-  const article = useMemo(() => {
-    const found = allData.find(item => item.id === id);
-    if (!found) return null;
-    
-    return {
-      ...found,
-      image: getImageUrl(found.image), // Используем реальное изображение из S3
-      content: found.content.map(block => ({
-        ...block,
-        src: block.type === 'image' ? getImageUrl(block.src) : block.src
-      }))
-    } as NewsArticle;
-  }, [id, allData]);
-
-  // Преобразуем все данные для RelatedNews (должно быть до условных возвратов)
-  const allNews = useMemo(() => {
-    return allData.map(item => ({
-      ...item,
-      image: getImageUrl(item.image) // Используем реальные изображения из S3
-    }));
-  }, [allData]);
+  }, [id]);
 
   // Показываем индикатор загрузки
   if (loading) {
@@ -157,5 +125,4 @@ const NewsArticlePage = () => {
 };
 
 export default NewsArticlePage;
-
 

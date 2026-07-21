@@ -7,7 +7,7 @@ import EquipmentFilter from '../components/EquipmentFilter/EquipmentFilter';
 import EquipmentLayout from '../components/EquipmentLayout/EquipmentLayout';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
-import { fetchStaticData, S3_URLS, getImageUrl } from '../utils/fetchStaticData';
+import { landingApi, type ProductCategoryDto } from '../api/public';
 import type { Product } from '../types/product';
 import styles from './EquipmentPage.module.css';
 
@@ -72,6 +72,7 @@ type CategoryStructure = {
 
 const EquipmentPage = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
+  const [categoriesData, setCategoriesData] = useState<ProductCategoryDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -91,8 +92,14 @@ const EquipmentPage = () => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const data = await fetchStaticData<Product[]>(S3_URLS.PRODUCTS);
-        setProductsData(data);
+        const [productPage, categoryTree] = await Promise.all([landingApi.products(), landingApi.categories()]);
+        setProductsData(productPage.items.map((product) => ({
+          ...product,
+          globalCategory: product.globalCategory ?? undefined,
+          specs: {},
+          fullDescription: product.description
+        })));
+        setCategoriesData(categoryTree);
       } catch (err) {
         console.error('[EquipmentPage] Ошибка при загрузке продуктов:', err);
         setError('Ошибка при загрузке данных продуктов');
@@ -104,36 +111,22 @@ const EquipmentPage = () => {
     loadProducts();
   }, []);
 
-  // Преобразуем данные и заменяем пути изображений, добавляем globalCategory если отсутствует
-  const products: Product[] = useMemo(() => {
-    return productsData.map(product => {
-      const globalCategory = getGlobalCategory(product);
-      const result = {
-        ...product,
-        image: getImageUrl(product.image), // Используем изображение из S3
-        globalCategory: globalCategory || product.globalCategory, // Добавляем globalCategory если определили
-      };
-      
-      // Логируем для отладки, если globalCategory не определена
-      if (!result.globalCategory) {
-        console.warn(`[EquipmentPage] Продукт "${product.name}" (категория: "${product.category}") не имеет globalCategory и не найден в маппинге. Продукт не будет отображен.`);
-      }
-      
-      return result;
-    });
-  }, [productsData]);
+  const products: Product[] = useMemo(() => productsData.map((product) => ({
+    ...product,
+    globalCategory: getGlobalCategory(product) || product.globalCategory
+  })), [productsData]);
 
   // Определяем правильный порядок категорий (должен совпадать с порядком в Header)
   // Порядок: 1. Оборудование для приготовления и хранения, 2. Фасовочное оборудование,
   // 3. Насосное оборудование, 4. СИП станции, 5. Лабораторное оборудование
-  const categoryOrder = useMemo(() => [
+  const categoryOrder = useMemo(() => categoriesData.length ? categoriesData.map((category) => category.name) : [
     'Оборудование для приготовления и хранения',
     'Фасовочное оборудование',
     'Насосное оборудование',
     'СИП станции',
     'Лабораторное оборудование',
     'Водоподготовка'
-  ], []);
+  ], [categoriesData]);
 
   // Получаем уникальные глобальные категории из продуктов (динамически)
   const globalCategories = useMemo(() => {
@@ -384,7 +377,6 @@ const EquipmentPage = () => {
               <IonSpinner name="crescent" style={{ width: '48px', height: '48px' }} />
               <p>Загрузка каталога оборудования...</p>
             </div>
-            <CooperationFormSection />
             <Footer />
           </IonContent>
         </PageWrapper>

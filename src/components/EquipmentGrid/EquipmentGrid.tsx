@@ -21,6 +21,7 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
   const navigate = useNavigate();
   const [displayProducts, setDisplayProducts] = useState(products);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsAnimating(true);
@@ -30,6 +31,23 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
     }, 150);
     return () => clearTimeout(timer);
   }, [products]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const firstProduct = useMemo(() => {
+    return displayProducts.length > 0 ? displayProducts[0] : null;
+  }, [displayProducts]);
+
+  const restProducts = useMemo(() => {
+    return displayProducts.length > 1 ? displayProducts.slice(1) : [];
+  }, [displayProducts]);
 
   if (products.length === 0) {
     return (
@@ -54,26 +72,6 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
       </section>
     );
   }
-
-  // Для мобильной версии показываем только первый продукт из каждой категории
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const firstProduct = useMemo(() => {
-    return displayProducts.length > 0 ? displayProducts[0] : null;
-  }, [displayProducts]);
-
-  const restProducts = useMemo(() => {
-    return displayProducts.length > 1 ? displayProducts.slice(1) : [];
-  }, [displayProducts]);
 
   return (
     <section className={styles.grid}>
@@ -144,4 +142,3 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
 };
 
 export default EquipmentGrid;
-

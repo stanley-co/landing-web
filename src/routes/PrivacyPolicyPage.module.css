@@ -89,6 +89,8 @@
 .link:hover {
   text-decoration: none;
 }
+.markdown { white-space: pre-wrap; line-height: 1.75; color: var(--ion-color-medium, #374151); }
+.loading { min-height: 360px; display: grid; place-content: center; justify-items: center; gap: 12px; }
 
 @media (max-width: 768px) {
   .section {
@@ -104,4 +106,3 @@
     padding: 16px 16px;
   }
 }
-

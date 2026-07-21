@@ -140,9 +140,13 @@ export function getImageUrl(imagePath: string | undefined): string {
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath;
   }
+
+  // The backend returns same-origin public URLs such as /media/<bucket>/<key>.
+  // Keep them untouched so test builds never rewrite them to the legacy S3 host.
+  if (imagePath.startsWith('/')) {
+    return imagePath;
+  }
   
   // Если путь начинается с "/", убираем его и добавляем к базовому URL
-  const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-  return `${S3_URLS.BASE}/${cleanPath}`;
+  return `${S3_URLS.BASE}/${imagePath}`;
 }
-
