@@ -36,8 +36,8 @@ jobs:
       TEST_SERVER_USER: ${{ secrets.TEST_SERVER_USER }}
       TEST_SERVER_SSH_KEY: ${{ secrets.TEST_SERVER_SSH_KEY }}
       TEST_SERVER_SSH_KNOWN_HOSTS: ${{ secrets.TEST_SERVER_SSH_KNOWN_HOSTS }}
-      GHCR_PULL_USERNAME: ${{ secrets.GHCR_PULL_USERNAME }}
-      GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
+      GHCR_PULL_USERNAME: ${{ github.actor }}
+      GHCR_PULL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - id: release
         name: Resolve and validate immutable release
