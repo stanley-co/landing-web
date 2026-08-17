@@ -22,6 +22,10 @@ export default function AdminPreviewPage() {
 
   useEffect(() => {
     const receive = (event: MessageEvent<unknown>) => {
+      if (event.origin === adminOrigin && (event.data as { type?: string } | undefined)?.type === 'landing-admin-preview-request') {
+        window.parent?.postMessage({ type: 'landing-admin-preview-ready' }, adminOrigin);
+        return;
+      }
       const nextDraft = trustedAdminDraft(event.origin, adminOrigin, event.data);
       if (nextDraft) setDraft(nextDraft);
     };
@@ -33,13 +37,15 @@ export default function AdminPreviewPage() {
   if (rejected) return <IonPage><IonContent><p style={{ padding: 24 }}>Preview is disabled: VITE_ADMIN_PREVIEW_ORIGIN is not configured.</p></IonContent></IonPage>;
   if (!draft) return <IonPage><IonContent><p style={{ padding: 24 }}>Waiting for an Admin draft…</p></IonContent></IonPage>;
   const value = draft.value;
+  const url = (...keys: string[]) => keys.map((key) => value[key]).find((candidate): candidate is string => typeof candidate === 'string' && candidate.trim() !== '') ?? placeholderImage;
   if (draft.kind === 'content') {
-    const blocks = Array.isArray(value.blocks) ? value.blocks.map((block) => ({ ...(block as Record<string, unknown>), src: placeholderImage })) : [];
-    return <IonPage><IonContent><ArticleHero title={String(value.title || 'Без названия')} date={String(value.date || new Date().toISOString().slice(0, 10))} category={String(value.category || 'Категория не выбрана')} image={placeholderImage} /><ArticleBody content={blocks as never} /></IonContent></IonPage>;
+    const blocks = Array.isArray(value.blocks) ? value.blocks.map((block) => ({ ...(block as Record<string, unknown>), src: (block as Record<string, unknown>).imageUrl || (block as Record<string, unknown>).url || placeholderImage })) : [];
+    return <IonPage><IonContent><ArticleHero title={String(value.title || 'Без названия')} date={String(value.date || new Date().toISOString().slice(0, 10))} category={String(value.category || 'Категория не выбрана')} image={url('imageUrl', 'image')} /><ArticleBody content={blocks as never} /></IonContent></IonPage>;
   }
   if (draft.kind === 'product') {
     const specs = Object.fromEntries((Array.isArray(value.specs) ? value.specs : []).map((item) => [String((item as Record<string, unknown>).name || ''), String((item as Record<string, unknown>).value || '')]));
-    return <IonPage><IonContent><ProductHeader name={String(value.name || 'Без названия')} category={String(value.categoryName || 'Категория не выбрана')} description={String(value.description || 'Краткое описание отсутствует')} /><ProductGallery images={[placeholderImage]} productName={String(value.name || 'Без названия')} productId="preview" /><ProductDescription name={String(value.name || 'Без названия')} description={String(value.description || '')} fullDescription={String(value.fullDescription || value.description || 'Полное описание отсутствует')} advantages={Array.isArray(value.advantages) ? value.advantages as never : []} /><ProductSpecs specs={specs} /></IonContent></IonPage>;
+    const images = Array.isArray(value.galleryImageUrls) ? value.galleryImageUrls.filter((item): item is string => typeof item === 'string') : [url('imageUrl', 'image')];
+    return <IonPage><IonContent><ProductHeader name={String(value.name || 'Без названия')} category={String(value.categoryName || value.category || 'Категория не выбрана')} description={String(value.description || 'Краткое описание отсутствует')} /><ProductGallery images={images.length ? images : [placeholderImage]} productName={String(value.name || 'Без названия')} productId="preview" /><ProductDescription name={String(value.name || 'Без названия')} description={String(value.description || '')} fullDescription={String(value.fullDescription || value.description || 'Полное описание отсутствует')} advantages={Array.isArray(value.advantages) ? value.advantages as never : []} /><ProductSpecs specs={specs} /></IonContent></IonPage>;
   }
-  return <IonPage><IonContent><section style={{ padding: 24 }}><img src={placeholderImage} alt="Предпросмотр слайда" style={{ width: '100%', maxHeight: 480, objectFit: 'cover' }} /><h1>{String(value.title || 'Заголовок слайда')}</h1><p>{String(value.description || 'Описание слайда отсутствует')}</p><button type="button">{String(value.buttonText || 'Кнопка')}</button></section></IonContent></IonPage>;
+  return <IonPage><IonContent><section style={{ padding: 24 }}><img src={url('desktopImageUrl', 'desktopImage')} alt="Предпросмотр слайда" style={{ width: '100%', maxHeight: 480, objectFit: 'cover' }} /><h1>{String(value.title || 'Заголовок слайда')}</h1><p>{String(value.description || 'Описание слайда отсутствует')}</p><button type="button">{String(value.buttonText || value.actionValue || 'Кнопка')}</button></section></IonContent></IonPage>;
 }
