@@ -11,6 +11,7 @@ import NewsArticlePage from './routes/NewsArticlePage';
 import ContactsPage from './routes/ContactsPage';
 import NotFoundPage from './routes/NotFoundPage';
 import PrivacyPolicyPage from './routes/PrivacyPolicyPage';
+import AdminPreviewPage from './routes/AdminPreviewPage';
 
 const AppContent = () => {
   const { isOpen, productName, productId, closeModal } = useContactFormModal();
@@ -30,6 +31,7 @@ const AppContent = () => {
         {/* Контакты */}
         <Route path="/contacts" element={<ContactsPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/preview/admin" element={<AdminPreviewPage />} />
         
         {/* Старые маршруты для обратной совместимости */}
         <Route path="/news" element={<Navigate to="/information#news" replace />} />
