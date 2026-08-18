@@ -1,0 +1,59 @@
+version: 1
+system: FKIT
+control_point: landing-web
+repositories:
+  landing-web:
+    role: public-frontend-and-system-control-point
+    remote: git@github.com:stanley-co/landing-web.git
+    local_hint: .
+    docs: docs/
+    agent_context: AGENTS.md
+    owns:
+      - public frontend rendering, routes, SEO, and public API consumption
+      - system repository registry and change-routing documentation
+  w-admin-web:
+    role: administration-frontend
+    remote: git@github.com:stanley-co/w-admin-web.git
+    local_hint: ../w-admin-web
+    docs: docs/
+    agent_context: AGENTS.md
+    owns:
+      - administration UI, forms, and consumer-specific API behavior
+  w-api-contracts:
+    role: api-contract-provider
+    remote: git@github.com:stanley-co/w-api-contracts.git
+    local_hint: ../../back/w-api-contracts
+    docs: docs/
+    agent_context: AGENTS.md
+    owns:
+      - canonical OpenAPI contract and compatibility rules
+  w-backend-service:
+    role: backend-api-provider
+    remote: git@github.com:stanley-co/w-backend-service.git
+    local_hint: ../../back/w-backend-service
+    docs: docs/
+    agent_context: AGENTS.md
+    owns:
+      - API implementation, business logic, PostgreSQL schema, Flyway migrations, S3 integration, and security
+  w-data-migrator:
+    role: deferred-migration-tool
+    remote: git@github.com:stanley-co/w-data-migrator.git
+    local_hint: ../../back/w-data-migrator
+    docs: docs/
+    agent_context: AGENTS.md
+    status: deferred
+    owns:
+      - migration discovery, dry runs, validation, mappings, and idempotency design
+  w-platform-infra:
+    role: infrastructure-and-deployment
+    remote: git@github.com:stanley-co/w-platform-infra.git
+    local_hint: ../../back/w-platform-infra
+    docs: docs/
+    agent_context: AGENTS.md
+    owns:
+      - Compose, nginx, CI/CD, environments, PostgreSQL and MinIO runtime topology, and operations
+non_repositories:
+  w-api-gateway:
+    status: not-a-separate-repository
+    owner: w-backend-service
+    note: MVP edge responsibilities are implemented inside the backend modular monolith.
