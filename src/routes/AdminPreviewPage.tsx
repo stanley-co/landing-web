@@ -44,7 +44,9 @@ export default function AdminPreviewPage() {
   }
   if (draft.kind === 'product') {
     const specs = Object.fromEntries((Array.isArray(value.specs) ? value.specs : []).map((item) => [String((item as Record<string, unknown>).name || ''), String((item as Record<string, unknown>).value || '')]));
-    const images = Array.isArray(value.galleryImageUrls) ? value.galleryImageUrls.filter((item): item is string => typeof item === 'string') : [url('imageUrl', 'image')];
+    const images = Array.isArray(value.galleryImageUrls)
+      ? value.galleryImageUrls.map((item) => typeof item === 'string' && item.trim() ? item : placeholderImage)
+      : [url('imageUrl', 'image')];
     return <IonPage><IonContent><ProductHeader name={String(value.name || 'Без названия')} category={String(value.categoryName || value.category || 'Категория не выбрана')} description={String(value.description || 'Краткое описание отсутствует')} /><ProductGallery images={images.length ? images : [placeholderImage]} productName={String(value.name || 'Без названия')} productId="preview" /><ProductDescription name={String(value.name || 'Без названия')} description={String(value.description || '')} fullDescription={String(value.fullDescription || value.description || 'Полное описание отсутствует')} advantages={Array.isArray(value.advantages) ? value.advantages as never : []} /><ProductSpecs specs={specs} /></IonContent></IonPage>;
   }
   return <IonPage><IonContent><section style={{ padding: 24 }}><img src={url('desktopImageUrl', 'desktopImage')} alt="Предпросмотр слайда" style={{ width: '100%', maxHeight: 480, objectFit: 'cover' }} /><h1>{String(value.title || 'Заголовок слайда')}</h1><p>{String(value.description || 'Описание слайда отсутствует')}</p><button type="button">{String(value.buttonText || value.actionValue || 'Кнопка')}</button></section></IonContent></IonPage>;
