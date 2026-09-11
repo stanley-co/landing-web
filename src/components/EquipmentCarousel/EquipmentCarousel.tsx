@@ -42,7 +42,9 @@ const EquipmentCarousel = () => {
     const loadCarouselData = async () => {
       try {
         setLoading(true);
-        setSlides((await landingApi.slides()).filter((slide) => slide.active).sort((a, b) => a.sortOrder - b.sortOrder));
+        // The public endpoint is the publication boundary; it returns only the
+        // server-approved projection, never an administrative draft.
+        setSlides((await landingApi.slides()).sort((a, b) => a.sortOrder - b.sortOrder));
       } catch (err) {
         console.error('[EquipmentCarousel] Ошибка при загрузке данных карусели:', err);
         // В случае ошибки используем пустой массив

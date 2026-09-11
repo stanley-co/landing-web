@@ -191,6 +191,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/csrf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Issue a readable CSRF cookie before refresh or logout */
+        get: operations["bootstrapCsrf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/logout": {
         parameters: {
             query?: never;
@@ -278,6 +295,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/products/{id}/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Soft-trash a product while retaining it for authorized recovery */
+        post: operations["trashProduct"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/products/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore an archived or soft-trashed product as a draft */
+        post: operations["restoreProduct"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/products/reorder": {
         parameters: {
             query?: never;
@@ -321,7 +372,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** Persist manual category ordering */
+        /** Atomically persist complete sibling lifecycle ordering scopes */
         put: operations["reorderProductCategories"];
         post?: never;
         delete?: never;
@@ -341,7 +392,8 @@ export interface paths {
         /** Update an editable product category without changing its stable ID */
         put: operations["updateProductCategory"];
         post?: never;
-        delete?: never;
+        /** Permanently delete an archived leaf category with no product references */
+        delete: operations["deleteProductCategory"];
         options?: never;
         head?: never;
         patch?: never;
@@ -417,6 +469,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/content/{id}/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Soft-trash content while retaining it for authorized recovery */
+        post: operations["trashContent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/content/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore archived or soft-trashed content as a draft */
+        post: operations["restoreContent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/slides": {
         parameters: {
             query?: never;
@@ -449,6 +535,40 @@ export interface paths {
         post?: never;
         /** Archive a slide without deleting its stable ID */
         delete: operations["archiveSlide"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/slides/{id}/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Soft-trash a carousel slide */
+        post: operations["trashSlide"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/slides/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore an archived or soft-trashed slide as inactive */
+        post: operations["restoreSlide"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -517,6 +637,126 @@ export interface paths {
         put?: never;
         /** Archive the current privacy policy */
         post: operations["archivePrivacyPolicy"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/moderation/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List moderation requests visible to the current author or administrator */
+        get: operations["listModerationRequests"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/moderation/requests/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a moderation request and immutable submitted revision */
+        get: operations["getModerationRequest"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/moderation/requests/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get append-only moderation history for a request */
+        get: operations["getModerationRequestHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/moderation/entities/{entityType}/{entityId}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit the current server-side draft revision for review */
+        post: operations["submitModerationRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/moderation/requests/{id}/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Withdraw the author's open request using its expected version */
+        post: operations["withdrawModerationRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/moderation/requests/{id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Publish, request changes, or reject a submitted revision */
+        post: operations["decideModerationRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/moderation/notification-recipients": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List notification recipients configured by an administrator */
+        get: operations["listModerationNotificationRecipients"];
+        /** Replace the administrator-managed notification recipient list */
+        put: operations["replaceModerationNotificationRecipients"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -791,6 +1031,8 @@ export interface components {
         /** @enum {string} */
         Status: "DRAFT" | "ACTIVE" | "ARCHIVED";
         /** @enum {string} */
+        LifecycleStatus: "DRAFT" | "ACTIVE" | "ARCHIVED" | "DELETED";
+        /** @enum {string} */
         MediaStatus: "TEMPORARY" | "ACTIVE" | "ARCHIVED";
         /** @enum {string} */
         ContentType: "NEWS" | "ARTICLE";
@@ -803,7 +1045,7 @@ export interface components {
         /** @enum {string} */
         MediaEntityType: "PRODUCT" | "CONTENT" | "SLIDE" | "DOCUMENT" | "PRIVACY_POLICY" | "UNATTACHED";
         /** @enum {string} */
-        ReferenceEntityType: "PRODUCT" | "CONTENT";
+        ReferenceEntityType: "PRODUCT" | "CONTENT" | "SLIDE" | "DOCUMENT" | "PRIVACY_POLICY";
         /** @enum {string} */
         LeadFormType: "PRODUCT_REQUEST" | "FEEDBACK";
         /** @enum {string} */
@@ -811,7 +1053,76 @@ export interface components {
         /** @enum {string} */
         SlidePlacement: "EQUIPMENT_CATALOG";
         /** @enum {string} */
+        SlideLifecycleStatus: "ACTIVE" | "ARCHIVED" | "DELETED";
+        /** @enum {string} */
         SlideActionType: "INTERNAL_LINK" | "EXTERNAL_LINK" | "ANCHOR" | "OPEN_FORM";
+        /** @enum {string} */
+        ModerationEntityType: "PRODUCT" | "CONTENT" | "SLIDE" | "DOCUMENT" | "PRIVACY_POLICY";
+        /** @enum {string} */
+        ModerationRequestStatus: "IN_REVIEW" | "PUBLISHED" | "CHANGES_REQUESTED" | "REJECTED" | "WITHDRAWN" | "RESOLVED";
+        /** @enum {string} */
+        ModerationDecision: "PUBLISH" | "REQUEST_CHANGES" | "REJECT";
+        ModerationSubmitRequest: {
+            /** Format: int64 */
+            expectedEntityVersion: number;
+        };
+        ModerationRecipients: {
+            recipients: string[];
+        };
+        ModerationVersionRequest: {
+            /** Format: int64 */
+            expectedVersion: number;
+        };
+        ModerationDecisionRequest: {
+            /** Format: int64 */
+            expectedVersion: number;
+            decision: components["schemas"]["ModerationDecision"];
+            comment?: string;
+        };
+        ModerationHistoryItemDto: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            action: "SUBMITTED" | "WITHDRAWN" | "PUBLISHED" | "CHANGES_REQUESTED" | "REJECTED" | "RESOLVED";
+            /** Format: uuid */
+            actorId: string;
+            comment?: string | null;
+            /** Format: int64 */
+            requestVersion: number;
+            /** Format: date-time */
+            occurredAt: string;
+        };
+        ModerationRequestDto: {
+            /** Format: uuid */
+            id: string;
+            entityType: components["schemas"]["ModerationEntityType"];
+            /** Format: uuid */
+            entityId: string;
+            /** Format: uuid */
+            authorId: string;
+            status: components["schemas"]["ModerationRequestStatus"];
+            /** Format: int64 */
+            version: number;
+            /** Format: int64 */
+            reviewedEntityVersion: number;
+            /**
+             * Format: int64
+             * @description Version currently visible through the immutable public projection, if any.
+             */
+            publishedEntityVersion?: number | null;
+            submittedRevision: {
+                [key: string]: unknown;
+            };
+            decisionComment?: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ModerationRequestPageDto: {
+            items: components["schemas"]["ModerationRequestDto"][];
+            page: components["schemas"]["PageMetadata"];
+        };
         ErrorResponse: {
             /** Format: date-time */
             timestamp: string;
@@ -912,6 +1223,11 @@ export interface components {
             sortOrder: number;
             activeProductCount: number;
             status: components["schemas"]["Status"];
+            /**
+             * Format: date-time
+             * @description Server-owned time of the last category change; null for legacy rows without history.
+             */
+            updatedAt?: string | null;
             children: components["schemas"]["AdminProductCategoryDto"][];
         };
         ContentListItemDto: {
@@ -985,6 +1301,7 @@ export interface components {
             actionValue?: string;
             sortOrder: number;
             active: boolean;
+            lifecycleStatus?: components["schemas"]["SlideLifecycleStatus"];
         };
         MediaFileDto: {
             /** Format: uuid */
@@ -1032,6 +1349,13 @@ export interface components {
             previewUrl?: string;
             status: components["schemas"]["Status"];
             sortOrder?: number;
+            /**
+             * Format: date-time
+             * @description Server-owned time of the last document change; null for legacy rows without history.
+             */
+            updatedAt?: string | null;
+            /** Format: int64 */
+            readonly moderationVersion?: number;
         };
         LeadCreateRequest: {
             source: string;
@@ -1071,6 +1395,11 @@ export interface components {
             roles: components["schemas"]["UserRole"][];
             permissions: string[];
             status: components["schemas"]["Status"];
+            /**
+             * Format: date-time
+             * @description Server-owned time of the last administrator change; null for legacy rows without history.
+             */
+            updatedAt?: string | null;
         };
         AdminUserCreateRequest: {
             /** Format: email */
@@ -1114,11 +1443,13 @@ export interface components {
             /** Format: uuid */
             imageId?: string;
             galleryImageIds?: string[];
-            status: components["schemas"]["Status"];
+            status: components["schemas"]["LifecycleStatus"];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** Format: int64 */
+            readonly moderationVersion?: number;
         };
         ProductCategoryWriteRequest: {
             /** Format: uuid */
@@ -1161,11 +1492,13 @@ export interface components {
             imageId: string;
             preview: string;
             blocks: components["schemas"]["ContentBlockAdminDto"][];
-            status: components["schemas"]["Status"];
+            status: components["schemas"]["LifecycleStatus"];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** Format: int64 */
+            readonly moderationVersion?: number;
         };
         SlideWriteRequest: {
             placement: components["schemas"]["SlidePlacement"];
@@ -1188,6 +1521,14 @@ export interface components {
             mobileImageId?: string;
             placement?: components["schemas"]["SlidePlacement"];
             active?: boolean;
+            lifecycleStatus?: components["schemas"]["SlideLifecycleStatus"];
+            /**
+             * Format: date-time
+             * @description Server-owned time of the last slide change; null for legacy rows without history.
+             */
+            updatedAt?: string | null;
+            /** Format: int64 */
+            readonly moderationVersion?: number;
         };
         MediaMetadataUpdateRequest: {
             title?: string;
@@ -1266,6 +1607,8 @@ export interface components {
             updatedAt: string;
             /** Format: uuid */
             changedBy?: string;
+            /** Format: int64 */
+            readonly moderationVersion?: number;
         };
         DocumentWriteRequest: {
             title: string;
@@ -1296,6 +1639,11 @@ export interface components {
             consentAccepted: boolean;
             /** Format: date-time */
             createdAt: string;
+            /**
+             * Format: date-time
+             * @description Server-owned time of the last lead change; null for legacy rows without history.
+             */
+            updatedAt?: string | null;
             ipAddress?: string;
             userAgent?: string;
             notifications: components["schemas"]["NotificationEventDto"][];
@@ -1660,6 +2008,33 @@ export interface components {
                 "application/json": components["schemas"]["AuditEventPageDto"];
             };
         };
+        /** @description Moderation request */
+        ModerationRequest: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ModerationRequestDto"];
+            };
+        };
+        /** @description Moderation requests */
+        ModerationRequestPage: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ModerationRequestPageDto"];
+            };
+        };
+        /** @description Append-only moderation history */
+        ModerationHistory: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ModerationHistoryItemDto"][];
+            };
+        };
         /** @description Bad request */
         BadRequest: {
             headers: {
@@ -1739,6 +2114,7 @@ export interface components {
         PublicId: string;
         EntityId: string;
         SlidePlacement: components["schemas"]["SlidePlacement"];
+        SlideLifecycleStatus: components["schemas"]["SlideLifecycleStatus"];
         CategoryId: string;
         GlobalCategory: string;
         Search: string;
@@ -1750,6 +2126,7 @@ export interface components {
         DateFrom: string;
         DateTo: string;
         Status: components["schemas"]["Status"];
+        AdminLifecycleStatus: components["schemas"]["LifecycleStatus"];
         MediaLifecycleStatus: components["schemas"]["MediaStatus"];
         MediaType: components["schemas"]["MediaType"];
         MediaSearch: string;
@@ -1758,6 +2135,8 @@ export interface components {
         MediaEntityType: components["schemas"]["MediaEntityType"];
         MediaEntityId: string;
         UploadedBy: string;
+        AuditEntityType: string;
+        AuditEntityId: string;
         CreatedFrom: string;
         CreatedTo: string;
         MediaSort: "createdAt,desc" | "createdAt,asc" | "name,asc" | "name,desc" | "size,desc" | "size,asc" | "usageCount,desc" | "usageCount,asc";
@@ -1766,6 +2145,10 @@ export interface components {
         ProductId: string;
         /** @description Searches company, name, phone and email. */
         LeadSearch: string;
+        ModerationEntityType: components["schemas"]["ModerationEntityType"];
+        ModerationRequestStatus: components["schemas"]["ModerationRequestStatus"];
+        ModerationEntityTypePath: components["schemas"]["ModerationEntityType"];
+        EntityIdNamed: string;
     };
     requestBodies: never;
     headers: never;
@@ -1942,6 +2325,25 @@ export interface operations {
         responses: {
             200: components["responses"]["AuthSession"];
             401: components["responses"]["Unauthorized"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    bootstrapCsrf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description CSRF cookie issued */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
     };
     logout: {
@@ -1979,9 +2381,11 @@ export interface operations {
     listAdminProducts: {
         parameters: {
             query?: {
-                status?: components["parameters"]["Status"];
+                status?: components["parameters"]["AdminLifecycleStatus"];
                 categoryId?: components["parameters"]["CategoryId"];
                 search?: components["parameters"]["Search"];
+                dateFrom?: components["parameters"]["DateFrom"];
+                dateTo?: components["parameters"]["DateTo"];
                 page?: components["parameters"]["PageNumber"];
                 size?: components["parameters"]["PageSize"];
             };
@@ -2063,6 +2467,50 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Archived */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: components["responses"]["NotFound"];
+        };
+    };
+    trashProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UUID for new rows, or an imported externalId for compatibility; no required slug. */
+                id: components["parameters"]["PublicId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Soft-trashed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: components["responses"]["NotFound"];
+        };
+    };
+    restoreProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UUID for new rows, or an imported externalId for compatibility; no required slug. */
+                id: components["parameters"]["PublicId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Restored as draft */
             204: {
                 headers: {
                     [name: string]: unknown;
@@ -2166,6 +2614,29 @@ export interface operations {
             404: components["responses"]["NotFound"];
         };
     };
+    deleteProductCategory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UUID for new rows, or an imported externalId for compatibility; no required slug. */
+                id: components["parameters"]["PublicId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: components["responses"]["ValidationError"];
+            404: components["responses"]["NotFound"];
+        };
+    };
     archiveProductCategory: {
         parameters: {
             query?: never;
@@ -2192,8 +2663,10 @@ export interface operations {
         parameters: {
             query?: {
                 type?: components["parameters"]["ContentType"];
-                status?: components["parameters"]["Status"];
+                status?: components["parameters"]["AdminLifecycleStatus"];
                 search?: components["parameters"]["Search"];
+                dateFrom?: components["parameters"]["DateFrom"];
+                dateTo?: components["parameters"]["DateTo"];
                 page?: components["parameters"]["PageNumber"];
                 size?: components["parameters"]["PageSize"];
             };
@@ -2283,10 +2756,55 @@ export interface operations {
             404: components["responses"]["NotFound"];
         };
     };
+    trashContent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UUID for new rows, or an imported externalId for compatibility; no required slug. */
+                id: components["parameters"]["PublicId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Soft-trashed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: components["responses"]["NotFound"];
+        };
+    };
+    restoreContent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description UUID for new rows, or an imported externalId for compatibility; no required slug. */
+                id: components["parameters"]["PublicId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Restored as draft */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: components["responses"]["NotFound"];
+        };
+    };
     listAdminSlides: {
         parameters: {
             query: {
                 placement: components["parameters"]["SlidePlacement"];
+                lifecycleStatus?: components["parameters"]["SlideLifecycleStatus"];
             };
             header?: never;
             path?: never;
@@ -2360,6 +2878,48 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Archived */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: components["responses"]["NotFound"];
+        };
+    };
+    trashSlide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["EntityId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Soft-trashed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: components["responses"]["NotFound"];
+        };
+    };
+    restoreSlide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["EntityId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Restored as inactive */
             204: {
                 headers: {
                     [name: string]: unknown;
@@ -2449,6 +3009,160 @@ export interface operations {
                 };
                 content?: never;
             };
+        };
+    };
+    listModerationRequests: {
+        parameters: {
+            query?: {
+                entityType?: components["parameters"]["ModerationEntityType"];
+                status?: components["parameters"]["ModerationRequestStatus"];
+                page?: components["parameters"]["PageNumber"];
+                size?: components["parameters"]["PageSize"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: components["responses"]["ModerationRequestPage"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getModerationRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["EntityId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: components["responses"]["ModerationRequest"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    getModerationRequestHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["EntityId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: components["responses"]["ModerationHistory"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    submitModerationRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entityType: components["parameters"]["ModerationEntityTypePath"];
+                entityId: components["parameters"]["EntityIdNamed"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModerationSubmitRequest"];
+            };
+        };
+        responses: {
+            201: components["responses"]["ModerationRequest"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    withdrawModerationRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["EntityId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModerationVersionRequest"];
+            };
+        };
+        responses: {
+            200: components["responses"]["ModerationRequest"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    decideModerationRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["EntityId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModerationDecisionRequest"];
+            };
+        };
+        responses: {
+            200: components["responses"]["ModerationRequest"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    listModerationNotificationRecipients: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Recipient addresses */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModerationRecipients"];
+                };
+            };
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    replaceModerationNotificationRecipients: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModerationRecipients"];
+            };
+        };
+        responses: {
+            /** @description Recipient addresses */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModerationRecipients"];
+                };
+            };
+            400: components["responses"]["ValidationError"];
+            403: components["responses"]["Forbidden"];
         };
     };
     listMedia: {
@@ -2787,6 +3501,10 @@ export interface operations {
     listAuditEvents: {
         parameters: {
             query?: {
+                entityType?: components["parameters"]["AuditEntityType"];
+                entityId?: components["parameters"]["AuditEntityId"];
+                createdFrom?: components["parameters"]["CreatedFrom"];
+                createdTo?: components["parameters"]["CreatedTo"];
                 page?: components["parameters"]["PageNumber"];
                 size?: components["parameters"]["PageSize"];
             };

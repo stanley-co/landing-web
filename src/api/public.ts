@@ -8,6 +8,7 @@ export type ContentListItemDto = components['schemas']['ContentListItemDto'];
 export type ContentDetailDto = components['schemas']['ContentDetailDto'];
 export type SlideDto = components['schemas']['SlideDto'];
 export type PrivacyPolicyDto = components['schemas']['PrivacyPolicyDto'];
+export type DocumentDto = components['schemas']['DocumentDto'];
 export type LeadCreateRequest = components['schemas']['LeadCreateRequest'];
 
 export const landingApi = {
@@ -18,5 +19,6 @@ export const landingApi = {
   contentItem: (id: string) => publicGet((signal) => publicApi.GET('/public/news/{id}', { params: { path: { id } }, signal })),
   slides: () => publicGet((signal) => publicApi.GET('/public/slides', { params: { query: { placement: 'EQUIPMENT_CATALOG' } }, signal })),
   privacyPolicy: () => publicGet((signal) => publicApi.GET('/public/legal/privacy-policy', { signal })),
+  documents: () => publicGet((signal) => publicApi.GET('/public/documents', { signal })),
   createLead: (body: LeadCreateRequest) => apiResult(publicApi.POST('/public/leads', { body }))
 };

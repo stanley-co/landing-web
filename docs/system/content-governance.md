@@ -13,3 +13,20 @@ The test deployment uses one origin: Admin is served at `/admin/`, while landing
 its compiled assets include a valid preview URL. Draft media IDs and product category
 IDs are resolved in the Admin client into transient URL/name fields before posting;
 they are neither persisted nor placed in the URL.
+# Moderation boundary
+
+Landing renders backend-filtered public DTOs only. Pending moderation revisions
+are administrative data and must never be added to list, detail, search,
+related-content, carousel, privacy, or document public requests. The sole
+draft visualisation boundary is `/preview/admin`, which accepts an in-memory,
+exact-origin `postMessage` from Admin and does not fetch or publish a review
+revision.
+## Draft review and publication
+
+All managed CMS types are authored as drafts by `FEATURE_OWNER` and
+`CONTENT_READER`. A submitted revision is immutable and remains absent from
+public responses until an `ADMIN` publishes that exact revision. The landing
+application consumes published projections only; it never calls moderation or
+admin APIs. Review notifications go to administrator-configured recipients
+after the submission transaction commits, and mail failure never changes the
+review outcome.
