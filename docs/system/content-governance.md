@@ -23,10 +23,11 @@ exact-origin `postMessage` from Admin and does not fetch or publish a review
 revision.
 ## Draft review and publication
 
-All managed CMS types are authored as drafts by `FEATURE_OWNER` and
-`CONTENT_READER`. A submitted revision is immutable and remains absent from
+All managed CMS types are authored as drafts by `FEATURE_OWNER`; `CONTENT_READER`
+is read-only. A submitted revision is immutable and remains absent from
 public responses until an `ADMIN` publishes that exact revision. The landing
 application consumes published projections only; it never calls moderation or
 admin APIs. Review notifications go to administrator-configured recipients
-after the submission transaction commits, and mail failure never changes the
-review outcome.
+after the submission transaction commits, using only a persisted trusted
+non-local Admin origin. Mail failure or an unavailable safe origin never changes
+the review outcome.

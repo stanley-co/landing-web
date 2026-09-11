@@ -1065,6 +1065,11 @@ export interface components {
         ModerationSubmitRequest: {
             /** Format: int64 */
             expectedEntityVersion: number;
+            /**
+             * Format: uri
+             * @description Optional browser origin captured at submission. The server uses it only when it matches a configured trusted non-local Admin origin.
+             */
+            externalOrigin?: string;
         };
         ModerationRecipients: {
             recipients: string[];
