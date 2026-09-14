@@ -5,6 +5,8 @@ import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useContactFormModal } from '../../contexts/ContactFormModalContext';
 import SearchModal from '../SearchModal/SearchModal';
+import { landingApi } from '../../api/public';
+import { normalizeEquipmentCategories, scrollToEquipmentHash, type EquipmentCategory } from '../../utils/equipmentCategories';
 import styles from "./Header.module.css";
 
 const Header = () => {
@@ -12,12 +14,30 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [isMobileMenu, setIsMobileMenu] = useState(false);
+  const [equipmentSections, setEquipmentSections] = useState<EquipmentCategory[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { openModal } = useContactFormModal();
   const headerRef = useRef<HTMLIonHeaderElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const dropdownRefs = useRef<Record<string, { trigger: HTMLDivElement | null, dropdown: HTMLDivElement | null }>>({});
+
+  useEffect(() => {
+    let mounted = true;
+
+    landingApi.categories()
+      .then((categories) => {
+        if (mounted) setEquipmentSections(normalizeEquipmentCategories(categories));
+      })
+      .catch((error) => {
+        console.error('[Header] Ошибка при загрузке категорий оборудования:', error);
+        if (mounted) setEquipmentSections([]);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Проверяем, помещаются ли элементы меню в доступное пространство
   useEffect(() => {
@@ -118,10 +138,7 @@ const Header = () => {
       // Добавляем hash в URL для правильной обработки якорей
       navigate(`${path}#${anchor}`);
       setTimeout(() => {
-        const element = document.getElementById(anchor);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        scrollToEquipmentHash(anchor);
       }, 200);
     } else {
       navigate(path);
@@ -194,26 +211,6 @@ const Header = () => {
       window.removeEventListener('resize', updateDropdownPosition);
     };
   }, [activeDropdown]);
-
-  // Функция для преобразования названия категории в ID якоря (та же, что в EquipmentPage)
-  const categoryToAnchorId = (category: string): string => {
-    return category
-      .toLowerCase()
-      .replace(/[^а-яёa-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-  };
-
-  // Стандартные разделы оборудования (могут быть расширены через JSON)
-  const equipmentSections = [
-    { name: 'Оборудование для приготовления и хранения', anchor: categoryToAnchorId('Оборудование для приготовления и хранения') },
-    { name: 'Фасовочное оборудование', anchor: categoryToAnchorId('Фасовочное оборудование') },
-    { name: 'Насосное оборудование', anchor: categoryToAnchorId('Насосное оборудование') },
-    { name: 'СИП станции', anchor: categoryToAnchorId('СИП станции') },
-    { name: 'Лабораторное оборудование', anchor: categoryToAnchorId('Лабораторное оборудование') },
-    { name: 'Водоподготовка', anchor: categoryToAnchorId('Водоподготовка') },
-  ];
 
   const informationSections = [
     { name: 'Полезные статьи', anchor: 'articles' },

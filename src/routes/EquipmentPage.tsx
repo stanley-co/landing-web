@@ -7,19 +7,10 @@ import EquipmentFilter from '../components/EquipmentFilter/EquipmentFilter';
 import EquipmentLayout from '../components/EquipmentLayout/EquipmentLayout';
 import CooperationFormSection from '../components/CooperationFormSection/CooperationFormSection';
 import Footer from '../components/Footer/Footer';
-import { landingApi, type ProductCategoryDto } from '../api/public';
+import { landingApi } from '../api/public';
 import type { Product } from '../types/product';
+import { normalizeEquipmentCategories, scrollToEquipmentHash, type EquipmentCategory } from '../utils/equipmentCategories';
 import styles from './EquipmentPage.module.css';
-
-// Функция для преобразования названия категории в ID якоря
-const categoryToAnchorId = (category: string): string => {
-  return category
-    .toLowerCase()
-    .replace(/[^а-яёa-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-};
 
 // Маппинг категорий в globalCategory для обратной совместимости с данными из S3
 // Если в данных из S3 нет поля globalCategory, оно будет определено автоматически на основе category
@@ -63,16 +54,13 @@ const getGlobalCategory = (product: Product): string | undefined => {
 type CategoryStructure = {
   globalCategory: string;
   globalCategoryId: string;
-  subcategories: {
-    name: string;
-    count: number;
-  }[];
+  subcategories: { name: string; count: number }[];
   totalCount: number;
 };
 
 const EquipmentPage = () => {
   const [productsData, setProductsData] = useState<Product[]>([]);
-  const [categoriesData, setCategoriesData] = useState<ProductCategoryDto[]>([]);
+  const [categoriesData, setCategoriesData] = useState<EquipmentCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -93,13 +81,20 @@ const EquipmentPage = () => {
       try {
         setLoading(true);
         const [productPage, categoryTree] = await Promise.all([landingApi.products(), landingApi.categories()]);
-        setProductsData(productPage.items.map((product) => ({
-          ...product,
-          globalCategory: product.globalCategory ?? undefined,
-          specs: {},
-          fullDescription: product.description
-        })));
-        setCategoriesData(categoryTree);
+        const mappedProducts = productPage.items.map((product) => {
+          const mappedProduct = {
+            ...product,
+            globalCategory: product.globalCategory ?? undefined,
+            specs: {},
+            fullDescription: product.description,
+          };
+          return {
+            ...mappedProduct,
+            globalCategory: getGlobalCategory(mappedProduct),
+          };
+        });
+        setProductsData(mappedProducts);
+        setCategoriesData(normalizeEquipmentCategories(categoryTree, mappedProducts));
       } catch (err) {
         console.error('[EquipmentPage] Ошибка при загрузке продуктов:', err);
         setError('Ошибка при загрузке данных продуктов');
@@ -116,126 +111,49 @@ const EquipmentPage = () => {
     globalCategory: getGlobalCategory(product) || product.globalCategory
   })), [productsData]);
 
-  // Определяем правильный порядок категорий (должен совпадать с порядком в Header)
-  // Порядок: 1. Оборудование для приготовления и хранения, 2. Фасовочное оборудование,
-  // 3. Насосное оборудование, 4. СИП станции, 5. Лабораторное оборудование
-  const categoryOrder = useMemo(() => categoriesData.length ? categoriesData.map((category) => category.name) : [
-    'Оборудование для приготовления и хранения',
-    'Фасовочное оборудование',
-    'Насосное оборудование',
-    'СИП станции',
-    'Лабораторное оборудование',
-    'Водоподготовка'
-  ], [categoriesData]);
-
-  // Получаем уникальные глобальные категории из продуктов (динамически)
-  const globalCategories = useMemo(() => {
-    const categories = new Set<string>();
-    products.forEach(product => {
-      const globalCategory = product.globalCategory;
-      if (globalCategory) {
-        categories.add(globalCategory);
-      }
-    });
-    // Сортируем категории по заданному порядку
-    const sorted = Array.from(categories).sort((a, b) => {
-      const indexA = categoryOrder.indexOf(a);
-      const indexB = categoryOrder.indexOf(b);
-      // Если категория есть в порядке - используем её индекс, иначе ставим в конец
-      if (indexA === -1 && indexB === -1) return a.localeCompare(b);
-      if (indexA === -1) return 1;
-      if (indexB === -1) return -1;
-      return indexA - indexB;
-    });
-    return sorted;
-  }, [products, categoryOrder]);
-
-  // Создаем структуру разделов динамически на основе globalCategories
-  const equipmentSections = useMemo(() => {
-    return globalCategories.map(category => ({
-      id: categoryToAnchorId(category),
-      name: category,
-    }));
-  }, [globalCategories]);
-
-  // Определяем порядок подкатегорий для каждой глобальной категории
-  const getSubcategoryOrder = (globalCat: string): string[] => {
-    const orders: Record<string, string[]> = {
-      'Оборудование для приготовления и хранения': [
-        'Вакуумные эмульгаторы',
-        'Планетарные миксеры',
-        'Реакторы / Промышленные смесители'
-      ],
-      'Фасовочное оборудование': [
-        'Дозирующие системы',
-        'Фасовочные автоматы',
-        'Упаковочные линии'
-      ],
-      'Насосное оборудование': [
-        'Центробежные насосы',
-        'Поршневые насосы',
-        'Винтовые насосы'
-      ],
-      'СИП станции': [
-        'Мобильные СИП станции',
-        'Стационарные СИП станции',
-        'Компактные СИП станции'
-      ],
-      'Лабораторное оборудование': [
-        'Лабораторные миксеры',
-        'Лабораторные реакторы',
-        'Лабораторные сушильные шкафы'
-      ]
-    };
-    return orders[globalCat] || [];
-  };
-
   // Создаем структуру категорий для единого фильтра
   const categoryStructure: CategoryStructure[] = useMemo(() => {
-    return equipmentSections.map(section => {
-      const globalCategory = section.name;
-      const sectionProducts = products.filter(p => p.globalCategory === globalCategory);
-      
-      // Получаем подкатегории с количеством
-      const subcategoryMap = new Map<string, number>();
-      sectionProducts.forEach(product => {
-        const count = subcategoryMap.get(product.category) || 0;
-        subcategoryMap.set(product.category, count + 1);
-      });
+    return categoriesData.map((category) => {
+      const sectionProducts = products.filter((product) => product.globalCategory === category.name);
+      const subcategories = category.children.length > 0
+        ? category.children.map((child) => ({ name: child.name, count: products.filter((product) => product.category === child.name && product.globalCategory === category.name).length }))
+        : Array.from(new Set(sectionProducts.map((product) => product.category))).map((name) => ({
+            name,
+            count: sectionProducts.filter((product) => product.category === name).length,
+          }));
 
-      const subcategoryOrder = getSubcategoryOrder(globalCategory);
-      const subcategories = Array.from(subcategoryMap.entries())
-        .map(([name, count]) => ({ name, count }))
-        .sort((a, b) => {
-          const indexA = subcategoryOrder.indexOf(a.name);
-          const indexB = subcategoryOrder.indexOf(b.name);
-          // Если подкатегория есть в порядке - используем её индекс, иначе ставим в конец
-          if (indexA === -1 && indexB === -1) return a.name.localeCompare(b.name);
-          if (indexA === -1) return 1;
-          if (indexB === -1) return -1;
-          return indexA - indexB;
-        });
-      
       return {
-        globalCategory,
-        globalCategoryId: section.id,
+        globalCategory: category.name,
+        globalCategoryId: category.anchor,
         subcategories,
         totalCount: sectionProducts.length,
       };
     });
-  }, [equipmentSections, products]);
+  }, [categoriesData, products]);
+
+  useEffect(() => {
+    if (loading) return;
+
+    const scrollToHash = () => {
+      window.requestAnimationFrame(() => scrollToEquipmentHash(window.location.hash));
+    };
+
+    scrollToHash();
+    window.addEventListener('hashchange', scrollToHash);
+    return () => window.removeEventListener('hashchange', scrollToHash);
+  }, [loading, categoriesData]);
 
   // Инициализируем состояния фильтров для всех разделов
   useEffect(() => {
     const initialFilters: Record<string, string | null> = {};
-    equipmentSections.forEach(section => {
-      initialFilters[section.id] = null;
+    categoriesData.forEach(section => {
+      initialFilters[section.anchor] = null;
     });
     setSelectedCategories(prev => ({
       ...prev,
       ...initialFilters,
     }));
-  }, [equipmentSections]);
+  }, [categoriesData]);
 
   // Отслеживание активной категории при скролле
   useEffect(() => {
@@ -314,7 +232,7 @@ const EquipmentPage = () => {
         observerRef.current.disconnect();
       }
     };
-  }, [equipmentSections]);
+  }, [categoriesData]);
 
   // Функция для получения продуктов по глобальной категории
   const getProductsByGlobalCategory = (globalCategory: string): Product[] => {
@@ -352,8 +270,8 @@ const EquipmentPage = () => {
     } else {
       // Если выбрано "Все категории", сбрасываем все фильтры
       const resetFilters: Record<string, string | null> = {};
-      equipmentSections.forEach(section => {
-        resetFilters[section.id] = null;
+      categoriesData.forEach(section => {
+        resetFilters[section.anchor] = null;
       });
       setSelectedCategories(resetFilters);
     }
@@ -404,7 +322,7 @@ const EquipmentPage = () => {
   }
 
   // Проверяем, есть ли разделы для отображения
-  const hasSections = equipmentSections.length > 0;
+  const hasSections = categoriesData.length > 0;
   const hasProducts = products.length > 0;
 
   return (
@@ -451,26 +369,19 @@ const EquipmentPage = () => {
                   
                   {/* Контент справа */}
                   <IonCol size="12" sizeMd="8" sizeLg="9" className={styles.contentCol}>
-                    {equipmentSections.map((section) => {
-              const globalCategory = section.name;
-                      const filteredProducts = getFilteredProductsForSection(section.id, globalCategory);
-              const sectionProducts = getProductsByGlobalCategory(globalCategory);
-
-              // Показываем секцию только если в ней есть продукты
-              if (sectionProducts.length === 0) {
-                return null;
-              }
+                    {categoriesData.map((section) => {
+                      const filteredProducts = getFilteredProductsForSection(section.anchor, section.name);
 
               return (
                         <section 
-                          key={section.id} 
-                          id={section.id} 
+                          key={section.anchor}
+                          id={section.anchor}
                           className={styles.equipmentSection}
                           ref={(el) => {
                             if (el) {
-                              sectionRefs.current.set(section.id, el);
+                              sectionRefs.current.set(section.anchor, el);
                             } else {
-                              sectionRefs.current.delete(section.id);
+                              sectionRefs.current.delete(section.anchor);
                             }
                           }}
                         >
