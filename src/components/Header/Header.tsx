@@ -5,8 +5,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useContactFormModal } from '../../contexts/ContactFormModalContext';
 import SearchModal from '../SearchModal/SearchModal';
-import { landingApi } from '../../api/public';
-import { normalizeEquipmentCategories, scrollToEquipmentHashWhenReady, type EquipmentCategory } from '../../utils/equipmentCategories';
+import { loadEquipmentCategoryTree, normalizeEquipmentCategories, scrollToEquipmentHashWhenReady, type EquipmentCategory } from '../../utils/equipmentCategories';
 import styles from "./Header.module.css";
 
 const Header = () => {
@@ -25,7 +24,7 @@ const Header = () => {
   useEffect(() => {
     let mounted = true;
 
-    landingApi.categories()
+    loadEquipmentCategoryTree()
       .then((categories) => {
         if (mounted) setEquipmentSections(normalizeEquipmentCategories(categories));
       })

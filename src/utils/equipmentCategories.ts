@@ -1,4 +1,4 @@
-import type { ProductCategoryDto } from '../api/public';
+import { landingApi, type ProductCategoryDto } from '../api/public';
 import type { Product } from '../types/product';
 
 export type EquipmentCategory = {
@@ -12,6 +12,19 @@ export type EquipmentCategory = {
 
 type CategoryProduct = Pick<Product, 'globalCategory' | 'category'>;
 type PublicCategoryWithParent = ProductCategoryDto & { parentId?: string | null };
+
+let equipmentCategoryTreePromise: Promise<ProductCategoryDto[]> | null = null;
+
+export const loadEquipmentCategoryTree = (): Promise<ProductCategoryDto[]> => {
+  if (!equipmentCategoryTreePromise) {
+    equipmentCategoryTreePromise = landingApi.categories().catch((error) => {
+      equipmentCategoryTreePromise = null;
+      throw error;
+    });
+  }
+
+  return equipmentCategoryTreePromise;
+};
 
 const hasParent = (category: ProductCategoryDto): boolean => {
   const parentId = (category as PublicCategoryWithParent).parentId;

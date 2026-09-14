@@ -9,7 +9,7 @@ import CooperationFormSection from '../components/CooperationFormSection/Coopera
 import Footer from '../components/Footer/Footer';
 import { landingApi } from '../api/public';
 import type { Product } from '../types/product';
-import { normalizeEquipmentCategories, scrollToEquipmentHashWhenReady, type EquipmentCategory } from '../utils/equipmentCategories';
+import { loadEquipmentCategoryTree, normalizeEquipmentCategories, scrollToEquipmentHashWhenReady, type EquipmentCategory } from '../utils/equipmentCategories';
 import styles from './EquipmentPage.module.css';
 
 // Маппинг категорий в globalCategory для обратной совместимости с данными из S3
@@ -80,7 +80,7 @@ const EquipmentPage = () => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const [productPage, categoryTree] = await Promise.all([landingApi.products(), landingApi.categories()]);
+        const [productPage, categoryTree] = await Promise.all([landingApi.products(), loadEquipmentCategoryTree()]);
         const mappedProducts = productPage.items.map((product) => {
           const mappedProduct = {
             ...product,
