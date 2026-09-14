@@ -9,7 +9,7 @@ import CooperationFormSection from '../components/CooperationFormSection/Coopera
 import Footer from '../components/Footer/Footer';
 import { landingApi } from '../api/public';
 import type { Product } from '../types/product';
-import { normalizeEquipmentCategories, scrollToEquipmentHash, type EquipmentCategory } from '../utils/equipmentCategories';
+import { normalizeEquipmentCategories, scrollToEquipmentHashWhenReady, type EquipmentCategory } from '../utils/equipmentCategories';
 import styles from './EquipmentPage.module.css';
 
 // Маппинг категорий в globalCategory для обратной совместимости с данными из S3
@@ -134,13 +134,18 @@ const EquipmentPage = () => {
   useEffect(() => {
     if (loading) return;
 
+    let cancelScroll = () => {};
     const scrollToHash = () => {
-      window.requestAnimationFrame(() => scrollToEquipmentHash(window.location.hash));
+      cancelScroll();
+      cancelScroll = scrollToEquipmentHashWhenReady(window.location.hash);
     };
 
     scrollToHash();
     window.addEventListener('hashchange', scrollToHash);
-    return () => window.removeEventListener('hashchange', scrollToHash);
+    return () => {
+      cancelScroll();
+      window.removeEventListener('hashchange', scrollToHash);
+    };
   }, [loading, categoriesData]);
 
   // Инициализируем состояния фильтров для всех разделов

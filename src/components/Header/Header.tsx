@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useContactFormModal } from '../../contexts/ContactFormModalContext';
 import SearchModal from '../SearchModal/SearchModal';
 import { landingApi } from '../../api/public';
-import { normalizeEquipmentCategories, scrollToEquipmentHash, type EquipmentCategory } from '../../utils/equipmentCategories';
+import { normalizeEquipmentCategories, scrollToEquipmentHashWhenReady, type EquipmentCategory } from '../../utils/equipmentCategories';
 import styles from "./Header.module.css";
 
 const Header = () => {
@@ -138,7 +138,7 @@ const Header = () => {
       // Добавляем hash в URL для правильной обработки якорей
       navigate(`${path}#${anchor}`);
       setTimeout(() => {
-        scrollToEquipmentHash(anchor);
+        scrollToEquipmentHashWhenReady(anchor);
       }, 200);
     } else {
       navigate(path);
