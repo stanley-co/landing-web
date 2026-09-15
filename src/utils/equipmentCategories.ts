@@ -37,6 +37,47 @@ const sortCategories = (categories: ProductCategoryDto[]): ProductCategoryDto[] 
     .sort((a, b) => a.category.sortOrder - b.category.sortOrder || a.index - b.index)
     .map(({ category }) => category);
 
+const normalizeCategoryToken = (value?: string | null): string => value?.trim().toLocaleLowerCase() ?? '';
+
+const categoryMatchesToken = (category: ProductCategoryDto, token: string): boolean => {
+  if (!token) return false;
+
+  return [category.name, category.anchor, category.code, category.externalId]
+    .some((value) => normalizeCategoryToken(value) === token);
+};
+
+const findChildCategories = (category: ProductCategoryDto): ProductCategoryDto[] => [
+  ...(category.children ?? []).flatMap(findChildCategories),
+  ...(category.children ?? []),
+];
+
+/**
+ * Resolves the public root category used by the landing section.
+ * Product DTOs currently contain category strings instead of category ids,
+ * so an unambiguous child name is the only safe fallback for new categories.
+ */
+export const resolveProductGlobalCategory = (
+  categories: ProductCategoryDto[],
+  product: CategoryProduct,
+): string | undefined => {
+  const roots = sortCategories(categories.filter((category) => !hasParent(category)));
+  const globalToken = normalizeCategoryToken(product.globalCategory);
+  const categoryToken = normalizeCategoryToken(product.category);
+
+  const globalRoot = roots.find((root) => categoryMatchesToken(root, globalToken));
+  if (globalRoot) return globalRoot.name;
+
+  const categoryRoot = roots.find((root) => categoryMatchesToken(root, categoryToken));
+  if (categoryRoot) return categoryRoot.name;
+
+  const childRoots = roots.filter((root) =>
+    findChildCategories(root).some((child) => normalizeCategoryToken(child.name) === categoryToken));
+
+  if (childRoots.length === 1) return childRoots[0].name;
+
+  return product.globalCategory || undefined;
+};
+
 const countProducts = (
   category: ProductCategoryDto,
   products: CategoryProduct[],

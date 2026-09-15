@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ProductCategoryDto } from '../api/public';
 import {
   normalizeEquipmentCategories,
+  resolveProductGlobalCategory,
   scrollToEquipmentHash,
   scrollToEquipmentHashWhenReady,
 } from './equipmentCategories';
@@ -123,6 +124,50 @@ describe('normalizeEquipmentCategories', () => {
 
     expect(result.map(({ name }) => name)).toEqual(['Корень']);
     expect(result[0].children).toEqual([]);
+  });
+});
+
+describe('resolveProductGlobalCategory', () => {
+  it('resolves a new child product to its parent landing section', () => {
+    const categories = [
+      category({
+        name: 'PROM CATEGORY',
+        anchor: 'PROM',
+        children: [category({ name: 'SUB PROM', anchor: 'SUB-PROM' })],
+      }),
+    ];
+    const product = { category: 'SUB PROM' };
+    const result = resolveProductGlobalCategory(categories, product);
+
+    expect(result).toBe('PROM CATEGORY');
+    expect(normalizeEquipmentCategories(categories, [{ ...product, globalCategory: result }])).toMatchObject([
+      { name: 'PROM CATEGORY', anchor: 'PROM', children: [{ name: 'SUB PROM', productCount: 1 }] },
+    ]);
+  });
+
+  it('normalizes a root anchor token to the root display name', () => {
+    const result = resolveProductGlobalCategory([
+      category({ name: 'PROM CATEGORY', anchor: 'PROM' }),
+    ], { globalCategory: 'PROM', category: 'SUB PROM' });
+
+    expect(result).toBe('PROM CATEGORY');
+  });
+
+  it('does not guess when a child name belongs to multiple roots', () => {
+    const result = resolveProductGlobalCategory([
+      category({ name: 'ROOT A', children: [category({ name: 'SHARED' })] }),
+      category({ name: 'ROOT B', children: [category({ name: 'SHARED' })] }),
+    ], { category: 'SHARED' });
+
+    expect(result).toBeUndefined();
+  });
+
+  it('preserves an existing category assignment when the public tree has no match', () => {
+    const result = resolveProductGlobalCategory([
+      category({ name: 'Current root', anchor: 'current-root' }),
+    ], { globalCategory: 'Legacy root', category: 'Legacy child' });
+
+    expect(result).toBe('Legacy root');
   });
 });
 

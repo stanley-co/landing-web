@@ -9,7 +9,13 @@ import CooperationFormSection from '../components/CooperationFormSection/Coopera
 import Footer from '../components/Footer/Footer';
 import { landingApi } from '../api/public';
 import type { Product } from '../types/product';
-import { loadEquipmentCategoryTree, normalizeEquipmentCategories, scrollToEquipmentHashWhenReady, type EquipmentCategory } from '../utils/equipmentCategories';
+import {
+  loadEquipmentCategoryTree,
+  normalizeEquipmentCategories,
+  resolveProductGlobalCategory,
+  scrollToEquipmentHashWhenReady,
+  type EquipmentCategory,
+} from '../utils/equipmentCategories';
 import styles from './EquipmentPage.module.css';
 
 // Маппинг категорий в globalCategory для обратной совместимости с данными из S3
@@ -90,7 +96,10 @@ const EquipmentPage = () => {
           };
           return {
             ...mappedProduct,
-            globalCategory: getGlobalCategory(mappedProduct),
+            globalCategory: resolveProductGlobalCategory(categoryTree, {
+              ...mappedProduct,
+              globalCategory: getGlobalCategory(mappedProduct),
+            }),
           };
         });
         setProductsData(mappedProducts);
