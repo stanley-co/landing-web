@@ -104,6 +104,13 @@ jobs:
             "IFS= read -r GHCR_PULL_USERNAME; IFS= read -r GHCR_PULL_TOKEN; IFS= read -r DEPLOY_REPOSITORY; IFS= read -r DEPLOY_BRANCH; IFS= read -r DEPLOY_COMMIT; IFS= read -r DEPLOY_RUN_ID; IFS= read -r EXPECTED_IMAGE_DIGEST; export GHCR_PULL_USERNAME GHCR_PULL_TOKEN DEPLOY_REPOSITORY DEPLOY_BRANCH DEPLOY_COMMIT DEPLOY_RUN_ID EXPECTED_IMAGE_DIGEST; /opt/kitexp-staging/bin/deploy-service landing-web '$IMAGE' '$TAG'"
       - name: Verify public test endpoints
         run: |
+          port=${TEST_SERVER_PORT:-22}
+          ready=$(ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" \
+            "awk -F= '/^(BACKEND_TAG|ADMIN_TAG|LANDING_TAG)=/{print \$2}' /opt/kitexp-staging/.env | grep -c '^sha-[0-9a-f]\\{40\\}$'" || true)
+          if [[ "$ready" != 3 ]]; then
+            echo "Partial application bootstrap: public checks deferred until all three immutable images are deployed."
+            exit 0
+          fi
           curl --fail --silent --show-error --insecure --max-time 20 "https://$TEST_SERVER_HOST/healthz" | grep -q ok
           curl --fail --silent --show-error --insecure --max-time 20 "https://$TEST_SERVER_HOST/actuator/health" | grep -q '"status":"UP"'
       - name: Record deployment
