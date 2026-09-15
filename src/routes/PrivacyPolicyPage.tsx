@@ -1,6 +1,7 @@
 import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { landingApi, type PrivacyPolicyDto } from '../api/public';
+import { LegalMarkdown } from '../components/LegalMarkdown';
 import PageWrapper from '../components/layout/PageWrapper';
 import DocumentHead from '../components/DocumentHead/DocumentHead';
 import Footer from '../components/Footer/Footer';
@@ -22,7 +23,7 @@ const PrivacyPolicyPage = () => {
         {error && <div className={styles.block}><h1>Политика временно недоступна</h1><p>{error}</p></div>}
         {policy && <>
           <header className={styles.header}><h1 className={styles.title}>{policy.title}</h1><p className={styles.effectiveDate}>Дата вступления в силу: {new Date(policy.effectiveDate).toLocaleDateString('ru-RU')}</p>{policy.lastModifiedDate && <p className={styles.effectiveDate}>Последнее изменение: {new Date(policy.lastModifiedDate).toLocaleDateString('ru-RU')}</p>}</header>
-          <article className={`${styles.block} ${styles.markdown}`}>{policy.markdown}</article>
+          <article className={`${styles.block} ${styles.markdown}`}><LegalMarkdown>{policy.markdown}</LegalMarkdown></article>
         </>}
       </div></section><Footer />
     </IonContent></PageWrapper>

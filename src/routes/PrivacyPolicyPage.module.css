@@ -89,7 +89,65 @@
 .link:hover {
   text-decoration: none;
 }
-.markdown { white-space: pre-wrap; line-height: 1.75; color: var(--ion-color-medium, #374151); }
+.markdown {
+  line-height: 1.75;
+  color: var(--ion-color-medium, #374151);
+}
+
+.markdown > :first-child {
+  margin-top: 0;
+}
+
+.markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  color: var(--ion-color-dark, #1a202c);
+  line-height: 1.25;
+}
+
+.markdown h1 {
+  margin: 0 0 20px;
+  font-size: 2rem;
+}
+
+.markdown h2 {
+  margin: 32px 0 14px;
+  font-size: 1.45rem;
+}
+
+.markdown h3 {
+  margin: 24px 0 10px;
+  font-size: 1.15rem;
+}
+
+.markdown p,
+.markdown ul,
+.markdown ol {
+  margin: 0 0 16px;
+}
+
+.markdown ul,
+.markdown ol {
+  padding-left: 24px;
+}
+
+.markdown li + li {
+  margin-top: 6px;
+}
+
+.markdown a {
+  color: var(--ion-color-primary, #008CFF);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.markdown a:hover {
+  text-decoration: none;
+}
 .loading { min-height: 360px; display: grid; place-content: center; justify-items: center; gap: 12px; }
 
 @media (max-width: 768px) {
