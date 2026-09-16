@@ -9,12 +9,20 @@ The route only accepts messages from the exact `VITE_ADMIN_PREVIEW_ORIGIN`; with
 Each deployed stand is configured as an Admin/landing pair: Admin is served at
 `/admin/`, while landing owns `/preview/admin`. Build Admin with that stand's
 `VITE_LANDING_PREVIEW_URL` value, and build landing with the matching
-`VITE_ADMIN_PREVIEW_ORIGIN`. Keep those values in the matching GitHub Environment
-variables or stand-local env files rather than source-controlled hostnames. The
-Admin image build asserts that its compiled assets include a valid preview URL,
-and the landing image build asserts that the accepted Admin origin is valid. Draft
-media IDs and product category IDs are resolved in the Admin client into transient
-URL/name fields before posting; they are neither persisted nor placed in the URL.
+`VITE_ADMIN_PREVIEW_ORIGIN`. Runtime values come from the matching GitHub
+Environment variables or stand-local env files; the source-controlled matrix below
+is the operator reference for those environments. The Admin image build asserts
+that its compiled assets include a valid preview URL, and the landing image build
+asserts that the accepted Admin origin is valid. Draft media IDs and product
+category IDs are resolved in the Admin client into transient URL/name fields before
+posting; they are neither persisted nor placed in the URL.
+
+Current stand values:
+
+| Environment | Admin `VITE_LANDING_PREVIEW_URL` | Landing `VITE_ADMIN_PREVIEW_ORIGIN` |
+| --- | --- | --- |
+| DEV/test | `https://176.108.243.2/preview/admin` | `https://176.108.243.2` |
+| production | `https://176.108.242.159/preview/admin` | `https://176.108.242.159` |
 # Moderation boundary
 
 Landing renders backend-filtered public DTOs only. Pending moderation revisions
