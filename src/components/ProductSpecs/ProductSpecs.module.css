@@ -80,6 +80,7 @@
 .labelText {
   position: relative;
   padding-left: 12px;
+  white-space: pre-wrap;
 }
 
 .labelText::before {
@@ -95,15 +96,18 @@
   font-size: 1rem;
   font-weight: 500;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .valueText {
   background: linear-gradient(135deg, rgba(0, 140, 255, 0.1) 0%, rgba(0, 140, 255, 0.05) 100%);
   padding: 8px 16px;
   border-radius: 8px;
-  display: inline-block;
+  display: block;
+  width: 100%;
   border: 1px solid rgba(0, 140, 255, 0.2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 768px) {
@@ -134,4 +138,3 @@
     font-size: 0.85rem;
   }
 }
-

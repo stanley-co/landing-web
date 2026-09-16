@@ -103,6 +103,7 @@
   font-weight: 600;
   margin-bottom: 20px;
   backdrop-filter: blur(10px);
+  white-space: pre-wrap;
 }
 
 .title {
@@ -113,6 +114,7 @@
   line-height: 1.2;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  white-space: pre-wrap;
 }
 
 .meta {
@@ -161,4 +163,3 @@
     gap: 12px;
   }
 }
-

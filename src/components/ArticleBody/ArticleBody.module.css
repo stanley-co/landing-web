@@ -17,6 +17,7 @@
   color: var(--ion-color-dark, #1a202c);
   margin: 0 0 24px 0;
   line-height: 1.8;
+  white-space: pre-wrap;
 }
 
 .figure {
@@ -38,6 +39,7 @@
   font-style: italic;
   margin: 0;
   padding: 0 16px;
+  white-space: pre-wrap;
 }
 
 .quote {
@@ -68,6 +70,7 @@
   margin: 0;
   padding-left: 24px;
   line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .linkBlock {
@@ -103,6 +106,7 @@
 .linkText {
   display: flex;
   align-items: center;
+  white-space: pre-wrap;
 }
 
 .linkIcon {
@@ -116,6 +120,7 @@
   font-size: 0.95rem;
   color: var(--ion-color-medium, #6b7280);
   line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 768px) {
@@ -163,4 +168,3 @@
     margin-top: 12px;
   }
 }
-

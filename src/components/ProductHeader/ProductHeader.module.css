@@ -67,6 +67,7 @@
   font-weight: 600;
   height: auto;
   padding: 8px 16px;
+  white-space: pre-wrap;
 }
 
 .title {
@@ -76,6 +77,7 @@
   margin: 0 0 8px 0;
   line-height: 1.2;
   letter-spacing: -0.02em;
+  white-space: pre-wrap;
 }
 
 .description {
@@ -84,6 +86,7 @@
   margin: 0;
   line-height: 1.7;
   max-width: 900px;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 768px) {
@@ -136,4 +139,3 @@
     font-size: 0.85rem;
   }
 }
-
