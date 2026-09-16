@@ -11,7 +11,9 @@ ARG VITE_S3_BUCKET=media
 ENV VITE_S3_BUCKET=$VITE_S3_BUCKET
 ARG VITE_ADMIN_PREVIEW_ORIGIN
 ENV VITE_ADMIN_PREVIEW_ORIGIN=$VITE_ADMIN_PREVIEW_ORIGIN
-RUN npm run build
+RUN node -e 'const url = new URL(process.argv[1]); if (!/^https?:$/.test(url.protocol) || url.pathname !== "/" || url.search || url.hash || url.username || url.password) throw new Error("VITE_ADMIN_PREVIEW_ORIGIN must be an absolute http(s) Admin origin without path, query, hash, or credentials");' "$VITE_ADMIN_PREVIEW_ORIGIN/" \
+ && npm run build \
+ && grep -R -F "$VITE_ADMIN_PREVIEW_ORIGIN" dist/assets >/dev/null
 
 FROM nginx:1.28-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf

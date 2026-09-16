@@ -21,6 +21,12 @@ jobs:
       github.event.workflow_run.event == 'push' &&
       github.event.workflow_run.head_branch == 'develop'
     runs-on: ubuntu-latest
+    environment: test
+    env:
+      VITE_PUBLIC_API_BASE_URL: ${{ vars.VITE_PUBLIC_API_BASE_URL || '/api/v1' }}
+      VITE_S3_HOST: ${{ vars.VITE_S3_HOST || '/' }}
+      VITE_S3_BUCKET: ${{ vars.VITE_S3_BUCKET || 'media' }}
+      VITE_ADMIN_PREVIEW_ORIGIN: ${{ vars.VITE_ADMIN_PREVIEW_ORIGIN }}
     outputs:
       digest: ${{ steps.build.outputs.digest }}
       image: ${{ steps.image.outputs.value }}
@@ -62,10 +68,10 @@ jobs:
           context: .
           push: true
           build-args: |
-            VITE_PUBLIC_API_BASE_URL=/api/v1
-            VITE_S3_HOST=/
-            VITE_S3_BUCKET=media
-            VITE_ADMIN_PREVIEW_ORIGIN=https://84.54.56.12
+            VITE_PUBLIC_API_BASE_URL=${{ env.VITE_PUBLIC_API_BASE_URL }}
+            VITE_S3_HOST=${{ env.VITE_S3_HOST }}
+            VITE_S3_BUCKET=${{ env.VITE_S3_BUCKET }}
+            VITE_ADMIN_PREVIEW_ORIGIN=${{ env.VITE_ADMIN_PREVIEW_ORIGIN }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           cache-from: type=gha

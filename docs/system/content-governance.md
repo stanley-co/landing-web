@@ -4,15 +4,17 @@ Landing owns `/preview/admin` and renders its existing article/product presentat
 
 The route only accepts messages from the exact `VITE_ADMIN_PREVIEW_ORIGIN`; without that configuration it is disabled. Admin frames must target `VITE_LANDING_PREVIEW_URL`, validate the frame origin/readiness, and send drafts only after it is ready. Missing media renders a non-fatal placeholder. Production public APIs continue to expose only active content, products, and slides.
 
-## Test configuration
+## Environment configuration
 
-The test deployment uses one origin: Admin is served at `/admin/`, while landing owns
-`/preview/admin`. Build Admin with
-`VITE_LANDING_PREVIEW_URL=https://84.54.56.12/preview/admin` and landing with
-`VITE_ADMIN_PREVIEW_ORIGIN=https://84.54.56.12`. The Admin image build asserts that
-its compiled assets include a valid preview URL. Draft media IDs and product category
-IDs are resolved in the Admin client into transient URL/name fields before posting;
-they are neither persisted nor placed in the URL.
+Each deployed stand is configured as an Admin/landing pair: Admin is served at
+`/admin/`, while landing owns `/preview/admin`. Build Admin with that stand's
+`VITE_LANDING_PREVIEW_URL` value, and build landing with the matching
+`VITE_ADMIN_PREVIEW_ORIGIN`. Keep those values in the matching GitHub Environment
+variables or stand-local env files rather than source-controlled hostnames. The
+Admin image build asserts that its compiled assets include a valid preview URL,
+and the landing image build asserts that the accepted Admin origin is valid. Draft
+media IDs and product category IDs are resolved in the Admin client into transient
+URL/name fields before posting; they are neither persisted nor placed in the URL.
 # Moderation boundary
 
 Landing renders backend-filtered public DTOs only. Pending moderation revisions
