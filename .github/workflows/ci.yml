@@ -23,11 +23,6 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    env:
-      VITE_PUBLIC_API_BASE_URL: ${{ vars.VITE_PUBLIC_API_BASE_URL || '/api/v1' }}
-      VITE_S3_HOST: ${{ vars.VITE_S3_HOST || '/' }}
-      VITE_S3_BUCKET: ${{ vars.VITE_S3_BUCKET || 'media' }}
-      VITE_ADMIN_PREVIEW_ORIGIN: ${{ vars.VITE_ADMIN_PREVIEW_ORIGIN || 'http://localhost:5173' }}
     steps:
       - uses: actions/checkout@v7
       - name: Check source hygiene
@@ -42,11 +37,16 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
-          VITE_PUBLIC_API_BASE_URL: ${{ env.VITE_PUBLIC_API_BASE_URL }}
-          VITE_S3_HOST: ${{ env.VITE_S3_HOST }}
-          VITE_S3_BUCKET: ${{ env.VITE_S3_BUCKET }}
-          VITE_ADMIN_PREVIEW_ORIGIN: ${{ env.VITE_ADMIN_PREVIEW_ORIGIN }}
+          VITE_PUBLIC_API_BASE_URL: ${{ vars.VITE_PUBLIC_API_BASE_URL || '/api/v1' }}
+          VITE_S3_HOST: ${{ vars.VITE_S3_HOST || '/' }}
+          VITE_S3_BUCKET: ${{ vars.VITE_S3_BUCKET || 'media' }}
+          VITE_ADMIN_PREVIEW_ORIGIN: ${{ vars.VITE_ADMIN_PREVIEW_ORIGIN || 'http://localhost:5173' }}
       - name: Audit runtime dependencies
         run: npm audit --omit=dev --audit-level=high
       - name: Verify production image build without publishing
         run: docker build --build-arg VITE_PUBLIC_API_BASE_URL="$VITE_PUBLIC_API_BASE_URL" --build-arg VITE_S3_HOST="$VITE_S3_HOST" --build-arg VITE_S3_BUCKET="$VITE_S3_BUCKET" --build-arg VITE_ADMIN_PREVIEW_ORIGIN="$VITE_ADMIN_PREVIEW_ORIGIN" -t landing-web:ci .
+        env:
+          VITE_PUBLIC_API_BASE_URL: ${{ vars.VITE_PUBLIC_API_BASE_URL || '/api/v1' }}
+          VITE_S3_HOST: ${{ vars.VITE_S3_HOST || '/' }}
+          VITE_S3_BUCKET: ${{ vars.VITE_S3_BUCKET || 'media' }}
+          VITE_ADMIN_PREVIEW_ORIGIN: ${{ vars.VITE_ADMIN_PREVIEW_ORIGIN || 'http://localhost:5173' }}
