@@ -1,0 +1,36 @@
++name: Validate release ref
+
+on:
+  push:
+    branches: ["release/**"]
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Validate release branch or tag
+        shell: bash
+        run: |
+          ref="${GITHUB_REF_NAME}"
+          if [[ "${GITHUB_REF_TYPE}" == branch ]]; then
+            [[ "$ref" =~ ^release/[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Invalid release branch: $ref" >&2; exit 64; }
+            git fetch origin develop --no-tags
+            git merge-base --is-ancestor origin/develop HEAD || {
+              echo "Release branch must be based on develop" >&2
+              exit 65
+            }
+            version="${ref#release/}"
+          else
+            [[ "$ref" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Invalid release tag: $ref" >&2; exit 64; }
+            version="${ref#v}"
+          fi
+          echo "Validated release v$version for ${GITHUB_REPOSITORY} at $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+
