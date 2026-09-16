@@ -111,7 +111,11 @@ jobs:
             echo "Partial application bootstrap: public checks deferred until all three immutable images are deployed."
             exit 0
           fi
-          ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" 'set -eu; curl --fail --silent --show-error --insecure --max-time 20 https://localhost/healthz | grep -q ok; curl --fail --silent --show-error --insecure --max-time 20 https://localhost/actuator/health | grep -q '"'"'"status"'"'":"'"'"UP"'"'"''
+          ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" 'bash -se' <<'REMOTE_SCRIPT'
+          set -eu
+          curl --fail --silent --show-error --insecure --max-time 20 https://localhost/healthz | grep -q ok
+          curl --fail --silent --show-error --insecure --max-time 20 https://localhost/actuator/health | grep -q '"status":"UP"'
+          REMOTE_SCRIPT
       - name: Record deployment
         run: |
           {
