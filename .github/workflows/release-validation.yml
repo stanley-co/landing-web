@@ -1,4 +1,4 @@
-+name: Validate release ref
+name: Validate release ref
 
 on:
   push:
@@ -33,4 +33,3 @@ jobs:
             version="${ref#v}"
           fi
           echo "Validated release v$version for ${GITHUB_REPOSITORY} at $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
-
