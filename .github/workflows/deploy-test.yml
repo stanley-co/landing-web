@@ -113,6 +113,14 @@ jobs:
           fi
           ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" 'bash -se' <<'REMOTE_SCRIPT'
           set -eu
+          for attempt in $(seq 1 12); do
+            if curl --fail --silent --show-error --insecure --max-time 20 https://localhost/healthz | grep -q ok \
+              && curl --fail --silent --show-error --insecure --max-time 20 https://localhost/actuator/health | grep -q '"status":"UP"'; then
+              exit 0
+            fi
+            echo "Public test endpoints are not ready yet; retry ${attempt}/12."
+            sleep 5
+          done
           curl --fail --silent --show-error --insecure --max-time 20 https://localhost/healthz | grep -q ok
           curl --fail --silent --show-error --insecure --max-time 20 https://localhost/actuator/health | grep -q '"status":"UP"'
           REMOTE_SCRIPT
