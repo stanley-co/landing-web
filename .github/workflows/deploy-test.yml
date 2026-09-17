@@ -103,6 +103,8 @@ jobs:
           } | ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" \
             "IFS= read -r GHCR_PULL_USERNAME; IFS= read -r GHCR_PULL_TOKEN; IFS= read -r DEPLOY_REPOSITORY; IFS= read -r DEPLOY_BRANCH; IFS= read -r DEPLOY_COMMIT; IFS= read -r DEPLOY_RUN_ID; IFS= read -r EXPECTED_IMAGE_DIGEST; export GHCR_PULL_USERNAME GHCR_PULL_TOKEN DEPLOY_REPOSITORY DEPLOY_BRANCH DEPLOY_COMMIT DEPLOY_RUN_ID EXPECTED_IMAGE_DIGEST; /opt/kitexp-staging/bin/deploy-service landing-web '$IMAGE' '$TAG'"
       - name: Verify public test endpoints
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
         run: |
           port=${TEST_SERVER_PORT:-22}
           ready=$(ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" \
@@ -111,10 +113,15 @@ jobs:
             echo "Partial application bootstrap: public checks deferred until all three immutable images are deployed."
             exit 0
           fi
-          ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" 'bash -se' <<'REMOTE_SCRIPT'
+          ssh -p "$port" -i ~/.ssh/test -o StrictHostKeyChecking=yes "$TEST_SERVER_USER@$TEST_SERVER_HOST" "TAG='$TAG' bash -se" <<'REMOTE_SCRIPT'
           set -eu
           cd /opt/kitexp-staging
-          bin/health-check
+          grep -qx "LANDING_TAG=${TAG}" .env
+          grep -q "\"tag\": \"${TAG}\"" state/landing-web.json
+          container_id=$(docker compose --env-file .env -f compose.staging.yaml ps -q landing-web)
+          test -n "$container_id"
+          status=$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$container_id")
+          test "$status" = healthy -o "$status" = running
           REMOTE_SCRIPT
       - name: Record deployment
         run: |
