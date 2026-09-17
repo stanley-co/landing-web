@@ -1,41 +1,53 @@
 import { IonSpinner, IonButton, IonIcon } from '@ionic/react';
-import { arrowForwardOutline } from 'ionicons/icons';
+import { arrowForwardOutline, chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './EquipmentCarousel.module.css';
 import { landingApi, type SlideDto } from '../../api/public';
 import { useContactFormModal } from '../../contexts/ContactFormModalContext';
 
 const EquipmentCarousel = () => {
-  const navigate = useNavigate();
   const { openModal: openContactForm } = useContactFormModal();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<SlideDto[]>([]);
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Обработка клика по ссылке
+  const resetAutoplay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  const goToSlide = (index: number) => {
+    resetAutoplay();
+    setCurrentSlide(index);
+  };
+
+  const goToPrevious = () => {
+    resetAutoplay();
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToNext = () => {
+    resetAutoplay();
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const hasAction = (slide: SlideDto) => (
+    slide.actionType === 'OPEN_FORM'
+    || (slide.actionType === 'EXTERNAL_LINK' && Boolean(slide.actionValue?.trim()))
+  );
+
   const handleAction = (slide: SlideDto) => {
-    const value = slide.actionValue?.trim();
-    if (!slide.actionType || !value) return;
     if (slide.actionType === 'OPEN_FORM') {
       openContactForm();
       return;
     }
+    const value = slide.actionValue?.trim();
     if (slide.actionType === 'EXTERNAL_LINK') {
+      if (!value) return;
       window.open(value, '_blank', 'noopener,noreferrer');
-      return;
     }
-    if (slide.actionType === 'ANCHOR') {
-      const [path, anchor = ''] = value.split('#');
-      if (!path || path === window.location.pathname) {
-        document.getElementById(anchor || value.replace(/^#/, ''))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        navigate(`${path}#${anchor}`);
-      }
-      return;
-    }
-    navigate(value);
   };
 
   useEffect(() => {
@@ -70,7 +82,7 @@ const EquipmentCarousel = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [slides.length]);
+  }, [slides.length, currentSlide]);
 
   if (loading) {
     return (
@@ -113,7 +125,7 @@ const EquipmentCarousel = () => {
             <div className={styles.content}>
               {slide.title && <h1 className={styles.title}>{slide.title}</h1>}
               {slide.description && <p className={styles.subtitle}>{slide.description}</p>}
-              {slide.actionType && slide.actionValue && (
+              {hasAction(slide) && (
                 <div className={styles.actionButtonWrapper}>
                   <IonButton
                     color="primary"
@@ -121,7 +133,7 @@ const EquipmentCarousel = () => {
                     className={styles.actionButton}
                     onClick={() => handleAction(slide)}
                   >
-                    {slide.buttonText || 'Узнать больше'}
+                    {slide.buttonText || (slide.actionType === 'OPEN_FORM' ? 'Оставить заявку' : 'Узнать больше')}
                     <IonIcon icon={arrowForwardOutline} slot="end" />
                   </IonButton>
                 </div>
@@ -129,6 +141,39 @@ const EquipmentCarousel = () => {
             </div>
           </div>
         ))}
+        {slides.length > 1 && (
+          <>
+            <IonButton
+              fill="clear"
+              className={`${styles.navButton} ${styles.navButtonPrev}`}
+              onClick={goToPrevious}
+              aria-label="Предыдущий слайд"
+            >
+              <IonIcon icon={chevronBackOutline} />
+            </IonButton>
+            <IonButton
+              fill="clear"
+              className={`${styles.navButton} ${styles.navButtonNext}`}
+              onClick={goToNext}
+              aria-label="Следующий слайд"
+            >
+              <IonIcon icon={chevronForwardOutline} />
+            </IonButton>
+            <div className={styles.dots} role="tablist" aria-label="Навигация по слайдам">
+              {slides.map((slide, index) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  className={`${styles.dot} ${index === currentSlide ? styles.dotActive : ''}`}
+                  onClick={() => goToSlide(index)}
+                  aria-label={`Перейти к слайду ${index + 1}`}
+                  aria-selected={index === currentSlide}
+                  role="tab"
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

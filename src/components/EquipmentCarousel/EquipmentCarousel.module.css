@@ -137,6 +137,67 @@
   transform: translateY(-2px);
 }
 
+.navButton {
+  position: absolute;
+  top: 50%;
+  z-index: 4;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  transform: translateY(-50%);
+  --border-radius: 50%;
+  --background: rgba(255, 255, 255, 0.16);
+  --background-hover: rgba(255, 255, 255, 0.28);
+  --color: #ffffff;
+  backdrop-filter: blur(8px);
+}
+
+.navButton::part(native) {
+  padding: 0;
+}
+
+.navButtonPrev {
+  left: 32px;
+}
+
+.navButtonNext {
+  right: 32px;
+}
+
+.navButton ion-icon {
+  font-size: 28px;
+}
+
+.dots {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  z-index: 4;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(-50%);
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: width 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.dotActive {
+  width: 32px;
+  border-radius: 999px;
+  border-color: #ffffff;
+  background: #ffffff;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
   .carousel {
@@ -162,6 +223,23 @@
     font-size: 1rem;
     padding: 0 24px;
   }
+
+  .navButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .navButtonPrev {
+    left: 16px;
+  }
+
+  .navButtonNext {
+    right: 16px;
+  }
+
+  .dots {
+    bottom: 22px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -186,5 +264,20 @@
     height: 44px;
     font-size: 0.9rem;
     padding: 0 20px;
+  }
+
+  .navButton {
+    top: auto;
+    bottom: 56px;
+    transform: none;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dotActive {
+    width: 28px;
   }
 }
