@@ -77,7 +77,7 @@ web/
 SSH-доступ:
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 kitexp@84.54.56.12
+ssh -i ~/.ssh/id_ed25519 kitexp@<retired-ip-only-dev-stand>
 ```
 
 Операционная система:
@@ -89,7 +89,7 @@ Ubuntu 22.04.5 LTS
 IP:
 
 ```text
-84.54.56.12
+<retired-ip-only-dev-stand>
 ```
 
 Пользователь:
@@ -105,7 +105,7 @@ kitexp
 Перед любыми действиями проверь:
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 kitexp@84.54.56.12 \
+ssh -i ~/.ssh/id_ed25519 kitexp@<retired-ip-only-dev-stand> \
   'whoami && hostname && uname -a && df -h && free -h && sudo -n true; echo $?'
 ```
 
@@ -136,15 +136,15 @@ ssh -i ~/.ssh/id_ed25519 kitexp@84.54.56.12 \
 На первом этапе использовать IP и path-based routing:
 
 ```text
-https://84.54.56.12/          — публичный лендинг
-https://84.54.56.12/admin/    — административная панель
-https://84.54.56.12/api/      — backend API
+https://<retired-ip-only-dev-stand>/          — публичный лендинг
+https://<retired-ip-only-dev-stand>/admin/    — административная панель
+https://<retired-ip-only-dev-stand>/api/      — backend API
 ```
 
 Также предусмотреть:
 
 ```text
-https://84.54.56.12/actuator/health
+https://<retired-ip-only-dev-stand>/actuator/health
 ```
 
 или отдельный безопасный health endpoint.
@@ -195,7 +195,7 @@ backend internal port
 ssh -L 8025:127.0.0.1:8025 \
     -L 9001:127.0.0.1:9001 \
     -i ~/.ssh/id_ed25519 \
-    kitexp@84.54.56.12
+    kitexp@<retired-ip-only-dev-stand>
 ```
 
 ---
@@ -433,7 +433,7 @@ STAGING_SSH_PRIVATE_KEY
 Получить host key:
 
 ```bash
-ssh-keyscan -H 84.54.56.12
+ssh-keyscan -H <retired-ip-only-dev-stand>
 ```
 
 Сохранить его в environment secret:
@@ -453,7 +453,7 @@ StrictHostKeyChecking=no
 Минимально:
 
 ```text
-STAGING_HOST=84.54.56.12
+STAGING_HOST=<retired-ip-only-dev-stand>
 STAGING_USER=kitexp
 STAGING_SSH_PRIVATE_KEY=<secret>
 STAGING_KNOWN_HOSTS=<secret>
@@ -738,7 +738,7 @@ Email можно задать конфигурацией.
 В итоговом отчете указать только команду получения:
 
 ```bash
-ssh -i ~/.ssh/id_ed25519 kitexp@84.54.56.12 \
+ssh -i ~/.ssh/id_ed25519 kitexp@<retired-ip-only-dev-stand> \
   'cat ~/.kitexp-staging-credentials'
 ```
 
@@ -1651,4 +1651,4 @@ cd /home/dds/dev/stanley-co
 
 Не останавливайся после создания CI-файлов.
 
-Конечный результат — фактически работающий тестовый стенд по адресу `84.54.56.12`.
+Конечный результат — фактически работающий тестовый стенд по адресу `<retired-ip-only-dev-stand>`.
