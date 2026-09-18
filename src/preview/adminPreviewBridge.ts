@@ -21,11 +21,10 @@ function validAdminOrigin(value: string | undefined): string | undefined {
 }
 
 export function adminPreviewOrigin(value: string | undefined, location: Location | undefined = window.location): string | undefined {
-  const configured = validAdminOrigin(value);
-  if (configured) return configured;
-  if (!location || isIpAddress(location.hostname)) return undefined;
-  if (location.hostname !== 'kitexp.ru' && !location.hostname.endsWith('.kitexp.ru')) return undefined;
-  return `${location.protocol}//admin.${location.hostname}`;
+  if (location && !isIpAddress(location.hostname) && (location.hostname === 'kitexp.ru' || location.hostname.endsWith('.kitexp.ru'))) {
+    return `${location.protocol}//admin.${location.hostname}`;
+  }
+  return validAdminOrigin(value);
 }
 
 /** Narrow message validation keeps the preview bridge ephemeral and origin-bound. */

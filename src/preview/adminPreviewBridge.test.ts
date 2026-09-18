@@ -15,6 +15,11 @@ describe('adminPreviewOrigin', () => {
     const location = new URL('https://new.kitexp.ru/preview/admin') as unknown as Location;
     expect(adminPreviewOrigin(undefined, location)).toBe('https://admin.new.kitexp.ru');
   });
+
+  it('prefers the current public host over a compiled domain from another stand', () => {
+    const location = new URL('https://new.kitexp.ru/preview/admin') as unknown as Location;
+    expect(adminPreviewOrigin('https://admin.dev.kitexp.ru', location)).toBe('https://admin.new.kitexp.ru');
+  });
 });
 
 describe('trustedAdminDraft', () => {
