@@ -6,9 +6,9 @@ import ProductDescription from '../components/ProductDescription/ProductDescript
 import ProductGallery from '../components/ProductGallery/ProductGallery';
 import ProductHeader from '../components/ProductHeader/ProductHeader';
 import ProductSpecs from '../components/ProductSpecs/ProductSpecs';
-import { trustedAdminDraft, type AdminPreviewDraft } from '../preview/adminPreviewBridge';
+import { adminPreviewOrigin, trustedAdminDraft, type AdminPreviewDraft } from '../preview/adminPreviewBridge';
 
-const adminOrigin = import.meta.env.VITE_ADMIN_PREVIEW_ORIGIN;
+const adminOrigin = adminPreviewOrigin(import.meta.env.VITE_ADMIN_PREVIEW_ORIGIN);
 const placeholderImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"%3E%3Crect width="100%25" height="100%25" fill="%23e5e7eb"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle" fill="%236b7280" font-family="sans-serif" font-size="28"%3E%D0%98%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B5%20%D0%B2%D1%8B%D0%B1%D1%80%D0%B0%D0%BD%D0%BE%3C/text%3E%3C/svg%3E';
 
 /**
