@@ -1,5 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { trustedAdminDraft } from './adminPreviewBridge';
+import { adminPreviewOrigin, trustedAdminDraft } from './adminPreviewBridge';
+
+describe('adminPreviewOrigin', () => {
+  it('uses a configured domain origin when it is safe', () => {
+    expect(adminPreviewOrigin('https://admin.example')).toBe('https://admin.example');
+  });
+
+  it('falls back from an IP-configured origin to the current Admin host', () => {
+    const location = new URL('https://dev.kitexp.ru/preview/admin') as unknown as Location;
+    expect(adminPreviewOrigin('https://176.108.243.2', location)).toBe('https://admin.dev.kitexp.ru');
+  });
+
+  it('derives the production Admin origin from the public landing host when configuration is missing', () => {
+    const location = new URL('https://new.kitexp.ru/preview/admin') as unknown as Location;
+    expect(adminPreviewOrigin(undefined, location)).toBe('https://admin.new.kitexp.ru');
+  });
+});
 
 describe('trustedAdminDraft', () => {
   const message = { type: 'landing-admin-preview', draft: { kind: 'content', value: { title: 'Draft' } } };
