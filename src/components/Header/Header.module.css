@@ -41,39 +41,6 @@
   }
 }
 
-.title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--ion-color-primary, #3880ff);
-  padding: 0;
-  cursor: pointer;
-  margin: 0;
-}
-
-.title:hover {
-  opacity: 0.8;
-}
-
-.tagline {
-  display: flex;
-  flex-direction: column;
-  font-size: 12px;
-  line-height: 1.2;
-  color: #6b7280;
-  font-weight: 400;
-  max-width: 200px;
-}
-
-.tagline span {
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .tagline {
-    display: none;
-  }
-}
-
 .searchButton {
   --color: #1a202c;
   --color-hover: #008CFF;
@@ -247,4 +214,3 @@
     opacity: 1;
   }
 }
-

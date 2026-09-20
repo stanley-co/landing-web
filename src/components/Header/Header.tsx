@@ -1,4 +1,4 @@
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon } from '@ionic/react';
+import { IonHeader, IonToolbar, IonButtons, IonButton, IonIcon } from '@ionic/react';
 import { menuOutline, closeOutline, chevronDownOutline, searchOutline } from 'ionicons/icons';
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -239,11 +239,6 @@ const Header = () => {
             className={styles.logo}
             onClick={() => navigate('/equipment')}
           />
-          <IonTitle className={styles.title} onClick={() => navigate('/equipment')}>ФКИТ</IonTitle>
-          <div className={styles.tagline}>
-            <span>Промышленное оборудование</span>
-            <span>для производства</span>
-          </div>
         </div>
         <IonButtons slot="end" className={isMobileMenu ? '' : 'ion-hide-md-up'}>
           <IonButton onClick={() => setMenuOpen(!menuOpen)}>
