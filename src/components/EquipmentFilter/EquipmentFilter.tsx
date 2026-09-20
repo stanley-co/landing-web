@@ -104,7 +104,19 @@ const EquipmentFilter = ({
         role="navigation" 
         aria-label="Фильтр оборудования"
       >
-        <h3 className={styles.title}>Категории</h3>
+        <div className={styles.header}>
+          <h3 className={styles.title}>Категории</h3>
+          {(selectedGlobalCategory || selectedSubcategory) && (
+            <IonButton
+              fill="clear"
+              size="small"
+              onClick={handleAllCategoriesClick}
+              className={styles.resetButton}
+            >
+              Сбросить
+            </IonButton>
+          )}
+        </div>
         <IonList className={styles.list}>
           <IonItem
             button
@@ -189,6 +201,9 @@ const EquipmentFilter = ({
             <IonToolbar>
               <IonTitle>Фильтры</IonTitle>
               <IonButtons slot="end">
+                {(selectedGlobalCategory || selectedSubcategory) && (
+                  <IonButton onClick={handleAllCategoriesClick}>Сбросить</IonButton>
+                )}
                 <IonButton onClick={() => setModalOpen(false)}>
                   <IonIcon icon={closeOutline} />
                 </IonButton>
