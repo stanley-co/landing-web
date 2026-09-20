@@ -10,13 +10,30 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ion-color-light, #f3f4f6);
+}
+
 .title {
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--ion-color-dark, #1a202c);
-  margin: 0 0 16px 0;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--ion-color-light, #f3f4f6);
+  margin: 0;
+}
+
+.resetButton {
+  --padding-start: 6px;
+  --padding-end: 6px;
+  min-height: 32px;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
 }
 
 .list {
