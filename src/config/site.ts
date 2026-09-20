@@ -35,5 +35,5 @@ export const DEFAULT_META = {
     'Вакуумные эмульгаторы, миксеры, дозаторы и резервуары для косметики и химии',
   ogType: 'website' as const,
   /** Относительный путь к изображению для OG (например /og-image.png). */
-  ogImagePath: '/logo.svg', // логотип компании
+  ogImagePath: '/fkit-logo-1260.png', // логотип компании
 } as const;
