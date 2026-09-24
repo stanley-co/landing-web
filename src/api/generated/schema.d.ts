@@ -711,6 +711,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/moderation/entities/{entityType}/{entityId}/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Manually activate and publish the current entity revision (ADMIN only) */
+        post: operations["activateModerationEntity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/moderation/entities/{entityType}/{entityId}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Manually change a managed entity lifecycle status (ADMIN only) */
+        post: operations["transitionModerationEntityStatus"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/moderation/requests/{id}/withdraw": {
         parameters: {
             query?: never;
@@ -954,6 +988,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/dashboard/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get permission-aware administration dashboard aggregates */
+        get: operations["getAdminDashboardSummary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/users": {
         parameters: {
             query?: never;
@@ -1028,6 +1079,145 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        DashboardSummaryDto: {
+            /** @enum {integer} */
+            periodDays: 7 | 30 | 90;
+            /** Format: date-time */
+            generatedAt: string;
+            business?: components["schemas"]["DashboardBusinessDto"];
+            leadTrend?: components["schemas"]["DashboardLeadTrendDto"][] | null;
+            inventory?: components["schemas"]["DashboardInventoryDto"][] | null;
+            moderation?: components["schemas"]["DashboardModerationDto"];
+            catalog?: components["schemas"]["DashboardCatalogDto"];
+            content?: components["schemas"]["DashboardContentDto"];
+            media?: components["schemas"]["DashboardMediaDto"];
+            recentActivity?: components["schemas"]["DashboardActivityDto"][] | null;
+        };
+        DashboardBusinessDto: {
+            /** Format: int64 */
+            leadsLast7Days?: number | null;
+            /** Format: int64 */
+            leadsLast30Days?: number | null;
+            /** Format: int64 */
+            failedLeadNotifications?: number | null;
+            /** Format: int64 */
+            activeProducts?: number | null;
+            /** Format: int64 */
+            activeNews?: number | null;
+            /** Format: int64 */
+            activeArticles?: number | null;
+            /** Format: int64 */
+            moderationInReview?: number | null;
+        };
+        DashboardLeadTrendDto: {
+            /** Format: date */
+            date: string;
+            /** Format: int64 */
+            productRequests: number;
+            /** Format: int64 */
+            feedback: number;
+            /** Format: int64 */
+            total: number;
+        };
+        DashboardInventoryDto: {
+            /** @enum {string} */
+            entityType: "PRODUCT" | "CONTENT" | "SLIDE" | "DOCUMENT";
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE" | "ARCHIVED" | "DELETED";
+            /** Format: int64 */
+            count: number;
+        };
+        DashboardModerationDto: {
+            byStatus: components["schemas"]["DashboardModerationCountDto"][];
+            latest: components["schemas"]["DashboardModerationItemDto"][];
+        };
+        DashboardModerationCountDto: {
+            status: components["schemas"]["ModerationRequestStatus"];
+            /** Format: int64 */
+            count: number;
+        };
+        DashboardModerationItemDto: {
+            /** Format: uuid */
+            id: string;
+            entityType: components["schemas"]["ModerationEntityType"];
+            /** Format: uuid */
+            entityId: string;
+            status: components["schemas"]["ModerationRequestStatus"];
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        DashboardCatalogDto: {
+            categories: components["schemas"]["DashboardCategoryDto"][];
+        };
+        DashboardCategoryDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** Format: int64 */
+            activeProductCount: number;
+            status: components["schemas"]["Status"];
+        };
+        DashboardContentDto: {
+            byType: components["schemas"]["DashboardContentCountDto"][];
+            byTypeAndStatus: components["schemas"]["DashboardContentStatusCountDto"][];
+            latest: components["schemas"]["DashboardContentItemDto"][];
+        };
+        DashboardContentCountDto: {
+            type: components["schemas"]["ContentType"];
+            /** Format: int64 */
+            count: number;
+        };
+        DashboardContentStatusCountDto: {
+            type: components["schemas"]["ContentType"];
+            status: components["schemas"]["LifecycleStatus"];
+            /** Format: int64 */
+            count: number;
+        };
+        DashboardContentItemDto: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            type: components["schemas"]["ContentType"];
+            status: components["schemas"]["LifecycleStatus"];
+            /** Format: date */
+            date: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        DashboardMediaDto: {
+            byStatus: components["schemas"]["DashboardMediaStatusCountDto"][];
+            /** Format: int64 */
+            used: number;
+            /** Format: int64 */
+            unused: number;
+            /** Format: int64 */
+            missingAltImages: number;
+            largest: components["schemas"]["DashboardMediaItemDto"][];
+        };
+        DashboardMediaStatusCountDto: {
+            status: components["schemas"]["MediaStatus"];
+            /** Format: int64 */
+            count: number;
+        };
+        DashboardMediaItemDto: {
+            /** Format: uuid */
+            id: string;
+            originalName: string;
+            /** Format: int64 */
+            size: number;
+            /** Format: int64 */
+            usageCount: number;
+        };
+        DashboardActivityDto: {
+            entityType: string;
+            /** Format: uuid */
+            entityId: string;
+            title: string;
+            status: string;
+            /** Format: date-time */
+            updatedAt: string;
+            editUrl: string;
+        };
         /** @enum {string} */
         Status: "DRAFT" | "ACTIVE" | "ARCHIVED";
         /** @enum {string} */
@@ -1053,7 +1243,7 @@ export interface components {
         /** @enum {string} */
         SlidePlacement: "EQUIPMENT_CATALOG";
         /** @enum {string} */
-        SlideLifecycleStatus: "ACTIVE" | "ARCHIVED" | "DELETED";
+        SlideLifecycleStatus: "DRAFT" | "ACTIVE" | "ARCHIVED" | "DELETED";
         /** @enum {string} */
         SlideActionType: "INTERNAL_LINK" | "EXTERNAL_LINK" | "ANCHOR" | "OPEN_FORM";
         /** @enum {string} */
@@ -1077,6 +1267,11 @@ export interface components {
         ModerationVersionRequest: {
             /** Format: int64 */
             expectedVersion: number;
+        };
+        ModerationStatusRequest: {
+            /** Format: int64 */
+            expectedVersion: number;
+            status: components["schemas"]["Status"];
         };
         ModerationDecisionRequest: {
             /** Format: int64 */
@@ -1176,6 +1371,11 @@ export interface components {
             image: string;
             description: string;
             sortOrder?: number;
+            /** Format: decimal */
+            priceAmount?: number | null;
+            priceCurrency?: components["schemas"]["PriceCurrency"] | null;
+            priceDisplayMode?: components["schemas"]["PriceDisplayMode"] | null;
+            promotionText?: string | null;
         };
         ProductDetailDto: components["schemas"]["ProductCardDto"] & {
             galleryImages?: string[];
@@ -1436,8 +1636,17 @@ export interface components {
             videoUrl?: string;
             relatedContent?: components["schemas"]["ProductRelatedContentWriteDto"][];
             sortOrder?: number;
-            status: components["schemas"]["Status"];
+            status?: components["schemas"]["Status"];
+            /** Format: decimal */
+            priceAmount?: number | null;
+            priceCurrency?: components["schemas"]["PriceCurrency"] | null;
+            priceDisplayMode?: components["schemas"]["PriceDisplayMode"] | null;
+            promotionText?: string | null;
         };
+        /** @enum {string} */
+        PriceCurrency: "RUB" | "USD" | "CNY";
+        /** @enum {string} */
+        PriceDisplayMode: "EXACT" | "FROM";
         ProductRelatedContentWriteDto: {
             id: string;
             type: components["schemas"]["ContentType"];
@@ -1480,7 +1689,7 @@ export interface components {
             imageId: string;
             preview: string;
             blocks: components["schemas"]["ContentBlockWriteDto"][];
-            status: components["schemas"]["Status"];
+            status?: components["schemas"]["Status"];
         };
         ContentAdminDto: {
             /** Format: uuid */
@@ -1588,7 +1797,7 @@ export interface components {
             seoDescription: string;
             /** Format: uuid */
             ogImageId?: string;
-            status: components["schemas"]["Status"];
+            status?: components["schemas"]["Status"];
         };
         PrivacyPolicyDto: {
             /** Format: uuid */
@@ -1620,7 +1829,7 @@ export interface components {
             description?: string;
             /** Format: uuid */
             fileId: string;
-            status: components["schemas"]["Status"];
+            status?: components["schemas"]["Status"];
             sortOrder?: number;
         };
         ReorderRequest: {
@@ -3084,6 +3293,48 @@ export interface operations {
             409: components["responses"]["Conflict"];
         };
     };
+    activateModerationEntity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entityType: components["parameters"]["ModerationEntityTypePath"];
+                entityId: components["parameters"]["EntityIdNamed"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModerationVersionRequest"];
+            };
+        };
+        responses: {
+            200: components["responses"]["ModerationRequest"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    transitionModerationEntityStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                entityType: components["parameters"]["ModerationEntityTypePath"];
+                entityId: components["parameters"]["EntityIdNamed"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModerationStatusRequest"];
+            };
+        };
+        responses: {
+            200: components["responses"]["ModerationRequest"];
+            403: components["responses"]["Forbidden"];
+            409: components["responses"]["Conflict"];
+        };
+    };
     withdrawModerationRequest: {
         parameters: {
             query?: never;
@@ -3450,6 +3701,29 @@ export interface operations {
         responses: {
             200: components["responses"]["AdminLead"];
             404: components["responses"]["NotFound"];
+        };
+    };
+    getAdminDashboardSummary: {
+        parameters: {
+            query?: {
+                periodDays?: 7 | 30 | 90;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Dashboard summary */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardSummaryDto"];
+                };
+            };
+            400: components["responses"]["ValidationError"];
         };
     };
     listAdminUsers: {

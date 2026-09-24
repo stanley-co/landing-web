@@ -121,6 +121,9 @@
   overflow-wrap: anywhere;
 }
 
+.price { margin: 0 0 6px; font-size: 1rem; font-weight: 600; color: var(--ion-color-dark, #1a202c); }
+.promotion { margin: 0 0 12px; padding-left: 8px; border-left: 2px solid var(--ion-color-primary, #176B5B); color: var(--ion-color-medium, #6b7280); font-size: .8125rem; line-height: 1.45; }
+
 .button {
   margin-top: auto;
   --border-radius: 8px;

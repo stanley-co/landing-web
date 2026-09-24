@@ -7,6 +7,10 @@ type Product = {
   category: string;
   image: string;
   description: string;
+  priceAmount?: number | null;
+  priceCurrency?: 'RUB' | 'USD' | 'CNY';
+  priceDisplayMode?: 'EXACT' | 'FROM';
+  promotionText?: string | null;
 };
 
 type EquipmentLayoutProps = {

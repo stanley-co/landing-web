@@ -11,6 +11,10 @@ type Product = {
   category: string;
   image: string;
   description: string;
+  priceAmount?: number | null;
+  priceCurrency?: 'RUB' | 'USD' | 'CNY';
+  priceDisplayMode?: 'EXACT' | 'FROM';
+  promotionText?: string | null;
 };
 
 type EquipmentGridProps = {
@@ -87,6 +91,7 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
                   category={firstProduct.category}
                   image={firstProduct.image}
                   description={firstProduct.description}
+                  priceAmount={firstProduct.priceAmount} priceCurrency={firstProduct.priceCurrency} priceDisplayMode={firstProduct.priceDisplayMode} promotionText={firstProduct.promotionText}
                 />
               </div>
             )}
@@ -104,6 +109,7 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
                         category={product.category}
                         image={product.image}
                         description={product.description}
+                        priceAmount={product.priceAmount} priceCurrency={product.priceCurrency} priceDisplayMode={product.priceDisplayMode} promotionText={product.promotionText}
                       />
                     </div>
                   ))}
@@ -130,6 +136,7 @@ const EquipmentGrid = ({ products }: EquipmentGridProps) => {
                     category={product.category}
                     image={product.image}
                     description={product.description}
+                    priceAmount={product.priceAmount} priceCurrency={product.priceCurrency} priceDisplayMode={product.priceDisplayMode} promotionText={product.promotionText}
                   />
                 </IonCol>
               ))}
