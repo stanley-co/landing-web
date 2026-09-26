@@ -2,7 +2,6 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton, IonImg
 import { arrowForwardOutline } from 'ionicons/icons';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useContactFormModal } from '../../contexts/ContactFormModalContext';
 import styles from "./EquipmentCard.module.css";
 
 type EquipmentCardProps = {
@@ -25,8 +24,10 @@ function formatPrice(amount: number, currency: NonNullable<EquipmentCardProps['p
 
 const EquipmentCard = ({ id, name, image, description, priceAmount, priceCurrency, priceDisplayMode, promotionText }: EquipmentCardProps) => {
   const navigate = useNavigate();
-  const { openModal } = useContactFormModal();
   const [imageLoaded, setImageLoaded] = useState(false);
+  const displayablePrice = priceAmount != null && priceCurrency
+    ? { amount: priceAmount, currency: priceCurrency }
+    : null;
 
   return (
     <IonCard className={styles.card}>
@@ -56,18 +57,21 @@ const EquipmentCard = ({ id, name, image, description, priceAmount, priceCurrenc
       </IonCardHeader>
       <IonCardContent>
         <p className={styles.description}>{description}</p>
-        {priceAmount != null && priceCurrency ? <>
-          <p className={styles.price}>{formatPrice(priceAmount, priceCurrency, priceDisplayMode)}</p>
-          {promotionText && <p className={styles.promotion}>{promotionText}</p>}
-        </> : null}
+        {displayablePrice && (
+          <div className={styles.priceBlock}>
+            <p className={styles.priceLabel}>Цена</p>
+            <p className={styles.price}>{formatPrice(displayablePrice.amount, displayablePrice.currency, priceDisplayMode)}</p>
+            {promotionText && <p className={styles.promotion}>{promotionText}</p>}
+          </div>
+        )}
         <IonButton
           expand="block" 
           fill="outline" 
           className={styles.button}
-          aria-label={priceAmount != null && priceCurrency ? `Подробнее о ${name}` : `Запросить цену: ${name}`}
-          onClick={() => priceAmount != null && priceCurrency ? navigate(`/equipment/${id}`) : openModal(name, id)}
+          aria-label={`Подробнее о ${name}`}
+          onClick={() => navigate(`/equipment/${id}`)}
         >
-          {priceAmount != null && priceCurrency ? <>Подробнее<IonIcon icon={arrowForwardOutline} slot="end" /></> : 'Запросить цену'}
+          Подробнее<IonIcon icon={arrowForwardOutline} slot="end" />
         </IonButton>
       </IonCardContent>
     </IonCard>
