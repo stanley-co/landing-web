@@ -70,6 +70,11 @@
   white-space: pre-wrap;
 }
 
+.detailPrice {
+  width: min(220px, 100%);
+  margin-top: 8px;
+}
+
 .title {
   font-size: 2rem;
   font-weight: 700;
@@ -137,5 +142,9 @@
 
   .category {
     font-size: 0.85rem;
+  }
+
+  .detailPrice {
+    width: min(280px, 100%);
   }
 }

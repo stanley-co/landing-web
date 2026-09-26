@@ -129,42 +129,7 @@
   overflow-wrap: anywhere;
 }
 
-.pricePanel {
-  margin: 0 0 16px;
-  padding: 12px 16px;
-  border: 1px solid #b8d7f3;
-  border-radius: 8px;
-  background: #f2f8ff;
-}
-
-.priceLabel {
-  margin: 0 0 4px;
-  color: #52657a;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.45;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.price {
-  margin: 0;
-  color: #172b3d;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.25;
-  font-variant-numeric: tabular-nums;
-}
-
-.promotion {
-  margin: 8px 0 0;
-  padding-top: 8px;
-  border-top: 1px solid #b8d7f3;
-  color: #52657a;
-  font-size: 13px;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-}
+.pricePanel { margin-bottom: 16px; }
 
 .button {
   margin-top: auto;
@@ -188,24 +153,6 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .pricePanel {
-    border-color: #3c5b78;
-    background: #162432;
-  }
-
-  .priceLabel,
-  .promotion {
-    color: #c6d8ea;
-  }
-
-  .price {
-    color: #f2f7ff;
-  }
-
-  .promotion {
-    border-top-color: #3c5b78;
-  }
-
   .button {
     --border-color: #8cc7ff;
     --color: #8cc7ff;

@@ -1,15 +1,20 @@
 import { IonChip, IonButton, IonIcon } from '@ionic/react';
 import { arrowBackOutline } from 'ionicons/icons';
 import styles from "./ProductHeader.module.css";
+import PricePanel from '../PricePanel/PricePanel';
 
 type ProductHeaderProps = {
   name: string;
   category: string;
   description: string;
+  priceAmount?: number | null;
+  priceCurrency?: 'RUB' | 'USD' | 'CNY' | null;
+  priceDisplayMode?: 'EXACT' | 'FROM' | null;
+  promotionText?: string | null;
   backButtonText?: string;
 };
 
-const ProductHeader = ({ name, category, description, backButtonText = 'Назад к каталогу' }: ProductHeaderProps) => {
+const ProductHeader = ({ name, category, description, priceAmount, priceCurrency, priceDisplayMode, promotionText, backButtonText = 'Назад к каталогу' }: ProductHeaderProps) => {
   const handleBack = () => {
     window.history.back();
   };
@@ -28,6 +33,7 @@ const ProductHeader = ({ name, category, description, backButtonText = 'Наза
             <IonChip color="primary" className={styles.category}>
               {category}
             </IonChip>
+            <PricePanel amount={priceAmount} currency={priceCurrency} mode={priceDisplayMode} promotionText={promotionText} className={styles.detailPrice} />
             <div className={styles.backButtonWrapper}>
               <IonButton
                 fill="outline"
@@ -47,4 +53,3 @@ const ProductHeader = ({ name, category, description, backButtonText = 'Наза
 };
 
 export default ProductHeader;
-

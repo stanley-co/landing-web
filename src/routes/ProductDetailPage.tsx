@@ -42,6 +42,10 @@ const ProductDetailPage = () => {
           image: detail.image,
           galleryImages: detail.galleryImages ?? [],
           description: detail.description,
+          priceAmount: detail.priceAmount,
+          priceCurrency: detail.priceCurrency,
+          priceDisplayMode: detail.priceDisplayMode,
+          promotionText: detail.promotionText,
           fullDescription: detail.fullDescription ?? detail.description,
           specs: Object.fromEntries((detail.specs ?? []).sort((a, b) => a.sortOrder - b.sortOrder).map((spec) => [spec.name, spec.value])),
           advantages: (detail.advantages ?? []).sort((a, b) => a.sortOrder - b.sortOrder),
@@ -158,6 +162,10 @@ const ProductDetailPage = () => {
             name={product.name}
             category={product.category}
             description={product.description}
+            priceAmount={product.priceAmount}
+            priceCurrency={product.priceCurrency}
+            priceDisplayMode={product.priceDisplayMode}
+            promotionText={product.promotionText}
           />
           <ProductGallery images={images} productName={product.name} productId={product.id} />
           <ProductDescription

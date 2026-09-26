@@ -12,8 +12,8 @@ type Product = {
   image: string;
   description: string;
   priceAmount?: number | null;
-  priceCurrency?: 'RUB' | 'USD' | 'CNY';
-  priceDisplayMode?: 'EXACT' | 'FROM';
+  priceCurrency?: 'RUB' | 'USD' | 'CNY' | null;
+  priceDisplayMode?: 'EXACT' | 'FROM' | null;
   promotionText?: string | null;
 };
 
