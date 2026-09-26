@@ -22,12 +22,41 @@ function formatPrice(amount: number, currency: NonNullable<EquipmentCardProps['p
   return mode === 'FROM' ? `от ${formatted}` : formatted;
 }
 
+function formatAccessiblePrice(amount: number, currency: NonNullable<EquipmentCardProps['priceCurrency']>, mode: NonNullable<EquipmentCardProps['priceDisplayMode']>) {
+  const value = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(amount);
+  const currencyName = currency === 'RUB' ? 'рублей' : currency === 'USD' ? 'долларов США' : 'китайских юаней';
+  return `${mode === 'FROM' ? 'от ' : ''}${value} ${currencyName}`;
+}
+
+type DisplayablePrice = {
+  amount: number;
+  currency: NonNullable<EquipmentCardProps['priceCurrency']>;
+  mode: NonNullable<EquipmentCardProps['priceDisplayMode']>;
+};
+
+function getDisplayablePrice(
+  amount: EquipmentCardProps['priceAmount'],
+  currency: EquipmentCardProps['priceCurrency'],
+  mode: EquipmentCardProps['priceDisplayMode'],
+): DisplayablePrice | null {
+  if (
+    typeof amount === 'number'
+    && Number.isFinite(amount)
+    && amount >= 0
+    && !Object.is(amount, -0)
+    && (currency === 'RUB' || currency === 'USD' || currency === 'CNY')
+    && (mode === 'EXACT' || mode === 'FROM')
+  ) {
+    return { amount, currency, mode };
+  }
+
+  return null;
+}
+
 const EquipmentCard = ({ id, name, image, description, priceAmount, priceCurrency, priceDisplayMode, promotionText }: EquipmentCardProps) => {
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const displayablePrice = priceAmount != null && priceCurrency
-    ? { amount: priceAmount, currency: priceCurrency }
-    : null;
+  const displayablePrice = getDisplayablePrice(priceAmount, priceCurrency, priceDisplayMode);
 
   return (
     <IonCard className={styles.card}>
@@ -58,11 +87,16 @@ const EquipmentCard = ({ id, name, image, description, priceAmount, priceCurrenc
       <IonCardContent>
         <p className={styles.description}>{description}</p>
         {displayablePrice && (
-          <div className={styles.priceBlock}>
-            <p className={styles.priceLabel}>Цена</p>
-            <p className={styles.price}>{formatPrice(displayablePrice.amount, displayablePrice.currency, priceDisplayMode)}</p>
-            {promotionText && <p className={styles.promotion}>{promotionText}</p>}
-          </div>
+          <dl className={styles.pricePanel}>
+            <dt className={styles.priceLabel}>Цена</dt>
+            <dd
+              className={styles.price}
+              aria-label={formatAccessiblePrice(displayablePrice.amount, displayablePrice.currency, displayablePrice.mode)}
+            >
+              {formatPrice(displayablePrice.amount, displayablePrice.currency, displayablePrice.mode)}
+            </dd>
+            {promotionText && <dd className={styles.promotion}>{promotionText}</dd>}
+          </dl>
         )}
         <IonButton
           expand="block" 
