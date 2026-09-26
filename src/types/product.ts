@@ -32,6 +32,10 @@ export interface Product {
   image: string; // Главное изображение продукта
   galleryImages?: string[]; // Массив путей к изображениям для галереи (относительные пути из S3, например: "images/products/vm-01-1.jpg")
   description: string;
+  priceAmount?: number | null;
+  priceCurrency?: 'RUB' | 'USD' | 'CNY' | null;
+  priceDisplayMode?: 'EXACT' | 'FROM' | null;
+  promotionText?: string | null;
   specs: ProductSpecs;
   fullDescription: string;
   advantages?: ProductAdvantage[]; // Опциональное поле для преимуществ
