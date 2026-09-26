@@ -100,6 +100,9 @@
 
 .card :global(ion-card-content) {
   padding: 0 14px 14px 14px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 
 .title {
@@ -121,8 +124,34 @@
   overflow-wrap: anywhere;
 }
 
-.price { margin: 0 0 6px; font-size: 1rem; font-weight: 600; color: var(--ion-color-dark, #1a202c); }
-.promotion { margin: 0 0 12px; padding-left: 8px; border-left: 2px solid var(--ion-color-primary, #176B5B); color: var(--ion-color-medium, #6b7280); font-size: .8125rem; line-height: 1.45; }
+.priceBlock {
+  margin: 0 0 16px;
+}
+
+.priceLabel {
+  margin: 0 0 4px;
+  color: var(--ion-color-medium, #6b7280);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.price {
+  margin: 0;
+  color: var(--ion-color-dark, #1a202c);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.promotion {
+  margin: 6px 0 0;
+  color: var(--ion-color-medium, #6b7280);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
 
 .button {
   margin-top: auto;
