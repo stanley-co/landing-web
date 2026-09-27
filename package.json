@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/server",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
     "generate:api": "openapi-typescript ../../back/w-api-contracts/openapi/openapi.yaml -o src/api/generated/schema.d.ts",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server.mjs",
+    "test:ssr": "npm run build && node test/ssr-http.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

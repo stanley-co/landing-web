@@ -10,8 +10,10 @@ export type SlideDto = components['schemas']['SlideDto'];
 export type PrivacyPolicyDto = components['schemas']['PrivacyPolicyDto'];
 export type DocumentDto = components['schemas']['DocumentDto'];
 export type LeadCreateRequest = components['schemas']['LeadCreateRequest'];
+export type PublicSitePolicyDto = components['schemas']['PublicSitePolicyDto'];
 
 export const landingApi = {
+  sitePolicy: () => publicGet((signal) => publicApi.GET('/public/site-policy', { signal })),
   products: (search?: string) => publicGet((signal) => publicApi.GET('/public/products', { params: { query: { search, page: 0, size: 100, sort: 'sortOrder' } }, signal })),
   product: (id: string) => publicGet((signal) => publicApi.GET('/public/products/{id}', { params: { path: { id } }, signal })),
   categories: () => publicGet((signal) => publicApi.GET('/public/product-categories', { signal })),

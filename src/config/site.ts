@@ -8,8 +8,12 @@ const envUrl =
   import.meta.env &&
   import.meta.env.VITE_SITE_URL;
 
+declare global { interface Window { __PUBLIC_SITE_POLICY__?: { canonicalBaseUrl?: string } } }
+
 /** Базовый URL сайта (без завершающего слэша). В браузере — из env или window.location. */
 export function getSiteUrl(): string {
+  const policyUrl = typeof window !== 'undefined' ? window.__PUBLIC_SITE_POLICY__?.canonicalBaseUrl : undefined;
+  if (policyUrl) return policyUrl.replace(/\/+$/, '');
   if (envUrl && typeof envUrl === 'string') {
     return envUrl.replace(/\/+$/, '');
   }

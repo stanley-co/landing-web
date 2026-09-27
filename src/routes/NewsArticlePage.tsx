@@ -1,6 +1,6 @@
 import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
 import ArticleHero from '../components/ArticleHero/ArticleHero';
 import ArticleBody from '../components/ArticleBody/ArticleBody';
@@ -9,6 +9,8 @@ import RelatedNews from '../components/RelatedNews/RelatedNews';
 import Footer from '../components/Footer/Footer';
 import DocumentHead from '../components/DocumentHead/DocumentHead';
 import { landingApi } from '../api/public';
+import type { ContentDetailDto } from '../api/public';
+import { useDetailBootstrap } from '../ssr/bootstrap';
 
 type ContentBlock = {
   type: 'paragraph' | 'image' | 'quote' | 'link';
@@ -31,19 +33,28 @@ type NewsArticle = {
 
 const NewsArticlePage = () => {
   const { id } = useParams();
-  const [article, setArticle] = useState<NewsArticle | null>(null);
+  const bootstrap = useDetailBootstrap('content', id ?? '');
+  const initial = useRef(bootstrap);
+  const initialId = useRef(id);
+  const [article, setArticle] = useState<NewsArticle | null>(() => initial.current ? { ...(initial.current.dto as ContentDetailDto), category: (initial.current.dto as ContentDetailDto).category ?? '', content: (initial.current.dto as ContentDetailDto).blocks ?? [] } : null);
   const [allNews, setAllNews] = useState<NewsArticle[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !initial.current);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (initialId.current !== id) { initial.current = undefined; initialId.current = id; setArticle(null); setAllNews([]); setError(null); }
     const loadData = async () => {
+      if (initial.current) {
+        // Related content is supplementary and must never replace approved detail SSR data.
+        landingApi.content().then((page) => setAllNews(page.items.map((item) => ({ ...item, category: item.category ?? '', content: [] })))).catch(() => undefined);
+        return;
+      }
       try {
         setLoading(true);
         if (!id) throw new Error('Не указан идентификатор материала');
-        const [detail, page] = await Promise.all([landingApi.contentItem(id), landingApi.content()]);
+        const detail = await landingApi.contentItem(id);
         setArticle({ ...detail, category: detail.category ?? '', content: detail.blocks ?? [] });
-        setAllNews(page.items.map((item) => ({ ...item, category: item.category ?? '', content: [] })));
+        landingApi.content().then((page) => setAllNews(page.items.map((item) => ({ ...item, category: item.category ?? '', content: [] })))).catch(() => undefined);
       } catch (err) {
         console.error('[NewsArticlePage] Ошибка при загрузке данных:', err);
         setError('Ошибка при загрузке статьи');
@@ -125,4 +136,3 @@ const NewsArticlePage = () => {
 };
 
 export default NewsArticlePage;
-

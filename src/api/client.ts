@@ -8,7 +8,7 @@ export const publicApi = createClient<paths>({ baseUrl });
 
 publicApi.use({
   onRequest({ request }) {
-    request.headers.set('X-Request-Id', crypto.randomUUID());
+    request.headers.set('X-Request-Id', globalThis.crypto?.randomUUID?.() ?? 'landing-request');
     return request;
   }
 });
@@ -22,7 +22,7 @@ export async function publicGet<T>(request: (signal: AbortSignal) => Promise<Api
   let lastError: Error | undefined;
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 10_000);
+    const timeout = globalThis.setTimeout(() => controller.abort(), 10_000);
     try {
       const result = await request(controller.signal);
       if (result.data !== undefined) return result.data;
@@ -39,7 +39,7 @@ export async function publicGet<T>(request: (signal: AbortSignal) => Promise<Api
         : error instanceof Error ? error : new Error('Сервис временно недоступен');
       if (attempt === 1) throw lastError;
     } finally {
-      window.clearTimeout(timeout);
+      globalThis.clearTimeout(timeout);
     }
   }
   throw lastError ?? new Error('Сервис временно недоступен');

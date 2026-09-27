@@ -27,7 +27,7 @@ function setMeta(name: string, content: string, isProperty = false) {
 }
 
 function setLink(rel: string, href: string) {
-  let el = document.querySelector(`link[rel="${rel}"][data-dynamic]`);
+  let el = document.querySelector(`link[rel="${rel}"]`);
   if (!el) {
     el = document.createElement('link');
     el.setAttribute('rel', rel);
@@ -38,8 +38,7 @@ function setLink(rel: string, href: string) {
 }
 
 function removeCanonical() {
-  const el = document.querySelector('link[rel="canonical"][data-dynamic]');
-  if (el) el.remove();
+  document.querySelectorAll('link[rel="canonical"]').forEach((el) => el.remove());
 }
 
 export default function DocumentHead({
