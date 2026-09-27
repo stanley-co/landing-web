@@ -13,11 +13,13 @@ ARG VITE_ADMIN_PREVIEW_ORIGIN
 ENV VITE_ADMIN_PREVIEW_ORIGIN=$VITE_ADMIN_PREVIEW_ORIGIN
 RUN node -e 'const url = new URL(process.argv[1]); if (!/^https?:$/.test(url.protocol) || url.pathname !== "/" || url.search || url.hash || url.username || url.password) throw new Error("VITE_ADMIN_PREVIEW_ORIGIN must be an absolute http(s) Admin origin without path, query, hash, or credentials");' "$VITE_ADMIN_PREVIEW_ORIGIN/" \
  && npm run build \
- && grep -R -F "$VITE_ADMIN_PREVIEW_ORIGIN" dist/assets >/dev/null
+ && grep -R -F "$VITE_ADMIN_PREVIEW_ORIGIN" dist/client/assets >/dev/null
 
-FROM nginx:1.28-alpine
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /workspace/dist /usr/share/nginx/html
+FROM node:22.17-alpine
+WORKDIR /workspace
+COPY --from=build /workspace/node_modules ./node_modules
+COPY --from=build /workspace/dist ./dist
+COPY server.mjs ./server.mjs
 EXPOSE 80
 HEALTHCHECK --interval=10s --timeout=3s --retries=6 CMD wget --spider -q http://127.0.0.1/healthz || exit 1
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server.mjs"]

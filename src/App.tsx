@@ -13,7 +13,7 @@ import NotFoundPage from './routes/NotFoundPage';
 import PrivacyPolicyPage from './routes/PrivacyPolicyPage';
 import AdminPreviewPage from './routes/AdminPreviewPage';
 
-const AppContent = () => {
+export const AppContent = () => {
   const { isOpen, productName, productId, closeModal } = useContactFormModal();
 
   return (

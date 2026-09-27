@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/public/site-policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the server-validated public site identity and indexing policy */
+        get: operations["getPublicSitePolicy"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/public/products": {
         parameters: {
             query?: never;
@@ -1354,6 +1371,15 @@ export interface components {
             /** Format: uri */
             ogImage?: string;
         };
+        PublicSitePolicyDto: {
+            /**
+             * Format: uri
+             * @description Validated HTTPS public base URL without a path, query, fragment, or credentials.
+             */
+            canonicalBaseUrl: string;
+            /** @description False makes all public documents noindex. */
+            indexingEnabled: boolean;
+        };
         ProductCardDto: {
             /**
              * Format: uuid
@@ -1378,6 +1404,16 @@ export interface components {
             promotionText?: string | null;
         };
         ProductDetailDto: components["schemas"]["ProductCardDto"] & {
+            /**
+             * Format: int64
+             * @description Version of the committed approved projection used for this response.
+             */
+            readonly approvedVersion?: number;
+            /**
+             * Format: date-time
+             * @description Publication time of the committed approved projection.
+             */
+            readonly publishedAt?: string;
             galleryImages?: string[];
             fullDescription?: string;
             specs?: components["schemas"]["ProductSpecDto"][];
@@ -1454,6 +1490,16 @@ export interface components {
             preview: string;
         };
         ContentDetailDto: components["schemas"]["ContentListItemDto"] & {
+            /**
+             * Format: int64
+             * @description Version of the committed approved projection used for this response.
+             */
+            readonly approvedVersion?: number;
+            /**
+             * Format: date-time
+             * @description Publication time of the committed approved projection.
+             */
+            readonly publishedAt?: string;
             blocks: components["schemas"]["ContentBlockDto"][];
         };
         ContentBlockDto: {
@@ -1952,6 +1998,15 @@ export interface components {
                 "application/json": components["schemas"]["ProductDetailDto"];
             };
         };
+        /** @description Server-validated public site policy */
+        PublicSitePolicy: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["PublicSitePolicyDto"];
+            };
+        };
         /** @description Category tree */
         ProductCategoryTree: {
             headers: {
@@ -2370,6 +2425,18 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getPublicSitePolicy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: components["responses"]["PublicSitePolicy"];
+        };
+    };
     listPublicProducts: {
         parameters: {
             query?: {

@@ -20,9 +20,10 @@ function validAdminOrigin(value: string | undefined): string | undefined {
   } catch { return undefined; }
 }
 
-export function adminPreviewOrigin(value: string | undefined, location: Location | undefined = window.location): string | undefined {
-  if (location && !isIpAddress(location.hostname) && (location.hostname === 'kitexp.ru' || location.hostname.endsWith('.kitexp.ru'))) {
-    return `${location.protocol}//admin.${location.hostname}`;
+export function adminPreviewOrigin(value: string | undefined, location?: Location): string | undefined {
+  const currentLocation = location ?? (typeof window === 'undefined' ? undefined : window.location);
+  if (currentLocation && !isIpAddress(currentLocation.hostname) && (currentLocation.hostname === 'kitexp.ru' || currentLocation.hostname.endsWith('.kitexp.ru'))) {
+    return `${currentLocation.protocol}//admin.${currentLocation.hostname}`;
   }
   return validAdminOrigin(value);
 }

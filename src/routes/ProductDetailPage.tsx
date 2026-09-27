@@ -1,6 +1,6 @@
 import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import PageWrapper from '../components/layout/PageWrapper';
 import ProductHeader from '../components/ProductHeader/ProductHeader';
 import ProductGallery from '../components/ProductGallery/ProductGallery';
@@ -13,49 +13,36 @@ import DocumentHead from '../components/DocumentHead/DocumentHead';
 import { landingApi } from '../api/public';
 import type { Product } from '../types/product';
 import type { News } from '../types/news';
+import type { ProductDetailDto } from '../api/public';
+import { useDetailBootstrap } from '../ssr/bootstrap';
+
+function mapProduct(detail: ProductDetailDto): { product: Product; articles: News[] } {
+  const articles: News[] = (detail.relatedContent ?? []).flatMap((relation) => relation.summary ? [{ ...relation.summary, category: relation.summary.category ?? '', content: [] }] : []);
+  return { articles, product: { id: detail.id, externalId: detail.externalId, code: detail.code, name: detail.name, globalCategory: detail.globalCategory, category: detail.category, image: detail.image, galleryImages: detail.galleryImages ?? [], description: detail.description, priceAmount: detail.priceAmount, priceCurrency: detail.priceCurrency, priceDisplayMode: detail.priceDisplayMode, promotionText: detail.promotionText, fullDescription: detail.fullDescription ?? detail.description, specs: Object.fromEntries((detail.specs ?? []).sort((a, b) => a.sortOrder - b.sortOrder).map((spec) => [spec.name, spec.value])), advantages: (detail.advantages ?? []).sort((a, b) => a.sortOrder - b.sortOrder), materialsAndNews: { video: detail.videoUrl, articles: articles.map((article) => article.id) } } };
+}
 
 const ProductDetailPage = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [articlesData, setArticlesData] = useState<News[]>([]);
-  const [loading, setLoading] = useState(true);
+  const bootstrap = useDetailBootstrap('product', id ?? '');
+  const initial = useRef(bootstrap);
+  const initialId = useRef(id);
+  const initialMapped = initial.current ? mapProduct(initial.current.dto as ProductDetailDto) : undefined;
+  const [product, setProduct] = useState<Product | null>(initialMapped?.product ?? null);
+  const [articlesData, setArticlesData] = useState<News[]>(initialMapped?.articles ?? []);
+  const [loading, setLoading] = useState(!initialMapped);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (initialId.current !== id) { initial.current = undefined; initialId.current = id; setProduct(null); setArticlesData([]); setError(null); }
     const loadData = async () => {
+      if (initial.current) return;
       try {
         setLoading(true);
         if (!id) throw new Error('Не указан идентификатор товара');
         const detail = await landingApi.product(id);
-        const articles: News[] = (detail.relatedContent ?? []).flatMap((relation) => relation.summary ? [{
-          ...relation.summary,
-          category: relation.summary.category ?? '',
-          content: []
-        }] : []);
-        const foundProduct: Product = {
-          id: detail.id,
-          externalId: detail.externalId,
-          code: detail.code,
-          name: detail.name,
-          globalCategory: detail.globalCategory,
-          category: detail.category,
-          image: detail.image,
-          galleryImages: detail.galleryImages ?? [],
-          description: detail.description,
-          priceAmount: detail.priceAmount,
-          priceCurrency: detail.priceCurrency,
-          priceDisplayMode: detail.priceDisplayMode,
-          promotionText: detail.promotionText,
-          fullDescription: detail.fullDescription ?? detail.description,
-          specs: Object.fromEntries((detail.specs ?? []).sort((a, b) => a.sortOrder - b.sortOrder).map((spec) => [spec.name, spec.value])),
-          advantages: (detail.advantages ?? []).sort((a, b) => a.sortOrder - b.sortOrder),
-          materialsAndNews: {
-            video: detail.videoUrl,
-            articles: articles.map((article) => article.id)
-          }
-        };
-        setProduct(foundProduct);
-        setArticlesData(articles);
+        const mapped = mapProduct(detail);
+        setProduct(mapped.product);
+        setArticlesData(mapped.articles);
       } catch (err) {
         console.error('[ProductDetailPage] Ошибка при загрузке данных:', err);
         setError('Ошибка при загрузке данных продукта');
