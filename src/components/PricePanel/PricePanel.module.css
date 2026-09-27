@@ -1,10 +1,10 @@
-.panel { margin: 0; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; }
+.panel { margin: 0; padding: 8px 12px; border: 1px solid #b8d7f3; border-radius: 6px; background: #ffffff; }
 .label { margin: 0 0 2px; color: #64748b; font-size: 11px; font-weight: 500; line-height: 1.35; letter-spacing: 0.02em; text-transform: uppercase; }
-.value { margin: 0; padding: 4px 8px; border: 1px solid #c7e2ff; border-radius: 4px; background: #eaf4ff; color: #24527a; font-size: 18px; font-weight: 650; line-height: 1.25; font-variant-numeric: tabular-nums; }
-.promotion { margin: 6px 0 0; padding: 5px 8px; border: 1px solid #d7ebdd; border-radius: 4px; background: #f1f8f3; color: #47705a; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+.value { margin: 0; color: #005fcc; font-size: 18px; font-weight: 650; line-height: 1.25; font-variant-numeric: tabular-nums; }
+.promotion { margin: 6px 0 0; padding-top: 6px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
 @media (prefers-color-scheme: dark) {
-  .panel { border-color: #334155; background: #1c2633; }
+  .panel { border-color: #3c5b78; background: #ffffff; }
   .label, .promotion { color: #b8c5d6; }
-  .value { border-color: #3c5b78; background: #21344a; color: #dceeff; }
-  .promotion { border-color: #355542; background: #20352a; color: #c8e3d0; }
+  .value { color: #005fcc; }
+  .promotion { border-top-color: #e2e8f0; }
 }
