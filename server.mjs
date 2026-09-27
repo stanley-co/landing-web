@@ -1,4 +1,4 @@
-/* global process, fetch, URL */
+/* global process, fetch, URL, AbortController, setTimeout, clearTimeout */
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
