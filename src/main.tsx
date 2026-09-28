@@ -1,7 +1,7 @@
 import React from 'react'
-import { hydrateRoot, createRoot } from 'react-dom/client'
 import { setupIonicReact } from '@ionic/react'
 import App from './App'
+import { renderApplication } from './renderApplication'
 import './styles/globals.css'
 
 /* Core CSS required for Ionic components to work properly */
@@ -23,8 +23,7 @@ import '@ionic/react/css/display.css'
 setupIonicReact()
 
 const root = document.getElementById('root')!;
-const render = root.hasChildNodes() ? hydrateRoot : createRoot;
-render(root,
+renderApplication(root,
   <React.StrictMode>
     <App />
   </React.StrictMode>
